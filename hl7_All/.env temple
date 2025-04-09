@@ -1,0 +1,16 @@
+#前端使用
+VITE_API_URL=http://localhost:8080
+
+
+#-------------------------------------------
+#後端使用
+
+
+# 伺服器端口
+server_PORT=8080
+
+# 允許的跨域來源（CORS）
+server_CORS_ORIGIN=http://localhost:8080
+
+# 其他環境變數
+server_NODE_ENV=development
