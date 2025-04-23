@@ -2,13 +2,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateFormData } from '../../store/hl7FormSlice';
 import FormSection, { FormField, inputClassName, selectClassName } from './FormSection';
 
-const MSHSection = () => {
+const MSHSection = ({messageType,hl7MessageType}) => {
   const dispatch = useDispatch();
-  const mshData = useSelector((state) => state.hl7Form.msh);
+  const mshData = useSelector((state) => state.hl7Form.forms[messageType]?.msh);
+
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     dispatch(updateFormData({
+      messageType: messageType, //辨別是哪個訊息類型
       segment: 'msh',
       field: id,
       value
@@ -27,7 +29,7 @@ const MSHSection = () => {
 
       <FormSection title="MSH (消息標頭)">
         {/* MSH-3 發送應用程序 */}
-        <FormField label="發送應用程序 (MSH-3)" required>
+        <FormField label="發送應用程序 (MSH-3)" >
           <input
             type="text"
             id="sendingApplication"
@@ -35,11 +37,12 @@ const MSHSection = () => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入發送應用程序"
+            required_test
           />
         </FormField>
 
         {/* MSH-4 發送設施 */}
-        <FormField label="發送設施 (MSH-4)" required>
+        <FormField label="發送設施 (MSH-4)" >
           <input
             type="text"
             id="sendingFacility"
@@ -47,11 +50,12 @@ const MSHSection = () => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入發送設施"
+            required_test
           />
         </FormField>
 
         {/* MSH-5 接收應用程序 */}
-        <FormField label="接收應用程序 (MSH-5)" required>
+        <FormField label="接收應用程序 (MSH-5)" >
           <input
             type="text"
             id="receivingApplication"
@@ -59,11 +63,12 @@ const MSHSection = () => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入接收應用程序"
+            required_test
           />
         </FormField>
 
         {/* MSH-6 接收設施 */}
-        <FormField label="接收設施 (MSH-6)" required>
+        <FormField label="接收設施 (MSH-6)" >
           <input
             type="text"
             id="receivingFacility"
@@ -71,6 +76,7 @@ const MSHSection = () => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入接收設施"
+            required_test
           />
         </FormField>
 
@@ -86,8 +92,21 @@ const MSHSection = () => {
           />
         </FormField>
 
+        {/* MSH-9 消息類型 */}
+        <FormField label="消息類型 (MSH-9)" >
+          <input
+            type="text"
+            id="messageType"
+            value={mshData?.messageType || hl7MessageType}
+            onChange={handleInputChange}
+            className={inputClassName}
+            placeholder="請輸入消息類型"
+            disabled={true}
+          />
+        </FormField>
+
         {/* MSH-10 消息控制ID */}
-        <FormField label="消息控制ID (MSH-10)" required>
+        <FormField label="消息控制ID (MSH-10)" >
           <input
             type="text"
             id="messageControlId"
@@ -95,17 +114,19 @@ const MSHSection = () => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入消息控制ID"
+            required_test
           />
         </FormField>
 
         {/* MSH-11 處理ID */}
-        <FormField label="處理ID (MSH-11)" required>
+        <FormField label="處理ID (MSH-11)" >
           <select
             id="processingId"
             name="processingId"
             value={mshData?.processingId || ''}
             onChange={handleInputChange}
             className={selectClassName}
+            required_test
           >
             <option value="">請選擇</option>
             <option value="D">除錯 (Debug)</option>

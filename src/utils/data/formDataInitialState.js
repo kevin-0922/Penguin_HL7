@@ -1,5 +1,3 @@
-// formDataInitialState.js - 存儲HL7表單的初始狀態
-
 // MSH段落初始值 (最多21項)
 const mshInitialState = {
   sendingApplication: '',         // MSH-3: Sending Application
@@ -7,6 +5,7 @@ const mshInitialState = {
   receivingApplication: '',       // MSH-5: Receiving Application
   receivingFacility: '',          // MSH-6: Receiving Facility
   security: '',                   // MSH-8: Security
+  messageType: '',               // MSH-9: Message Type
   messageControlId: '',           // MSH-10: Message Control ID
   processingId: '',               // MSH-11: Processing ID
   sequenceNumber: '',             // MSH-13: Sequence Number
@@ -258,26 +257,64 @@ const obxInitialState = {
   performingOrganizationMedicalDirector: '' // OBX-25: 執行組織醫療主任
 };
 
-// 合併所有初始狀態
-const formDataInitialState = {
+// QPD段落初始值 (最多3項)
+const qpdInitialState = {
+  messageQueryName: '',           // QPD-1: 查詢名稱
+  queryTag: '',                  // QPD-2: 查詢標籤
+  userParametersInSuccessiveFields: '' // QPD-3: 查詢參數
+};
+
+// RCP段落初始值 (最多7項)
+const rcpInitialState = {
+  queryPriority: '',             // RCP-1: 查詢優先級
+  quantityLimitedRequest: '',    // RCP-2: 回應數量限制
+  responseModality: '',          // RCP-3: 回應模式
+  executionAndDeliveryTime: '',  // RCP-4: 執行和傳送時間
+  modifyIndicator: '',           // RCP-5: 修改指示
+  sortByComponent: '',           // RCP-6: 排序組件
+  segmentGroupInclusion: ''      // RCP-7: 段落組包含指示
+};
+
+// NTE段落初始值 (最多4項)
+const nteInitialState = {
+  setId: '',                    // NTE-1: 設置 ID
+  sourceOfComment: '',          // NTE-2: 註釋來源
+  comment: '',                  // NTE-3: 註釋
+  commentType: ''               // NTE-4: 註釋類型
+};
+
+// O33消息初始值
+const o33DataInitialState = {
   msh: mshInitialState,
   pid: pidInitialState,
   spm: spmInitialState,
   sac: sacInitialState,
+  nte: nteInitialState,
   orc: orcInitialState,
   obr: obrInitialState,
   obx: obxInitialState
 };
 
-export default formDataInitialState;
+// Q11消息初始值
+const q11DataInitialState = {
+  msh: mshInitialState,
+  qpd: qpdInitialState,
+  rcp: rcpInitialState
+};
 
-// 也可以分別導出各個段落的初始狀態，方便單獨使用
+// 導出初始狀態
+export { o33DataInitialState, q11DataInitialState };
+
+// 導出各個段落的初始狀態
 export {
   mshInitialState,
   pidInitialState,
   spmInitialState,
   sacInitialState,
+  nteInitialState,
   orcInitialState,
   obrInitialState,
-  obxInitialState
+  obxInitialState,
+  qpdInitialState,
+  rcpInitialState
 }; 

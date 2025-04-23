@@ -136,3 +136,4 @@ dist
 /public_auth/build
 /temp
 /files
+node_modules

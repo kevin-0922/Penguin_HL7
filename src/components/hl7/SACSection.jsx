@@ -2,13 +2,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateFormData } from '../../store/hl7FormSlice';
 import FormSection, { FormField, inputClassName, selectClassName } from './FormSection';
 
-const SACSection = () => {
+const SACSection = ({messageType}) => {
   const dispatch = useDispatch();
-  const sacData = useSelector((state) => state.hl7Form.sac);
+  const sacData = useSelector((state) => state.hl7Form.forms[messageType].sac);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     dispatch(updateFormData({
+      messageType: messageType, //辨別是哪個訊息類型
       segment: 'sac',
       field: id,
       value

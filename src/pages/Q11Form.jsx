@@ -6,16 +6,11 @@ import axios from "axios";
 
 // 導入各段落組件
 import MSHSection from "../components/hl7/MSHSection";
-import PIDSection from "../components/hl7/PIDSection";
-import SPMSection from "../components/hl7/SPMSection";
-import SACSection from "../components/hl7/SACSection";
-import ORCSection from "../components/hl7/ORCSection";
-import OBRSection from "../components/hl7/OBRSection";
-import OBXSection from "../components/hl7/OBXSection";
-
+import QPDSection from "../components/hl7/QPDSection";
+import RCPSection from "../components/hl7/RCPSection";
 import { generateCompleteHL7Message } from "../utils/hl7MessageService";
 
-const O33Form = () => {
+const Q11Form = () => {
   const dispatch = useDispatch();
   const formData = useSelector((state) => state.hl7Form);
   const [hl7Message, setHL7Message] = useState("");
@@ -36,7 +31,8 @@ const O33Form = () => {
   // 處理表單提交
   const handleSubmit = (e) => {
     e.preventDefault();
-    const generatedMessage = generateCompleteHL7Message(formData, 'O33');
+    console.log("formData", formData);
+    const generatedMessage = generateCompleteHL7Message(formData, 'Q11');
     setHL7Message(generatedMessage);
     setShowModal(true);
   };
@@ -74,37 +70,22 @@ const O33Form = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">OML^O33 數位病理工作流程訊息</h1>
+      <h1 className="text-2xl font-bold mb-6">QBP^Q11 患者查詢訊息</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <ErrorBoundary>
-          <MSHSection messageType="O33" hl7MessageType="OML^O33^OML_O33"/>
+          <MSHSection  messageType="Q11" hl7MessageType="QBP^Q11^QBP_Q11"/>
         </ErrorBoundary>
 
         <ErrorBoundary>
-          <PIDSection messageType="O33"/>
+          <QPDSection  messageType="Q11"/>
         </ErrorBoundary>
 
         <ErrorBoundary>
-          <SPMSection messageType="O33"/>
+          <RCPSection  messageType="Q11"/>
         </ErrorBoundary>
 
-        <ErrorBoundary>
-          <SACSection messageType="O33"/>
-        </ErrorBoundary>
-
-        <ErrorBoundary>
-          <ORCSection messageType="O33"/>
-        </ErrorBoundary>
-
-        <ErrorBoundary>
-          <OBRSection messageType="O33"/>
-        </ErrorBoundary>
-
-        <ErrorBoundary>
-          <OBXSection messageType="O33"/>
-        </ErrorBoundary>
-
+      
         <div className="mt-6">
           <button
             type="submit"
@@ -149,4 +130,4 @@ const O33Form = () => {
   );
 };
 
-export default O33Form;
+export default Q11Form;

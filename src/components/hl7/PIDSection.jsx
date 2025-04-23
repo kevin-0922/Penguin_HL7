@@ -2,13 +2,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateFormData } from '../../store/hl7FormSlice';
 import FormSection, { FormField, inputClassName, selectClassName, dateTimeClassName } from './FormSection';
 
-const PIDSection = () => {
+const PIDSection = ({messageType}) => {
   const dispatch = useDispatch();
-  const pidData = useSelector((state) => state.hl7Form.pid);
+  const pidData = useSelector((state) => state.hl7Form.forms[messageType].pid);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     dispatch(updateFormData({
+      messageType: messageType, //辨別是哪個訊息類型
       segment: 'pid',
       field: id,
       value

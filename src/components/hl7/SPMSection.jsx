@@ -2,13 +2,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateFormData } from '../../store/hl7FormSlice';
 import FormSection, { FormField, inputClassName, selectClassName, dateTimeClassName } from './FormSection';
 
-const SPMSection = () => {
+const SPMSection = ({messageType}) => {
   const dispatch = useDispatch();
-  const spmData = useSelector((state) => state.hl7Form.spm);
+  const spmData = useSelector((state) => state.hl7Form.forms[messageType].spm);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     dispatch(updateFormData({
+      messageType: messageType, //辨別是哪個訊息類型
       segment: 'spm',
       field: id,
       value

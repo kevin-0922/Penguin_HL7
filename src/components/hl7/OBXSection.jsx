@@ -2,13 +2,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateFormData } from '../../store/hl7FormSlice';
 import FormSection, { FormField, inputClassName, selectClassName, dateTimeClassName } from './FormSection';
 
-const OBXSection = () => {
+const OBXSection = ({messageType}) => {
   const dispatch = useDispatch();
-  const obxData = useSelector((state) => state.hl7Form.obx);
+  const obxData = useSelector((state) => state.hl7Form.forms[messageType].obx);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     dispatch(updateFormData({
+      messageType: messageType, //辨別是哪個訊息類型
       segment: 'obx',
       field: id,
       value

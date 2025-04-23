@@ -1,7 +1,6 @@
 const { db, query, get, run } = require('../../database/db');
 const path = require('path');
 const fs = require('fs');
-const hl7 = require('simple-hl7');
 
 // 導入解析器
 const parseMSH = require('../../utils/parsers/parseMSH');
@@ -23,12 +22,15 @@ class Hl7Controller {
   async handleHttpRequest(req, res) {
     try {
       // 從請求體中獲取HL7訊息
-      const hl7Message = req.body.message || req.body;
+      const hl7Message = req.body.message;
       
       console.log('收到HTTP HL7訊息請求:', hl7Message);
       
       // 處理HL7訊息並產生回應
       const response = await this.processHl7Message(hl7Message);
+      //console.log('response:', response);
+      // 輸出ACK回應到控制台
+      console.log('返回ACK回應:', response);
       
       // 設置回應頭並發送回應
       res.set('Content-Type', 'application/hl7-v2');
@@ -44,9 +46,10 @@ class Hl7Controller {
 
   // 解析HL7訊息的路由處理器
   async parseHL7Message(req, res) {
+    console.log('收到HL7訊息:', req.body);
     try {
       const { message } = req.body;
-      
+    
       if (!message) {
         return res.status(400).json({
           success: false,
@@ -82,9 +85,19 @@ class Hl7Controller {
 
   // 處理OML^O33訊息
   async handleOmlO33(message) {
+    console.log('message測試:', message);
     try {
-        const parser = new hl7.Parser();
-        const hl7Msg = parser.parse(message);
+      let hl7Msg;
+      try {
+        // 規範化換行符
+        const normalizedMessage = message.replace(/\r\n|\n/g, '\r');
+        hl7Msg = this.parser.parse(normalizedMessage);
+        console.log('成功將消息解析為HL7對象');
+      } catch (parseError) {
+        console.error('解析HL7消息時出錯:', parseError);
+        // 如果解析失敗，創建模擬對象
+        hl7Msg = this.createHL7Adapter(message);
+      }
       // 解析訊息部分
       const msh = parseMSH(hl7Msg);
       const pid = parsePID(hl7Msg);
@@ -92,21 +105,147 @@ class Hl7Controller {
       const obr = parseOBR(hl7Msg);
       const spm = parseSPM(hl7Msg);
       
-      // 記錄訊息到數據庫
-      await this.saveReceivedMessage({
-        message_type: 'OML^O33',
-        message_control_id: msh.messageControlId,
-        sender: msh.sendingApplication,
-        receiver: msh.receivingApplication,
-        message_content: message
-      });
+      // 只在控制台輸出訊息內容和解析結果
+      console.log('==== 處理 OML^O33 訊息 ====');
+      console.log('MSH部分:', msh);
+      console.log('PID部分:', pid);
+      console.log('ORC部分:', orc);
+      console.log('OBR部分:', obr);
+      console.log('SPM部分:', spm);
+      
+      try {
+        const messageType = 'OML^O33';
+        const messageControlId = this.extractMsgControlId(message);
+        const sender = this.extractSender(message);
+        const receiver = this.extractReceiver(message);
+        
+        await run(
+          `INSERT INTO received_messages 
+          (message_type, message_control_id, sender, receiver, message_content, status)
+          VALUES (?, ?, ?, ?, ?, ?)`,
+          [messageType, messageControlId, sender, receiver, message, 'received']
+        );
+        console.log('O33訊息已儲存到資料庫');
+      } catch (dbError) {
+        console.error('儲存O33訊息時發生錯誤:', dbError);
+        // 儲存失敗不影響後續處理
+      }
+      
+      // 構建O34回應訊息(可選)
+      const o34Response = this.buildO34Response(message, msh, pid);
+      console.log('生成O34回應:', o34Response);
+
+      try {
+        const messageControlId = this.extractMsgControlId(message) + '_O34';
+        const sender = this.extractReceiver(message); // 角色互換
+        const receiver = this.extractSender(message); // 角色互換
+        
+        await run(
+          `INSERT INTO sent_messages 
+          (message_type, message_control_id, sender, receiver, message_content, status)
+          VALUES (?, ?, ?, ?, ?, ?)`,
+          ['ORL^O34', messageControlId, sender, receiver, o34Response, 'sent']
+        );
+        console.log('O34回應訊息已儲存到資料庫');
+      } catch (dbError) {
+        console.error('儲存O34回應訊息時發生錯誤:', dbError);
+        // 儲存失敗不影響後續處理
+      }
       
       // 構建ACK回應
-      return this.buildAckResponse(message, 'AA', 'Message received and processed successfully');
+      const ackResponse = this.buildAckResponse(message, 'AA', 'Message received and processed successfully');
+      //console.log('生成ACK回應:', ackResponse);
+
+      // try {
+      //   const messageControlId = this.extractMsgControlId(message) + '_ACK';
+      //   const sender = this.extractReceiver(message); // 角色互換
+      //   const receiver = this.extractSender(message); // 角色互換
+        
+      //   await run(
+      //     `INSERT INTO sent_messages 
+      //     (message_type, message_control_id, sender, receiver, message_content, status)
+      //     VALUES (?, ?, ?, ?, ?, ?)`,
+      //     ['ACK', messageControlId, sender, receiver, ackResponse, 'sent']
+      //   );
+      //   console.log('ACK回應訊息已儲存到資料庫');
+      // } catch (dbError) {
+      //   console.error('儲存ACK回應訊息時發生錯誤:', dbError);
+      //   // 儲存失敗不影響後續處理
+      // }
+      
+      return ackResponse;
     } catch (error) {
       console.error('處理OML^O33訊息時發生錯誤:', error);
       return this.buildAckResponse(message, 'AE', error.message);
     }
+  }
+
+   // 輔助方法: 提取訊息控制ID
+   extractMsgControlId(message) {
+    try {
+      const segments = message.split(/\r\n|\r|\n/);
+      const mshSegment = segments.find(s => s.startsWith('MSH'));
+      if (!mshSegment) return 'UNKNOWN';
+      const fields = mshSegment.split('|');
+      return fields.length > 9 ? fields[9] : 'UNKNOWN';
+    } catch (e) {
+      return 'UNKNOWN';
+    }
+  }
+
+   // 輔助方法: 提取發送方
+   extractSender(message) {
+    try {
+      const segments = message.split(/\r\n|\r|\n/);
+      const mshSegment = segments.find(s => s.startsWith('MSH'));
+      if (!mshSegment) return 'UNKNOWN';
+      const fields = mshSegment.split('|');
+      return fields.length > 2 ? fields[2] : 'UNKNOWN';
+    } catch (e) {
+      return 'UNKNOWN';
+    }
+  }
+  
+  // 輔助方法: 提取接收方
+  extractReceiver(message) {
+    try {
+      const segments = message.split(/\r\n|\r|\n/);
+      const mshSegment = segments.find(s => s.startsWith('MSH'));
+      if (!mshSegment) return 'UNKNOWN';
+      const fields = mshSegment.split('|');
+      return fields.length > 4 ? fields[4] : 'UNKNOWN';
+    } catch (e) {
+      return 'UNKNOWN';
+    }
+  }
+
+
+  createHL7Adapter(message) {
+    console.log('創建HL7適配器...');
+    // 分割消息為段落
+    const segments = message.split(/\r\n|\r|\n/);
+    console.log(`找到 ${segments.length} 個段落`);
+    
+    // 創建適配器對象
+    return {
+      getSegment: function(segmentType) {
+        const segment = segments.find(s => s.startsWith(segmentType));
+        if (!segment) {
+          console.log(`找不到 ${segmentType} 段落`);
+          return null;
+        }
+        
+        console.log(`找到 ${segmentType} 段落:`, segment);
+        const fields = segment.split('|');
+        
+        return {
+          fields: fields.map((value, i) => ({ value })),
+          get: function(index) {
+            return fields[index] || '';
+          }
+        };
+      }
+    };
   }
 
   // 處理ORL^O34訊息
@@ -115,14 +254,9 @@ class Hl7Controller {
       // 解析訊息部分
       const msh = parseMSH(message);
       
-      // 記錄訊息到數據庫
-      await this.saveReceivedMessage({
-        message_type: 'ORL^O34',
-        message_control_id: msh.messageControlId,
-        sender: msh.sendingApplication,
-        receiver: msh.receivingApplication,
-        message_content: message
-      });
+      // 只在控制台輸出訊息
+      console.log('==== 處理 ORL^O34 訊息 ====');
+      console.log('MSH部分:', msh);
       
       // 構建ACK回應
       return this.buildAckResponse(message, 'AA', 'Message received and processed successfully');
@@ -130,19 +264,18 @@ class Hl7Controller {
       console.error('處理ORL^O34訊息時發生錯誤:', error);
       return this.buildAckResponse(message, 'AE', error.message);
     }
-  }
+  }handler
 
   // 處理HL7訊息
   async processHl7Message(message) {
     try {
       // 提取訊息類型
       const messageType = this.extractMessageType(message);
-      
       console.log(`處理 ${messageType} 類型的訊息`);
       
       // 獲取對應的訊息處理器
       const handler = this.messageHandlers.get(messageType);
-      
+      console.log('handler:', handler);
       if (!handler) {
         console.warn(`沒有找到 ${messageType} 類型的處理器`);
         return this.buildAckResponse(message, 'AR', `Unsupported message type: ${messageType}`);
@@ -268,295 +401,65 @@ class Hl7Controller {
     }
   }
 
+  // 構建O34回應訊息
+  buildO34Response(message, msh, pid) {
+    try {
+      const timestamp = new Date().toISOString().replace(/[-:T]/g, '').substring(0, 14);
+      const messageControlId = msh.messageControlId || 'UNKNOWN';
+      const sendingApp = msh.receivingApplication || '';
+      const sendingFacility = msh.receivingFacility || '';
+      const receivingApp = msh.sendingApplication || '';
+      const receivingFacility = msh.sendingFacility || '';
+      
+      // 構建O34回應
+      return [
+        `MSH|^~\\&|${sendingApp}|${sendingFacility}|${receivingApp}|${receivingFacility}|${timestamp}||ORL^O34|${messageControlId}_ACK|P|2.5.1`,
+        `MSA|AA|${messageControlId}|Message processed successfully`,
+        `PID|1||${pid?.patientId || ''}^^^MRN||${pid?.patientName || ''}||||||||||||||||`
+      ].join('\r\n');
+    } catch (error) {
+      console.error('構建O34回應時發生錯誤:', error);
+      return `MSH|^~\\&|ERROR|ERROR|ERROR|ERROR|${new Date().toISOString().replace(/[-:T]/g, '').substring(0, 14)}||ORL^O34|ERROR|P|2.5.1\r\nMSA|AE|ERROR|Error constructing O34 response: ${error.message}`;
+    }
+  }
+
   
-  // 獲取已發送的訊息
   async getSentMessages(req, res) {
-    try {
-      const messages = await query('SELECT * FROM sent_messages ORDER BY created_at DESC');
-      res.json({
-        success: true,
-        data: messages
-      });
-    } catch (error) {
-      console.error('獲取已發送訊息時發生錯誤:', error);
-      res.status(500).json({
-        success: false,
-        error: error.message
-      });
-    }
+    res.json({ success: true, data: [] });
   }
 
-  // 獲取已接收的訊息
   async getReceivedMessages(req, res) {
-    try {
-      const messages = await query('SELECT * FROM received_messages ORDER BY received_at DESC');
-      res.json({
-        success: true,
-        data: messages
-      });
-    } catch (error) {
-      console.error('獲取已接收訊息時發生錯誤:', error);
-      res.status(500).json({
-        success: false,
-        error: error.message
-      });
-    }
+    res.json({ success: true, data: [] });
   }
 
-  // 獲取訊息詳情
   async getMessageDetails(req, res) {
-    try {
-      const { type, id } = req.params;
-      
-      if (type !== 'sent' && type !== 'received') {
-        return res.status(400).json({
-          success: false,
-          error: '無效的訊息類型'
-        });
-      }
-      
-      const table = type === 'sent' ? 'sent_messages' : 'received_messages';
-      const message = await get(`SELECT * FROM ${table} WHERE id = ?`, [id]);
-      
-      if (!message) {
-        return res.status(404).json({
-          success: false,
-          error: '訊息不存在'
-        });
-      }
-      
-      res.json({
-        success: true,
-        data: message
-      });
-    } catch (error) {
-      console.error('獲取訊息詳情時發生錯誤:', error);
-      res.status(500).json({
-        success: false,
-        error: error.message
-      });
-    }
+    res.status(404).json({ success: false, error: '功能暫時禁用' });
   }
 
-  // 保存已發送的訊息
   async saveSentMessage(req, res) {
-    try {
-      const { message_type, message_control_id, sender, receiver, message_content, status } = req.body;
-      
-      if (!message_type || !message_control_id || !sender || !receiver || !message_content) {
-        return res.status(400).json({
-          success: false,
-          error: '缺少必要欄位'
-        });
-      }
-      
-      const result = await run(
-        `INSERT INTO sent_messages 
-        (message_type, message_control_id, sender, receiver, message_content, status)
-        VALUES (?, ?, ?, ?, ?, ?)`,
-        [message_type, message_control_id, sender, receiver, message_content, status || 'sent']
-      );
-      
-      res.json({
-        success: true,
-        data: {
-          id: result.id,
-          message: 'Message saved successfully'
-        }
-      });
-    } catch (error) {
-      console.error('保存已發送訊息時發生錯誤:', error);
-      res.status(500).json({
-        success: false,
-        error: error.message
-      });
-    }
+    res.json({ success: true, message: '功能暫時禁用' });
   }
 
-  // 保存已接收的訊息
   async saveReceivedMessage(messageData) {
-    try {
-      const { message_type, message_control_id, sender, receiver, message_content, response_message_id, status } = messageData;
-      
-      return await run(
-        `INSERT INTO received_messages 
-        (message_type, message_control_id, sender, receiver, message_content, response_message_id, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [message_type, message_control_id, sender, receiver, message_content, response_message_id || null, status || 'received']
-      );
-    } catch (error) {
-      console.error('保存已接收訊息時發生錯誤:', error);
-      throw error;
-    }
+    // 空實現，只記錄日誌
+    console.log('訊息已接收但未儲存:', messageData.message_type);
+    return { success: true };
   }
 
-  // 更新訊息狀態
   async updateMessageStatus(req, res) {
-    try {
-      const { id } = req.params;
-      const { type, status } = req.body;
-      
-      if (!type || !status) {
-        return res.status(400).json({
-          success: false,
-          error: '缺少必要欄位'
-        });
-      }
-      
-      if (type !== 'sent' && type !== 'received') {
-        return res.status(400).json({
-          success: false,
-          error: '無效的訊息類型'
-        });
-      }
-      
-      const table = type === 'sent' ? 'sent_messages' : 'received_messages';
-      const result = await run(`UPDATE ${table} SET status = ? WHERE id = ?`, [status, id]);
-      
-      if (result.changes === 0) {
-        return res.status(404).json({
-          success: false,
-          error: '訊息不存在'
-        });
-      }
-      
-      res.json({
-        success: true,
-        data: {
-          message: 'Message status updated successfully'
-        }
-      });
-    } catch (error) {
-      console.error('更新訊息狀態時發生錯誤:', error);
-      res.status(500).json({
-        success: false,
-        error: error.message
-      });
-    }
+    res.status(404).json({ success: false, error: '功能暫時禁用' });
   }
 
-  // 刪除訊息
   async deleteMessage(req, res) {
-    try {
-      const { type, id } = req.params;
-      
-      if (type !== 'sent' && type !== 'received') {
-        return res.status(400).json({
-          success: false,
-          error: '無效的訊息類型'
-        });
-      }
-      
-      const table = type === 'sent' ? 'sent_messages' : 'received_messages';
-      const result = await run(`DELETE FROM ${table} WHERE id = ?`, [id]);
-      
-      if (result.changes === 0) {
-        return res.status(404).json({
-          success: false,
-          error: '訊息不存在'
-        });
-      }
-      
-      res.json({
-        success: true,
-        data: {
-          message: 'Message deleted successfully'
-        }
-      });
-    } catch (error) {
-      console.error('刪除訊息時發生錯誤:', error);
-      res.status(500).json({
-        success: false,
-        error: error.message
-      });
-    }
+    res.status(404).json({ success: false, error: '功能暫時禁用' });
   }
 
-  // 獲取訊息統計
   async getMessageStats(req, res) {
-    try {
-      const sentCount = await get('SELECT COUNT(*) as count FROM sent_messages');
-      const receivedCount = await get('SELECT COUNT(*) as count FROM received_messages');
-      
-      const sentByType = await query('SELECT message_type, COUNT(*) as count FROM sent_messages GROUP BY message_type');
-      const receivedByType = await query('SELECT message_type, COUNT(*) as count FROM received_messages GROUP BY message_type');
-      
-      res.json({
-        success: true,
-        data: {
-          sent: {
-            total: sentCount.count,
-            byType: sentByType
-          },
-          received: {
-            total: receivedCount.count,
-            byType: receivedByType
-          }
-        }
-      });
-    } catch (error) {
-      console.error('獲取訊息統計時發生錯誤:', error);
-      res.status(500).json({
-        success: false,
-        error: error.message
-      });
-    }
+    res.json({ success: true, data: { sent: { total: 0 }, received: { total: 0 } } });
   }
 
-  // 搜索訊息
   async searchMessages(req, res) {
-    try {
-      const { type, query: searchQuery } = req.query;
-      
-      if (!type) {
-        return res.status(400).json({
-          success: false,
-          error: '缺少訊息類型'
-        });
-      }
-      
-      if (type !== 'sent' && type !== 'received' && type !== 'all') {
-        return res.status(400).json({
-          success: false,
-          error: '無效的訊息類型'
-        });
-      }
-      
-      let messages = [];
-      
-      if (type === 'sent' || type === 'all') {
-        const sentMessages = await query(
-          `SELECT * FROM sent_messages 
-          WHERE message_type LIKE ? OR message_control_id LIKE ? OR sender LIKE ? OR receiver LIKE ? OR message_content LIKE ?
-          ORDER BY created_at DESC`,
-          Array(5).fill(`%${searchQuery || ''}%`)
-        );
-        
-        messages = [...messages, ...sentMessages.map(msg => ({ ...msg, source: 'sent' }))];
-      }
-      
-      if (type === 'received' || type === 'all') {
-        const receivedMessages = await query(
-          `SELECT * FROM received_messages 
-          WHERE message_type LIKE ? OR message_control_id LIKE ? OR sender LIKE ? OR receiver LIKE ? OR message_content LIKE ?
-          ORDER BY received_at DESC`,
-          Array(5).fill(`%${searchQuery || ''}%`)
-        );
-        
-        messages = [...messages, ...receivedMessages.map(msg => ({ ...msg, source: 'received' }))];
-      }
-      
-      res.json({
-        success: true,
-        data: messages
-      });
-    } catch (error) {
-      console.error('搜索訊息時發生錯誤:', error);
-      res.status(500).json({
-        success: false,
-        error: error.message
-      });
-    }
+    res.json({ success: true, data: [] });
   }
 }
 

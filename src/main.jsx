@@ -9,6 +9,7 @@ import { store } from './store/store';
 import Root from './routes/root';
 import Home from './pages/home';
 import O33Form from './pages/O33Form';
+import Q11Form from './pages/Q11Form';
 import './index.css'
 
 const router = createBrowserRouter([
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
             {
                 path: "o33",
                 element: <O33Form />,
+            },
+            {
+                path: "q11",
+                element: <Q11Form />,
             }
         ]
     },

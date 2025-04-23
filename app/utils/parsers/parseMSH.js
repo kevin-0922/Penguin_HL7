@@ -1,5 +1,5 @@
 const parseMSH = (message) => {
-    const msh = message.header;
+    const msh = message.getSegment("MSH");
     if (!msh) {
         console.log("找不到 MSH 段");
         return null;

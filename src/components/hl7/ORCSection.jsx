@@ -2,13 +2,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateFormData } from '../../store/hl7FormSlice';
 import FormSection, { FormField, inputClassName, selectClassName, dateTimeClassName } from './FormSection';
 
-const ORCSection = () => {
+const ORCSection = ({messageType}) => {
   const dispatch = useDispatch();
-  const orcData = useSelector((state) => state.hl7Form.orc);
+  const orcData = useSelector((state) => state.hl7Form.forms[messageType].orc);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     dispatch(updateFormData({
+      messageType: messageType, //辨別是哪個訊息類型
       segment: 'orc',
       field: id,
       value
