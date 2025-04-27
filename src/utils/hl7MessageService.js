@@ -25,9 +25,17 @@ export const generateHL7Message = (formData, messageType = 'UNSELECTED') => {
     throw new Error(`未找到消息生成器: ${messageType}`);
   }
   
-  // 實例化生成器並調用生成方法
+  // 處理數據結構：檢查是否是嵌套的表單數據格式
+  let processedData = formData;
+  
+  // 如果數據中有 forms 屬性並且包含對應的消息類型數據，則提取該部分
+  if (formData.forms && formData.forms[messageType]) {
+    processedData = formData.forms[messageType];
+  }
+  
+  // 實例化生成器並調用生成方法，傳入處理後的數據
   const generator = new GeneratorClass();
-  return generator.generateMessage(formData);
+  return generator.generateMessage(processedData);
 };
 
 /**

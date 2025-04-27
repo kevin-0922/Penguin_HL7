@@ -424,43 +424,7 @@ class Hl7Controller {
   }
 
   
-  async getSentMessages(req, res) {
-    res.json({ success: true, data: [] });
-  }
 
-  async getReceivedMessages(req, res) {
-    res.json({ success: true, data: [] });
-  }
-
-  async getMessageDetails(req, res) {
-    res.status(404).json({ success: false, error: '功能暫時禁用' });
-  }
-
-  async saveSentMessage(req, res) {
-    res.json({ success: true, message: '功能暫時禁用' });
-  }
-
-  async saveReceivedMessage(messageData) {
-    // 空實現，只記錄日誌
-    console.log('訊息已接收但未儲存:', messageData.message_type);
-    return { success: true };
-  }
-
-  async updateMessageStatus(req, res) {
-    res.status(404).json({ success: false, error: '功能暫時禁用' });
-  }
-
-  async deleteMessage(req, res) {
-    res.status(404).json({ success: false, error: '功能暫時禁用' });
-  }
-
-  async getMessageStats(req, res) {
-    res.json({ success: true, data: { sent: { total: 0 }, received: { total: 0 } } });
-  }
-
-  async searchMessages(req, res) {
-    res.json({ success: true, data: [] });
-  }
 }
 
 // 導出hl7Controller實例

@@ -18,9 +18,7 @@ const hl7FormSlice = createSlice({
       'O33': o33DataInitialState,
       'Q11': q11DataInitialState,
       //可新增訊息
-    },
-    // 當前選中的消息類型 - 預設為空或第一個可用的消息類型
-    activeMessageType: defaultMessageType
+    }
   },
   reducers: {
     // 更新特定消息類型的表單數據
@@ -30,39 +28,43 @@ const hl7FormSlice = createSlice({
         state.forms[messageType][segment][field] = value;
       }
     },
-    // 設置當前活動的消息類型
-    setActiveMessageType: (state, action) => {
-      const newMessageType = action.payload;
-      state.activeMessageType = newMessageType;
-      
-      // 如果這個消息類型還沒有表單數據，則初始化
-      if (!state.forms[newMessageType]) {
-        const initialState = messageTypeToInitialState[newMessageType];
-        if (initialState) {
-          state.forms[newMessageType] = initialState;
-        }
-      }
-    },
     //重置指定類型的表單
     resetForm: (state, action) => {
-      const messageType = action.payload || state.activeMessageType;
+      const messageType = action.payload;
+      if (!messageType) {
+        console.warn('resetForm 需要提供 messageType 參數');
+        return;
+      }
+      
       const initialState = messageTypeToInitialState[messageType];
       if (initialState) {
         state.forms[messageType] = initialState;
+      } else {
+        console.warn(`找不到 ${messageType} 的初始狀態定義`);
       }
     },
      // 重置全部表單
      resetAllForms: (state) => {
-      Object.keys(state.forms).forEach(messageType => {
+      // 優先使用 messageTypeToInitialState 的鍵，確保所有已知的訊息類型都被重置
+      const allMessageTypes = new Set([
+        ...Object.keys(messageTypeToInitialState),
+        ...Object.keys(state.forms)
+      ]);
+      
+      allMessageTypes.forEach(messageType => {
         const initialState = messageTypeToInitialState[messageType];
         if (initialState) {
+          // 如果有初始狀態定義，使用它重置
           state.forms[messageType] = initialState;
+        } else if (state.forms[messageType]) {
+          // 如果沒有初始狀態但存在於 forms 中，記錄警告
+          console.warn(`重置表單時找不到 ${messageType} 的初始狀態定義`);
         }
       });
     }
   }
 });
 
-export const { updateFormData, setActiveMessageType , resetForm, resetAllForms} = hl7FormSlice.actions;
+export const { updateFormData, resetForm, resetAllForms} = hl7FormSlice.actions;
 export default hl7FormSlice.reducer; 
 

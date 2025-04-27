@@ -11,7 +11,7 @@ const OBRSection = ({messageType}) => {
     const { id, value } = e.target;
     dispatch(updateFormData({
       messageType: messageType, //辨別是哪個訊息類型
-      segment: 'msh',
+      segment: 'obr',
       field: id,
       value
     }));

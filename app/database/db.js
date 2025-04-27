@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 // 確認數據庫目錄存在
-const dbDir = path.join(__dirname, '..', 'data');
+const dbDir = path.join(__dirname, '..', 'database');
 if (!fs.existsSync(dbDir)) {
   console.log(`數據庫目錄不存在，正在創建: ${dbDir}`);
   fs.mkdirSync(dbDir, { recursive: true });

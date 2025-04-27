@@ -36,14 +36,14 @@ export class O33MessageGenerator extends BaseMessageGenerator {
     const segments = [];
     
     // 按照 HL7 訊息格式順序生成段落
-    segments.push(this.segmentGenerators['MSH'].generate(formData));
-    segments.push(this.segmentGenerators['PID'].generate(formData));
-    segments.push(this.segmentGenerators['SPM'].generate(formData));
-    segments.push(this.segmentGenerators['SAC'].generate(formData));
+    segments.push(this.getSegmentGenerator('MSH').generate(formData));
+    segments.push(this.getSegmentGenerator('PID').generate(formData));
+    segments.push(this.getSegmentGenerator('SPM').generate(formData));
+    segments.push(this.getSegmentGenerator('SAC').generate(formData));
     // 添加訂單和觀察段落
-    segments.push(this.segmentGenerators['ORC'].generate(formData));
-    segments.push(this.segmentGenerators['OBR'].generate(formData));
-    segments.push(this.segmentGenerators['OBX'].generate(formData));
+    segments.push(this.getSegmentGenerator('ORC').generate(formData));
+    segments.push(this.getSegmentGenerator('OBR').generate(formData));
+    segments.push(this.getSegmentGenerator('OBX').generate(formData));
     
     return segments.join('\n');
   }

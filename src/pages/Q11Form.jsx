@@ -31,8 +31,9 @@ const Q11Form = () => {
   // 處理表單提交
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("formData", formData);
-    const generatedMessage = generateCompleteHL7Message(formData, 'Q11');
+    const q11Data = formData.forms.Q11;
+    console.log("q11Data", q11Data);
+    const generatedMessage = generateCompleteHL7Message(q11Data, 'Q11');
     setHL7Message(generatedMessage);
     setShowModal(true);
   };

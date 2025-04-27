@@ -65,7 +65,6 @@ const O33Form = () => {
 
       console.log("訊息發送成功:", response.data);
       alert("HL7訊息已成功發送！");
-      setShowModal(false);
     } catch (error) {
       console.error("發送HL7訊息時發生錯誤:", error);
       alert(`發送失敗: ${error.response?.data?.error || error.message}`);

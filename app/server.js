@@ -3,8 +3,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const hl7Routes = require('./routes/hl7Routes');
-const controllers = require('./controllers');
-const messageRoutes = require('./routes/messageRoutes');
 const viteExpress = require('vite-express');
 
 // 明確導入數據庫以確保連接初始化
@@ -29,9 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.text({ type: 'application/hl7-v2' }));
 
 // API 路由
-app.use('/api', controllers);
 app.use('/api/hl7', hl7Routes);
-app.use('/api/messages', messageRoutes);
 
 // 測試數據庫連接
 app.get('/api/db-test', async (req, res) => {

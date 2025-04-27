@@ -1,11 +1,23 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { updateFormData } from '../../store/hl7FormSlice';
 import FormSection, { FormField, inputClassName, selectClassName } from './FormSection';
+import { useEffect } from 'react';
 
 const MSHSection = ({messageType,hl7MessageType}) => {
   const dispatch = useDispatch();
   const mshData = useSelector((state) => state.hl7Form.forms[messageType]?.msh);
 
+  // 當組件加載或 hl7MessageType 變化時，初始化 messageType 字段
+  useEffect(() => {
+    if (hl7MessageType && (!mshData?.messageType || mshData.messageType !== hl7MessageType)) {
+      dispatch(updateFormData({
+        messageType: messageType,
+        segment: 'msh',
+        field: 'messageType',
+        value: hl7MessageType
+      }));
+    }
+  }, [hl7MessageType, messageType, dispatch, mshData?.messageType]);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -101,7 +113,6 @@ const MSHSection = ({messageType,hl7MessageType}) => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入消息類型"
-            disabled={true}
           />
         </FormField>
 
