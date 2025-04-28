@@ -69,6 +69,25 @@ const Q11Form = () => {
     }
   };
 
+  const handleSendHL7Server = async () => {
+    try {
+      const response = await axios.post(
+        "/api/hl7/hl7server",
+        { message: hl7Message },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("訊息發送成功:", response.data);
+      alert("HL7訊息已成功發送至HL7 Server！");
+    } catch (error) {
+      console.error("發送HL7訊息時發生錯誤:", error);
+      alert(`發送失敗: ${error.response?.data?.error || error.message}`);
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-6">QBP^Q11 患者查詢訊息</h1>
@@ -110,6 +129,12 @@ const Q11Form = () => {
                 className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
               >
                 發送
+              </button>
+              <button
+                onClick={handleSendHL7Server}
+                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              >
+                發送至HL7 Server
               </button>
               <button
                 onClick={handleCopy}

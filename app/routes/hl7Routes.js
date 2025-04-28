@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const hl7Controller = require('../controllers/hl7/hl7Controller');
+const hl7Server = require('../controllers/hl7/hl7server');
 
 
 // 接收 HL7 訊息路由
 router.post('/receive', hl7Controller.handleHttpRequest.bind(hl7Controller));
+
+router.post('/hl7server', hl7Server.handleRequest.bind(hl7Server));
 
 // 解析 HL7 訊息路由
 router.post('/parse', hl7Controller.parseHL7Message.bind(hl7Controller));
