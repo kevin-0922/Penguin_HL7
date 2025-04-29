@@ -1,36 +1,210 @@
 const mllp = require("mllp-node");
+const fs = require('fs');
+const path = require('path');
 
 class Hl7Server {
   constructor() {
-    // 創建 MLLP 伺服器實例
-    this.server = new mllp.MLLPServer("127.0.0.1", 4321);
+    console.log("=== 初始化 HL7 MLLP 伺服器 ===");
     
+    // 配置參數，未來可從環境變數或配置文件獲取
+    this.config = {
+      localHost: process.env.MLLP_LOCAL_HOST || "127.0.0.1",
+      localPort: parseInt(process.env.MLLP_LOCAL_PORT || "4321"),
+      remoteHost: process.env.MLLP_REMOTE_HOST || "35.195.170.176",
+      remotePort: parseInt(process.env.MLLP_REMOTE_PORT || "46750"),
+      timeout: parseInt(process.env.MLLP_TIMEOUT || "30000")  // 默認30秒超時
+    };
+    
+    console.log("MLLP 伺服器配置:", this.config);
+    
+    try {
+      // 創建 MLLP 伺服器實例
+      this.server = new mllp.MLLPServer(this.config.localHost, this.config.localPort);
+      console.log(`MLLP 伺服器創建成功，監聽 ${this.config.localHost}:${this.config.localPort}`);
+      
+      // 建立日誌目錄
+      this.logDir = path.join(__dirname, '../../../logs');
+      if (!fs.existsSync(this.logDir)) {
+        fs.mkdirSync(this.logDir, { recursive: true });
+        console.log(`創建日誌目錄: ${this.logDir}`);
+      }
+      
+      // 設置各種事件處理器
+      this._setupEventHandlers();
+    } catch (error) {
+      console.error("MLLP 伺服器初始化失敗:", error);
+      throw error;
+    }
+  }
+  
+  _setupEventHandlers() {
     // 監聽接收到的HL7訊息
-    this.server.on('hl7', function(data) {
-      console.log('接收到HL7訊息:', data);
+    this.server.on('hl7', (data) => {
+      const timestamp = new Date().toISOString();
+      console.log(`[${timestamp}] 接收到HL7訊息:`, data.toString());
+      this._logToFile('received', data.toString());
     });
+    
+    // 監聽錯誤
+    this.server.on('error', (error) => {
+      console.error(`[${new Date().toISOString()}] MLLP伺服器錯誤:`, error);
+      this._logToFile('error', JSON.stringify(error));
+    });
+    
+    // 監聽連接
+    this.server.on('connection', (socket) => {
+      console.log(`[${new Date().toISOString()}] 新連接建立: ${socket.remoteAddress}:${socket.remotePort}`);
+    });
+    
+    // 監聽關閉
+    this.server.on('close', () => {
+      console.log(`[${new Date().toISOString()}] MLLP伺服器已關閉`);
+    });
+  }
+  
+  // 將消息寫入日誌文件
+  _logToFile(type, content) {
+    try {
+      const timestamp = new Date().toISOString().replace(/:/g, '-');
+      const logFile = path.join(this.logDir, `hl7_${type}_${timestamp.split('T')[0]}.log`);
+      const logEntry = `=== ${timestamp} ===\n${content}\n\n`;
+      
+      fs.appendFileSync(logFile, logEntry);
+    } catch (error) {
+      console.error("寫入日誌文件失敗:", error);
+    }
   }
 
   async handleRequest(req, res) {
-    console.log("接收到HL7訊息:", req.body);
+    const requestTimestamp = new Date().toISOString();
+    console.log(`[${requestTimestamp}] 開始處理HTTP HL7請求...`);
+    console.log("請求頭:", JSON.stringify(req.headers));
+    console.log("請求體:", typeof req.body === 'string' ? req.body : JSON.stringify(req.body));
+    
     try {
-      const hl7Message = req.body; // 從請求中獲取HL7訊息
+      // 檢查請求體是否存在
+      if (!req.body) {
+        throw new Error("請求體為空，無法處理HL7訊息");
+      }
       
-      // 使用 MLLP 協議將訊息發送到目標伺服器
-      this.server.send("35.195.170.176", 46750, hl7Message, (err, ackData) => {
-        if (err) {
-          console.error("傳送失敗:", err);
-          res.status(500).send(err.message);
-        } else {
-          console.log("收到 ACK:", ackData.toString());
-          res.status(200).send(ackData.toString());
-        }
+      const hl7Message = req.body; // 從請求中獲取HL7訊息
+      this._logToFile('outgoing', hl7Message);
+      
+      console.log(`[${requestTimestamp}] 準備發送HL7訊息到 ${this.config.remoteHost}:${this.config.remotePort}`);
+      console.log("原始訊息:", hl7Message);
+      
+      // 創建一個超時計時器
+      let timeoutId;
+      const timeoutPromise = new Promise((_, reject) => {
+        timeoutId = setTimeout(() => {
+          reject(new Error(`MLLP請求超時，超過 ${this.config.timeout}ms 未收到回應`));
+        }, this.config.timeout);
       });
+      
+      // 創建MLLP發送promise
+      const sendPromise = new Promise((resolve, reject) => {
+        this.server.send(
+          this.config.remoteHost, 
+          this.config.remotePort, 
+          hl7Message, 
+          (err, ackData) => {
+            if (timeoutId) clearTimeout(timeoutId);
+            
+            if (err) {
+              console.error(`[${new Date().toISOString()}] 傳送失敗:`, err);
+              this._logToFile('error', `傳送失敗: ${JSON.stringify(err)}`);
+              reject(err);
+            } else {
+              const receiveTimestamp = new Date().toISOString();
+              console.log(`[${receiveTimestamp}] 收到ACK回應`);
+              
+              if (ackData) {
+                const ackString = ackData.toString();
+                console.log("ACK內容:", ackString);
+                this._logToFile('ack', ackString);
+                
+                // 嘗試解析ACK訊息
+                try {
+                  const segments = ackString.split('\r');
+                  if (segments.length > 0) {
+                    const mshSegment = segments[0];
+                    console.log("MSH段落:", mshSegment);
+                    
+                    // 解析MSA段落獲取確認狀態
+                    const msaSegment = segments.find(s => s.startsWith('MSA'));
+                    if (msaSegment) {
+                      console.log("MSA段落:", msaSegment);
+                      const msaParts = msaSegment.split('|');
+                      if (msaParts.length > 1) {
+                        console.log("ACK狀態碼:", msaParts[1]);
+                      }
+                    }
+                  }
+                } catch (parseError) {
+                  console.warn("無法解析ACK訊息:", parseError);
+                }
+                
+                resolve(ackData);
+              } else {
+                console.warn("收到空的ACK回應");
+                this._logToFile('warning', "收到空的ACK回應");
+                resolve(Buffer.from(""));
+              }
+            }
+          }
+        );
+        console.log(`[${new Date().toISOString()}] MLLP請求已發送，等待回應...`);
+      });
+      
+      // 競爭發送和超時
+      const ackData = await Promise.race([sendPromise, timeoutPromise]);
+      
+      // 處理回應
+      console.log(`[${new Date().toISOString()}] 處理HTTP回應`);
+      res.status(200).send(ackData.toString());
+      console.log(`[${new Date().toISOString()}] HTTP回應已發送`);
+      
     } catch (error) {
-      console.error("處理HL7訊息時發生錯誤:", error);
-      res.status(500).send(error.message);
+      const errorTimestamp = new Date().toISOString();
+      console.error(`[${errorTimestamp}] 處理HL7訊息時發生錯誤:`, error);
+      console.error("錯誤堆疊:", error.stack);
+      this._logToFile('error', `${errorTimestamp} - ${error.message}\n${error.stack}`);
+      
+      res.status(500).json({
+        success: false,
+        error: error.message,
+        timestamp: errorTimestamp
+      });
+    } finally {
+      console.log(`[${new Date().toISOString()}] 請求處理完成`);
+    }
+  }
+  
+  // 關閉伺服器
+  close() {
+    console.log(`[${new Date().toISOString()}] 關閉MLLP伺服器...`);
+    if (this.server) {
+      this.server.close();
     }
   }
 }
 
-module.exports = new Hl7Server();
+// 確保程序結束時關閉伺服器
+process.on('exit', () => {
+  console.log("程序退出，關閉MLLP伺服器");
+  if (module.exports && typeof module.exports.close === 'function') {
+    module.exports.close();
+  }
+});
+
+process.on('SIGINT', () => {
+  console.log("收到中斷信號，關閉MLLP伺服器");
+  if (module.exports && typeof module.exports.close === 'function') {
+    module.exports.close();
+  }
+  process.exit(0);
+});
+
+// 創建並導出伺服器實例
+const server = new Hl7Server();
+module.exports = server;
