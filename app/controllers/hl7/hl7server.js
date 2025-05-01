@@ -42,18 +42,31 @@ class Hl7Server {
     this.server.on('hl7', (data) => {
       const timestamp = new Date().toISOString();
       console.log(`[${timestamp}] 接收到HL7訊息:`, data.toString());
+      console.log('原始數據:', data);
+      console.log('數據類型:', typeof data);
+      console.log('數據長度:', data.length);
+      console.log('十六進制表示:', data.toString('hex'));
       this._logToFile('received', data.toString());
     });
     
     // 監聽錯誤
     this.server.on('error', (error) => {
       console.error(`[${new Date().toISOString()}] MLLP伺服器錯誤:`, error);
+      console.error('錯誤詳情:', error.stack);
       this._logToFile('error', JSON.stringify(error));
     });
     
     // 監聽連接
     this.server.on('connection', (socket) => {
       console.log(`[${new Date().toISOString()}] 新連接建立: ${socket.remoteAddress}:${socket.remotePort}`);
+      console.log('Socket詳情:', {
+        localAddress: socket.localAddress,
+        localPort: socket.localPort,
+        remoteAddress: socket.remoteAddress,
+        remotePort: socket.remotePort,
+        bytesRead: socket.bytesRead,
+        bytesWritten: socket.bytesWritten
+      });
     });
     
     // 監聽關閉
@@ -178,21 +191,34 @@ class Hl7Server {
   // 解析MLLP回應
   _parseMLLPResponse(responseData) {
     try {
+      console.log('開始解析MLLP回應...');
+      console.log('原始回應數據:', responseData);
+      console.log('回應數據類型:', typeof responseData);
+      console.log('回應數據長度:', responseData.length);
+      console.log('回應數據十六進制:', responseData.toString('hex'));
+      
       // 檢查起始字符
       if (responseData[0] !== 0x0B) {
+        console.log('起始字符不正確:', responseData[0].toString(16));
         throw new Error("無效的MLLP回應：缺少起始字符");
       }
       
       // 檢查結束字符
       if (responseData[responseData.length - 2] !== 0x1C || 
           responseData[responseData.length - 1] !== 0x0D) {
+        console.log('結束字符不正確:', 
+          responseData[responseData.length - 2].toString(16), 
+          responseData[responseData.length - 1].toString(16));
         throw new Error("無效的MLLP回應：缺少結束字符");
       }
       
       // 提取消息內容
-      return responseData.slice(1, -2).toString("US-ASCII");
+      const message = responseData.slice(1, -2).toString("ascii");
+      console.log('解析後的消息內容:', message);
+      return message;
     } catch (error) {
       console.error("解析MLLP回應失敗:", error);
+      console.error('錯誤詳情:', error.stack);
       throw new Error(`解析MLLP回應失敗: ${error.message}`);
     }
   }
@@ -200,64 +226,57 @@ class Hl7Server {
   // 驗證ACK消息
   _validateACK(ackString) {
     try {
+      console.log('開始驗證ACK消息...');
+      console.log('ACK消息內容:', ackString);
+      
       const segments = ackString.split('\r');
+      console.log('消息段落數量:', segments.length);
+      console.log('所有段落:', segments);
+      
       if (segments.length < 2) {
         throw new Error("無效的ACK消息：缺少必要的段落");
       }
       
       // 檢查MSH段落
       const mshSegment = segments[0];
+      console.log('MSH段落:', mshSegment);
       if (!mshSegment.startsWith('MSH')) {
         throw new Error("無效的ACK消息：缺少MSH段落");
       }
       
       // 檢查MSA段落
       const msaSegment = segments.find(s => s.startsWith('MSA'));
+      console.log('MSA段落:', msaSegment);
       if (!msaSegment) {
         throw new Error("無效的ACK消息：缺少MSA段落");
       }
       
       const msaParts = msaSegment.split('|');
+      console.log('MSA段落部分:', msaParts);
       if (msaParts.length < 2) {
         throw new Error("無效的ACK消息：MSA段落格式錯誤");
       }
       
       // 檢查確認狀態
       const ackCode = msaParts[1];
+      console.log('ACK狀態碼:', ackCode);
       if (ackCode !== 'AA') {
         throw new Error(`消息被拒絕，狀態碼: ${ackCode}`);
       }
       
     } catch (error) {
       console.error("ACK驗證失敗:", error);
+      console.error('錯誤詳情:', error.stack);
       throw new Error(`ACK驗證失敗: ${error.message}`);
     }
   }
   
   // 關閉伺服器
   close() {
-    console.log(`[${new Date().toISOString()}] 關閉MLLP伺服器...`);
-    if (this.server) {
-      this.server.close();
-    }
+    console.log(`[${new Date().toISOString()}] 收到關閉MLLP伺服器請求，但已禁用自動關閉`);
+    // 不再自動關閉服務器
   }
 }
-
-// 確保程序結束時關閉伺服器
-process.on('exit', () => {
-  console.log("程序退出，關閉MLLP伺服器");
-  if (module.exports && typeof module.exports.close === 'function') {
-    module.exports.close();
-  }
-});
-
-process.on('SIGINT', () => {
-  console.log("收到中斷信號，關閉MLLP伺服器");
-  if (module.exports && typeof module.exports.close === 'function') {
-    module.exports.close();
-  }
-  process.exit(0);
-});
 
 // 創建並導出伺服器實例
 const server = new Hl7Server();
