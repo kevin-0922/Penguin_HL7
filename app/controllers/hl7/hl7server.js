@@ -87,11 +87,23 @@ class Hl7Server {
         throw new Error("請求體為空，無法處理HL7訊息");
       }
       
-      const hl7Message = req.body; // 從請求中獲取HL7訊息
+      // 獲取HL7訊息並確保是字符串格式
+      const hl7Message = typeof req.body === 'string' ? req.body : 
+                        typeof req.body.message === 'string' ? req.body.message : 
+                        JSON.stringify(req.body);
+      
+      // 記錄發送的消息
       this._logToFile('outgoing', hl7Message);
       
       console.log(`[${requestTimestamp}] 準備發送HL7訊息到 ${this.config.remoteHost}:${this.config.remotePort}`);
-      console.log("原始訊息:", hl7Message);
+      
+      // 創建MLLP封裝的消息
+      const messageBytes = Buffer.from(hl7Message, 'ascii');
+      const outBytes = Buffer.alloc(messageBytes.length + 3);
+      outBytes[0] = 0x0B;  // Start Block
+      messageBytes.copy(outBytes, 1);
+      outBytes[outBytes.length - 2] = 0x1C;  // End Block 1
+      outBytes[outBytes.length - 1] = 0x0D;  // End Block 2
       
       // 創建一個超時計時器
       let timeoutId;
@@ -106,7 +118,7 @@ class Hl7Server {
         this.server.send(
           this.config.remoteHost, 
           this.config.remotePort, 
-          hl7Message, 
+          outBytes, 
           (err, ackData) => {
             if (timeoutId) clearTimeout(timeoutId);
             
@@ -119,36 +131,19 @@ class Hl7Server {
               console.log(`[${receiveTimestamp}] 收到ACK回應`);
               
               if (ackData) {
-                const ackString = ackData.toString();
+                // 解析MLLP封裝的ACK消息
+                const ackString = this._parseMLLPResponse(ackData);
                 console.log("ACK內容:", ackString);
                 this._logToFile('ack', ackString);
                 
-                // 嘗試解析ACK訊息
-                try {
-                  const segments = ackString.split('\r');
-                  if (segments.length > 0) {
-                    const mshSegment = segments[0];
-                    console.log("MSH段落:", mshSegment);
-                    
-                    // 解析MSA段落獲取確認狀態
-                    const msaSegment = segments.find(s => s.startsWith('MSA'));
-                    if (msaSegment) {
-                      console.log("MSA段落:", msaSegment);
-                      const msaParts = msaSegment.split('|');
-                      if (msaParts.length > 1) {
-                        console.log("ACK狀態碼:", msaParts[1]);
-                      }
-                    }
-                  }
-                } catch (parseError) {
-                  console.warn("無法解析ACK訊息:", parseError);
-                }
+                // 驗證ACK消息
+                this._validateACK(ackString);
                 
-                resolve(ackData);
+                resolve(ackString);
               } else {
                 console.warn("收到空的ACK回應");
                 this._logToFile('warning', "收到空的ACK回應");
-                resolve(Buffer.from(""));
+                resolve("");
               }
             }
           }
@@ -161,7 +156,7 @@ class Hl7Server {
       
       // 處理回應
       console.log(`[${new Date().toISOString()}] 處理HTTP回應`);
-      res.status(200).send(ackData.toString());
+      res.status(200).send(ackData);
       console.log(`[${new Date().toISOString()}] HTTP回應已發送`);
       
     } catch (error) {
@@ -177,6 +172,65 @@ class Hl7Server {
       });
     } finally {
       console.log(`[${new Date().toISOString()}] 請求處理完成`);
+    }
+  }
+  
+  // 解析MLLP回應
+  _parseMLLPResponse(responseData) {
+    try {
+      // 檢查起始字符
+      if (responseData[0] !== 0x0B) {
+        throw new Error("無效的MLLP回應：缺少起始字符");
+      }
+      
+      // 檢查結束字符
+      if (responseData[responseData.length - 2] !== 0x1C || 
+          responseData[responseData.length - 1] !== 0x0D) {
+        throw new Error("無效的MLLP回應：缺少結束字符");
+      }
+      
+      // 提取消息內容
+      return responseData.slice(1, -2).toString("US-ASCII");
+    } catch (error) {
+      console.error("解析MLLP回應失敗:", error);
+      throw new Error(`解析MLLP回應失敗: ${error.message}`);
+    }
+  }
+
+  // 驗證ACK消息
+  _validateACK(ackString) {
+    try {
+      const segments = ackString.split('\r');
+      if (segments.length < 2) {
+        throw new Error("無效的ACK消息：缺少必要的段落");
+      }
+      
+      // 檢查MSH段落
+      const mshSegment = segments[0];
+      if (!mshSegment.startsWith('MSH')) {
+        throw new Error("無效的ACK消息：缺少MSH段落");
+      }
+      
+      // 檢查MSA段落
+      const msaSegment = segments.find(s => s.startsWith('MSA'));
+      if (!msaSegment) {
+        throw new Error("無效的ACK消息：缺少MSA段落");
+      }
+      
+      const msaParts = msaSegment.split('|');
+      if (msaParts.length < 2) {
+        throw new Error("無效的ACK消息：MSA段落格式錯誤");
+      }
+      
+      // 檢查確認狀態
+      const ackCode = msaParts[1];
+      if (ackCode !== 'AA') {
+        throw new Error(`消息被拒絕，狀態碼: ${ackCode}`);
+      }
+      
+    } catch (error) {
+      console.error("ACK驗證失敗:", error);
+      throw new Error(`ACK驗證失敗: ${error.message}`);
     }
   }
   
