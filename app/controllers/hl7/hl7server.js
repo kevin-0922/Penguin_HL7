@@ -33,6 +33,7 @@ class Hl7Server {
     this.server.on('hl7', (data) => {
       const timestamp = new Date().toISOString();
       console.log(`[${timestamp}] 接收到HL7訊息:`, data.toString());
+      console.log(`[${timestamp}] 原始HL7訊息數據:`, data);
     });
     
     // 監聽錯誤
@@ -43,6 +44,23 @@ class Hl7Server {
     // 監聽連接
     this.server.on('connection', (socket) => {
       console.log(`[${new Date().toISOString()}] 新連接建立: ${socket.remoteAddress}:${socket.remotePort}`);
+      
+      // 為每個連接添加數據監聽器以捕獲所有原始數據
+      socket.on('data', (data) => {
+        console.log(`[${new Date().toISOString()}] 接收到原始數據從 ${socket.remoteAddress}:${socket.remotePort}:`);
+        console.log("原始數據:", data);
+        console.log("數據字符串形式:", data.toString());
+        console.log("數據十六進制形式:", data.toString('hex'));
+        console.log("數據長度:", data.length, "字節");
+        
+        // 顯示按字節詳細分析
+        console.log("原始數據逐字節分析:");
+        for (let i = 0; i < data.length; i++) {
+          console.log(`字節[${i}]: ${data[i]} (0x${data[i].toString(16)}) ASCII: ${
+            data[i] >= 32 && data[i] <= 126 ? String.fromCharCode(data[i]) : '控制字符'
+          }`);
+        }
+      });
     });
     
     // 監聽關閉
@@ -91,7 +109,6 @@ class Hl7Server {
           this.config.remotePort, 
           outBytes, 
           (err, ackData) => {
-            console.log('ackData', ackData);
             if (timeoutId) clearTimeout(timeoutId);
             
             if (err) {
@@ -99,19 +116,99 @@ class Hl7Server {
               reject(err);
             } else {
               const receiveTimestamp = new Date().toISOString();
-              console.log(`[${receiveTimestamp}] 收到ACK回應`);
+              console.log(`[${receiveTimestamp}] 收到伺服器回應:`);
+              console.log("=============== 回應內容開始 ===============");
+              console.log("原始 ackData:", ackData);
               
-              if (ackData) {
-                console.log("ackData為：", ackData);
-                // 直接返回ackData的字符串表示，跳過解析和驗證
-                const ackString = ackData.toString();
-                console.log("ACK內容:", ackString);
+              // 檢查是否為 Buffer 對象
+              if (Buffer.isBuffer(ackData)) {
+                // 顯示原始十六進制和 ASCII 形式
+                console.log("十六進制表示:", ackData.toString('hex'));
+                console.log("Buffer 長度:", ackData.length);
                 
-                resolve(ackString);
+                // 手動解析 MLLP 封裝
+                if (ackData.length > 2 && ackData[0] === 0x0B && ackData[ackData.length - 2] === 0x1C && ackData[ackData.length - 1] === 0x0D) {
+                  console.log("發現 MLLP 封裝格式");
+                  
+                  // 移除 MLLP 封裝字符 (起始 0x0B 和結束 0x1C 0x0D)
+                  const contentBuffer = ackData.slice(1, -2);
+                  console.log("移除 MLLP 封裝後的內容:", contentBuffer.toString());
+                  
+                  // 嘗試分析 HL7 段落
+                  const segments = contentBuffer.toString().split('\r');
+                  console.log("檢測到 HL7 段落數量:", segments.length);
+                  segments.forEach((segment, i) => {
+                    if (segment.trim()) {
+                      console.log(`段落 ${i+1}: ${segment}`);
+                      
+                      // 特別識別 MSH 或 MSA 段
+                      if (segment.startsWith('MSH')) {
+                        console.log(">>> 發現 MSH 段 <<<");
+                      } else if (segment.startsWith('MSA')) {
+                        console.log(">>> 發現 MSA 段 <<<");
+                      }
+                    }
+                  });
+                } else {
+                  console.log("原始內容 (非標準 MLLP 封裝):", ackData.toString());
+                }
               } else {
-                console.warn("收到空的ACK回應");
-                resolve("");
+                console.log("ackData 不是 Buffer 類型:", typeof ackData);
+                console.log("內容:", ackData);
               }
+              
+              // 這裡是關鍵部分 - 確保返回的是完整消息
+              let responseStr;
+              if (Buffer.isBuffer(ackData)) {
+                if (ackData[0] === 0x0B && ackData[ackData.length - 2] === 0x1C && ackData[ackData.length - 1] === 0x0D) {
+                  // 正確處理 MLLP 封裝，保留完整 HL7 消息
+                  responseStr = ackData.slice(1, -2).toString();
+                } else {
+                  // 如果不是 MLLP 格式，直接轉為字符串
+                  responseStr = ackData.toString();
+                }
+              } else {
+                responseStr = ackData ? String(ackData) : "";
+              }
+              
+              // 檢查回應是否只包含 MSA 段，如果是則添加 MSH 段構建完整的 ACK 回應
+              if (responseStr && responseStr.trim().startsWith('MSA|')) {
+                console.log("檢測到只有 MSA 段，添加 MSH 段構建完整 ACK 回應");
+                
+                // 從 MSA 段提取控制 ID (MSA|AA|CONTROL_ID)
+                const msaParts = responseStr.split('|');
+                const controlId = msaParts.length >= 3 ? msaParts[2].trim() : "";
+                
+                // 生成時間戳
+                const timestamp = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14);
+                
+                // 創建標準 MSH 段 (確保格式正確且完整)
+                const mshSegment = `MSH|^~\\&|RECEIVING_APP|RECEIVING_FACILITY|SENDING_APP|SENDING_FACILITY|${timestamp}||ACK^Q11^ACK|${controlId}|P|2.5.1|||AL||TW|UTF-8|||`;
+                
+                // 使用標準 HL7 段分隔符（ASCII 13 = CR）
+                responseStr = mshSegment + String.fromCharCode(13) + responseStr;
+                
+                console.log("構建的完整 ACK 回應 (分段顯示):");
+                const segments = responseStr.split(String.fromCharCode(13));
+                segments.forEach((segment, index) => {
+                  console.log(`段落 ${index+1}: ${segment}`);
+                });
+              }
+              
+              // 打印最終回應而不使用 console.log (避免長字符串被截斷)
+              console.log("最終回應字符串 (按字節長度): " + responseStr.length + " 字節");
+              console.log("最終回應字符串 (前60個字符): " + responseStr.substring(0, 60) + "...");
+              console.log("最終回應結構:");
+              if (responseStr.includes(String.fromCharCode(13))) {
+                const segments = responseStr.split(String.fromCharCode(13));
+                segments.forEach((segment, index) => {
+                  console.log(`  響應段落 ${index+1}: ${segment.substring(0, 20)}...`);
+                });
+              } else {
+                console.log("  (響應不包含段落分隔符)");
+              }
+              
+              resolve(responseStr);
             }
           }
         );
