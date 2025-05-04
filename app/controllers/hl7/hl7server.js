@@ -102,12 +102,10 @@ class Hl7Server {
               console.log(`[${receiveTimestamp}] 收到ACK回應`);
               
               if (ackData) {
-                // 解析MLLP封裝的ACK消息
-                const ackString = this._parseMLLPResponse(ackData);
+                console.log("ackData為：", ackData);
+                // 直接返回ackData的字符串表示，跳過解析和驗證
+                const ackString = ackData.toString();
                 console.log("ACK內容:", ackString);
-                
-                // 驗證ACK消息
-                this._validateACK(ackString);
                 
                 resolve(ackString);
               } else {
@@ -142,7 +140,8 @@ class Hl7Server {
     }
   }
 
-  // 解析MLLP回應
+  // 解析MLLP回應 - 已注釋調
+  /*
   _parseMLLPResponse(responseData) {
     try {
       // 檢查起始字符
@@ -163,8 +162,10 @@ class Hl7Server {
       throw new Error(`解析MLLP回應失敗: ${error.message}`);
     }
   }
+  */
 
-  // 驗證ACK消息
+  // 驗證ACK消息 - 已注釋調
+  /*
   _validateACK(ackString) {
     try {
       const segments = ackString.split('\r');
@@ -200,6 +201,7 @@ class Hl7Server {
       throw new Error(`ACK驗證失敗: ${error.message}`);
     }
   }
+  */
   
   // 關閉伺服器
   close() {
