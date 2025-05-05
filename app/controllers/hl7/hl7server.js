@@ -6,10 +6,10 @@ class Hl7Server {
     
     // 配置參數，未來可從環境變數或配置文件獲取
     this.config = {
-      localHost: process.env.MLLP_LOCAL_HOST || "127.0.0.1",
-      localPort: parseInt(process.env.MLLP_LOCAL_PORT || "4321"),
-      remoteHost: process.env.MLLP_REMOTE_HOST || "35.195.170.176",
-      remotePort: parseInt(process.env.MLLP_REMOTE_PORT || "46750"),
+      localHost:  process.env.MLLP_LOCAL_HOST,
+      localPort: parseInt(process.env.MLLP_LOCAL_PORT),
+      remoteHost: process.env.MLLP_REMOTE_HOST,
+      remotePort: parseInt(process.env.MLLP_REMOTE_PORT),
       timeout: parseInt(process.env.MLLP_TIMEOUT || "30000")  // 默認30秒超時
     };
     
@@ -309,3 +309,7 @@ class Hl7Server {
 // 創建並導出伺服器實例
 const server = new Hl7Server();
 module.exports = server;
+
+
+
+
