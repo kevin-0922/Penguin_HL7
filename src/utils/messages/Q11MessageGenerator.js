@@ -31,7 +31,7 @@ export class Q11MessageGenerator extends BaseMessageGenerator {
     segments.push(this.getSegmentGenerator('RCP').generate(formData));
     
     // 返回完整的 Q11 消息
-    return segments.join('\n');
+    return segments.join('\r');
   }
   
   /**

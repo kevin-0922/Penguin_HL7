@@ -10,12 +10,12 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
+    "@keepsolutions/mllp-node": "^1.0.1",
     "@reduxjs/toolkit": "^2.6.1",
     "axios": "^1.8.4",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.19.2",
-    "mllp-node": "^2.0.0",
     "moment": "^2.30.1",
     "process": "^0.11.10",
     "react": "^18.3.1",

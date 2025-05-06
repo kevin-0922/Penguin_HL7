@@ -45,7 +45,7 @@ export class O33MessageGenerator extends BaseMessageGenerator {
     segments.push(this.getSegmentGenerator('OBR').generate(formData));
     segments.push(this.getSegmentGenerator('OBX').generate(formData));
     
-    return segments.join('\n');
+    return segments.join('\r');
   }
   
   /**

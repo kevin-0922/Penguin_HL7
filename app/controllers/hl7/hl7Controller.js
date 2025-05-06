@@ -366,7 +366,7 @@ class Hl7Controller {
   buildAckResponse(message, ackCode, textMessage) {
     try {
       // 分割訊息為段落
-      const segments = message.split('\r\n');
+      const segments = message.split('\r');
       
       // 獲取MSH段落
       const msh = segments.find(segment => segment.startsWith('MSH'));
@@ -394,10 +394,10 @@ class Hl7Controller {
       return [
         `MSH|^~\\&|${receivingApp}|${receivingFacility}|${sendingApp}|${sendingFacility}|${timestamp}||ACK|${messageControlId}|P|2.5.1`,
         `MSA|${ackCode}|${messageControlId}|${textMessage}`
-      ].join('\r\n');
+      ].join('\r');
     } catch (error) {
       console.error('構建ACK回應時發生錯誤:', error);
-      return `MSH|^~\\&|ERROR|ERROR|ERROR|ERROR|${new Date().toISOString().replace(/[-:T]/g, '').substring(0, 14)}||ACK|ERROR|P|2.5.1\r\nMSA|AE|ERROR|Error constructing ACK: ${error.message}`;
+      return `MSH|^~\\&|ERROR|ERROR|ERROR|ERROR|${new Date().toISOString().replace(/[-:T]/g, '').substring(0, 14)}||ACK|ERROR|P|2.5.1\rMSA|AE|ERROR|Error constructing ACK: ${error.message}`;
     }
   }
 
@@ -416,10 +416,10 @@ class Hl7Controller {
         `MSH|^~\\&|${sendingApp}|${sendingFacility}|${receivingApp}|${receivingFacility}|${timestamp}||ORL^O34|${messageControlId}_ACK|P|2.5.1`,
         `MSA|AA|${messageControlId}|Message processed successfully`,
         `PID|1||${pid?.patientId || ''}^^^MRN||${pid?.patientName || ''}||||||||||||||||`
-      ].join('\r\n');
+      ].join('\r');
     } catch (error) {
       console.error('構建O34回應時發生錯誤:', error);
-      return `MSH|^~\\&|ERROR|ERROR|ERROR|ERROR|${new Date().toISOString().replace(/[-:T]/g, '').substring(0, 14)}||ORL^O34|ERROR|P|2.5.1\r\nMSA|AE|ERROR|Error constructing O34 response: ${error.message}`;
+      return `MSH|^~\\&|ERROR|ERROR|ERROR|ERROR|${new Date().toISOString().replace(/[-:T]/g, '').substring(0, 14)}||ORL^O34|ERROR|P|2.5.1\rMSA|AE|ERROR|Error constructing O34 response: ${error.message}`;
     }
   }
 
