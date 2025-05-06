@@ -32,68 +32,88 @@ const MSHSection = ({messageType,hl7MessageType}) => {
   return (
     <>
       <div className="bg-blue-50 p-4 mb-4 rounded-lg">
-        <h3 className="text-lg font-semibold text-blue-800 mb-2">消息標頭段落 (MSH)</h3>
+        <h3 className="text-lg font-semibold text-blue-800 mb-2">訊息標頭段落 (MSH)</h3>
         <p className="text-sm text-blue-600">
-          此段落用於記錄HL7消息的基本標頭信息，包括發送和接收設施等重要資訊。
+          此段落用於記錄HL7訊息的基本標頭資訊，包括發送和接收機構等重要資訊。
           標記 * 的欄位為必填項目。
         </p>
       </div>
 
-      <FormSection title="MSH (消息標頭)">
-        {/* MSH-3 發送應用程序 */}
-        <FormField label="發送應用程序 (MSH-3)" >
+      <FormSection title="MSH (訊息標頭)">
+        {/* MSH-3 發送應用程式 */}
+        <FormField 
+          label="發送應用程式" 
+          enName="Sending Application"
+          fieldNotation="MSH-3" 
+        >
           <input
             type="text"
             id="sendingApplication"
             value={mshData?.sendingApplication || ''}
             onChange={handleInputChange}
             className={inputClassName}
-            placeholder="請輸入發送應用程序"
+            placeholder="請輸入發送應用程式"
             required_test
           />
         </FormField>
 
-        {/* MSH-4 發送設施 */}
-        <FormField label="發送設施 (MSH-4)" >
+        {/* MSH-4 發送機構 */}
+        <FormField 
+          label="發送機構" 
+          enName="Sending Facility"
+          fieldNotation="MSH-4" 
+        >
           <input
             type="text"
             id="sendingFacility"
             value={mshData?.sendingFacility || ''}
             onChange={handleInputChange}
             className={inputClassName}
-            placeholder="請輸入發送設施"
+            placeholder="請輸入發送機構"
             required_test
           />
         </FormField>
 
-        {/* MSH-5 接收應用程序 */}
-        <FormField label="接收應用程序 (MSH-5)" >
+        {/* MSH-5 接收應用程式 */}
+        <FormField 
+          label="接收應用程式" 
+          enName="Receiving Application"
+          fieldNotation="MSH-5" 
+        >
           <input
             type="text"
             id="receivingApplication"
             value={mshData?.receivingApplication || ''}
             onChange={handleInputChange}
             className={inputClassName}
-            placeholder="請輸入接收應用程序"
+            placeholder="請輸入接收應用程式"
             required_test
           />
         </FormField>
 
-        {/* MSH-6 接收設施 */}
-        <FormField label="接收設施 (MSH-6)" >
+        {/* MSH-6 接收機構 */}
+        <FormField 
+          label="接收機構" 
+          enName="Receiving Facility"
+          fieldNotation="MSH-6"
+        >
           <input
             type="text"
             id="receivingFacility"
             value={mshData?.receivingFacility || ''}
             onChange={handleInputChange}
             className={inputClassName}
-            placeholder="請輸入接收設施"
+            placeholder="請輸入接收機構"
             required_test
           />
         </FormField>
 
         {/* MSH-8 安全性 */}
-        <FormField label="安全性 (MSH-8)">
+        <FormField 
+          label="安全性" 
+          enName="Security"
+          fieldNotation="MSH-8"
+        >
           <input
             type="text"
             id="security"
@@ -104,33 +124,45 @@ const MSHSection = ({messageType,hl7MessageType}) => {
           />
         </FormField>
 
-        {/* MSH-9 消息類型 */}
-        <FormField label="消息類型 (MSH-9)" >
+        {/* MSH-9 訊息類型 */}
+        <FormField 
+          label="訊息類型" 
+          enName="Message Type"
+          fieldNotation="MSH-9"
+        >
           <input
             type="text"
             id="messageType"
             value={mshData?.messageType || hl7MessageType}
             onChange={handleInputChange}
             className={inputClassName}
-            placeholder="請輸入消息類型"
+            placeholder="請輸入訊息類型"
           />
         </FormField>
 
-        {/* MSH-10 消息控制ID */}
-        <FormField label="消息控制ID (MSH-10)" >
+        {/* MSH-10 訊息控制ID */}
+        <FormField 
+          label="訊息控制ID" 
+          enName="Message Control ID"
+          fieldNotation="MSH-10"
+        >
           <input
             type="text"
             id="messageControlId"
             value={mshData?.messageControlId || ''}
             onChange={handleInputChange}
             className={inputClassName}
-            placeholder="請輸入消息控制ID"
+            placeholder="請輸入訊息控制ID"
             required_test
           />
         </FormField>
 
         {/* MSH-11 處理ID */}
-        <FormField label="處理ID (MSH-11)" >
+        <FormField 
+          label="處理ID" 
+          enName="Processing ID"
+          fieldNotation="MSH-11"
+        >
           <select
             id="processingId"
             name="processingId"
@@ -140,14 +172,18 @@ const MSHSection = ({messageType,hl7MessageType}) => {
             required_test
           >
             <option value="">請選擇</option>
-            <option value="D">除錯 (Debug)</option>
-            <option value="P">生產 (Production)</option>
-            <option value="T">訓練 (Training)</option>
+            <option value="P">Production</option>
+            <option value="D">Debugging</option>
+            <option value="T">Training</option>
           </select>
         </FormField>
 
         {/* MSH-13 序列號 */}
-        <FormField label="序列號 (MSH-13)">
+        <FormField 
+          label="序列號" 
+          enName="Sequence Number"
+          fieldNotation="MSH-13"
+        >
           <input
             type="text"
             id="sequenceNumber"
@@ -158,20 +194,28 @@ const MSHSection = ({messageType,hl7MessageType}) => {
           />
         </FormField>
 
-        {/* MSH-14 序列指針 */}
-        <FormField label="序列指針 (MSH-14)">
+        {/* MSH-14 延續指標 */}
+        <FormField 
+          label="延續指標" 
+          enName="Continuation Pointer"
+          fieldNotation="MSH-14"
+        >
           <input
             type="text"
             id="continuationPointer"
             value={mshData?.continuationPointer || ''}
             onChange={handleInputChange}
             className={inputClassName}
-            placeholder="請輸入序列指針"
+            placeholder="請輸入延續指標"
           />
         </FormField>
 
-        {/* MSH-15 接受確認類型 */}
-        <FormField label="接受確認類型 (MSH-15)">
+        {/* MSH-15 接收確認類型 */}
+        <FormField 
+          label="接收確認類型" 
+          enName="Accept Acknowledgment Type"
+          fieldNotation="MSH-15"
+        >
           <select
             id="acceptAckType"
             name="acceptAckType"
@@ -180,15 +224,19 @@ const MSHSection = ({messageType,hl7MessageType}) => {
             className={selectClassName}
           >
             <option value="">請選擇</option>
-            <option value="AL">總是 (Always)</option>
-            <option value="NE">從不 (Never)</option>
-            <option value="ER">錯誤時 (Error)</option>
-            <option value="SU">成功時 (Successful)</option>
+            <option value="AL">Always</option>
+            <option value="NE">Never</option>
+            <option value="ER">Error/reject conditions only</option>
+            <option value="SU">Successful completion only</option>
           </select>
         </FormField>
 
-        {/* MSH-16 應用程序確認類型 */}
-        <FormField label="應用程序確認類型 (MSH-16)">
+        {/* MSH-16 應用程式確認類型 */}
+        <FormField 
+          label="應用程式確認類型" 
+          enName="Application Acknowledgment Type"
+          fieldNotation="MSH-16"
+        >
           <select
             id="applicationAckType"
             name="applicationAckType"
@@ -197,10 +245,10 @@ const MSHSection = ({messageType,hl7MessageType}) => {
             className={selectClassName}
           >
             <option value="">請選擇</option>
-            <option value="AL">總是 (Always)</option>
-            <option value="NE">從不 (Never)</option>
-            <option value="ER">錯誤時 (Error)</option>
-            <option value="SU">成功時 (Successful)</option>
+            <option value="AL">Always</option>
+            <option value="NE">Never</option>
+            <option value="ER">Error/reject conditions only</option>
+            <option value="SU">Successful completion only</option>
           </select>
         </FormField>
       </FormSection>

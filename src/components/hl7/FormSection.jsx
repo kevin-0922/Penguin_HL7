@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+
 const FormSection = ({ title, children, className = '' }) => {
   return (
     <div className={`bg-white p-6 rounded-lg shadow-md mb-6 ${className}`}>
@@ -17,11 +19,15 @@ const FormSection = ({ title, children, className = '' }) => {
 export default FormSection;
 
 // 輸入欄位組件
-export const FormField = ({ label, required, children, fullWidth = false }) => {
+export const FormField = ({ label, enName="", fieldNotation="", required, children, fullWidth = false }) => {
+  // 從 Redux store 獲取顯示欄位標記的設定
+  const showFieldNotation = useSelector(state => state.hl7Form.showFieldNotation);
+
+  
   return (
     <div className={fullWidth ? "md:col-span-2" : ""}>
       <label className="block text-sm font-medium text-gray-700 mb-1">
-        {label} {required && <span className="text-red-500">*</span>}
+        {label + " " + "("+ enName +")" + " " +  (showFieldNotation?"("+ fieldNotation +")" : "") } {required && <span className="text-red-500">*</span>}
       </label>
       {children}
     </div>

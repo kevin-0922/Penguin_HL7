@@ -28,7 +28,7 @@ const QPDSection = ({messageType}) => {
 
       <FormSection title="QPD (查詢參數定義)">
         {/* QPD-1 查詢名稱 */}
-        <FormField label="查詢名稱 (QPD-1)" >
+        <FormField label="查詢名稱" enName="Message Query Name" fieldNotation="QPD-1" >
           <input
             type="text"
             id="messageQueryName"
@@ -41,7 +41,7 @@ const QPDSection = ({messageType}) => {
         </FormField>
 
         {/* QPD-2 查詢標籤 */}
-        <FormField label="查詢標籤 (QPD-2)" >
+        <FormField label="查詢標籤" enName="Query Tag" fieldNotation="QPD-2" >
           <input
             type="text"
             id="queryTag"
@@ -54,7 +54,7 @@ const QPDSection = ({messageType}) => {
         </FormField>
 
         {/* QPD-3 查詢參數 */}
-        <FormField label="查詢參數 (QPD-3)" >
+        <FormField label="查詢參數" enName="Query Parameters" fieldNotation="QPD-3" >
           <input
             type="text"
             id="userParametersInSuccessiveFields"

@@ -14,6 +14,7 @@ const defaultMessageType = Object.keys(messageTypeToInitialState)[0] || '';
 const hl7FormSlice = createSlice({
   name: 'hl7Form',
   initialState: {
+    showFieldNotation: true, // 控制是否顯示欄位標記 (MSH-3)
     forms: {
       'O33': o33DataInitialState,
       'Q11': q11DataInitialState,
@@ -61,10 +62,14 @@ const hl7FormSlice = createSlice({
           console.warn(`重置表單時找不到 ${messageType} 的初始狀態定義`);
         }
       });
+    },
+    // 設置是否顯示欄位標記
+    setFieldNotation: (state, action) => {
+      state.showFieldNotation = action.payload;
     }
   }
 });
 
-export const { updateFormData, resetForm, resetAllForms} = hl7FormSlice.actions;
+export const { updateFormData, resetForm, resetAllForms, setFieldNotation } = hl7FormSlice.actions;
 export default hl7FormSlice.reducer; 
 

@@ -162,7 +162,3 @@ class Hl7Server {
 // 創建並導出伺服器實例
 const server = new Hl7Server();
 module.exports = server;
-
-
-
-
