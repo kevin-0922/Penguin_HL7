@@ -38,7 +38,7 @@ function initializeDatabase() {
       message_control_id TEXT NOT NULL,
       sender TEXT NOT NULL,
       receiver TEXT NOT NULL,
-      message_content TEXT NOT NULL,
+      message_content JSON NOT NULL,  -- 改為 JSON 格式，儲存結構化的 HL7 訊息
       status TEXT DEFAULT 'sent',
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )`, (err) => {
@@ -56,7 +56,7 @@ function initializeDatabase() {
       message_control_id TEXT NOT NULL,
       sender TEXT NOT NULL,
       receiver TEXT NOT NULL,
-      message_content TEXT NOT NULL,
+      message_content JSON NOT NULL,  -- 改為 JSON 格式，儲存結構化的 HL7 訊息
       status TEXT DEFAULT 'received',
       response_message_id INTEGER,
       received_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
