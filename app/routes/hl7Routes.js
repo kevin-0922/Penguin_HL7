@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const hl7Controller = require('../controllers/hl7/hl7Controller');
 const hl7Server = require('../controllers/hl7/hl7server');
-
+const { handleQBPQuery } = require('../utils/parsers/qbpHandler');
 
 // 接收 HL7 訊息路由
 router.post('/receive', hl7Controller.handleHttpRequest.bind(hl7Controller));
@@ -27,5 +27,14 @@ router.post('/mllp', async (req, res) => {
     });
   }
 });
-
+// router.post('/qbp', async (req, res) => {
+//   const qbpMessage = req.body.message || req.body;
+//   try {
+//     const rspMessage = await handleQBPQuery(qbpMessage);
+//     res.type('text/plain').send(rspMessage);
+//   } catch (error) {
+//     console.error('處理 QBP 時發生錯誤：', error);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
 module.exports = router;
