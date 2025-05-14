@@ -1,4 +1,5 @@
 HL7_MLLP_PROTOCOL_GUIDE.md
+
 # Logs
 logs
 *.log
@@ -138,4 +139,5 @@ dist
 /temp
 /files
 node_modules
+package-lock.json
 .DS_Store

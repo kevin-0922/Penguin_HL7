@@ -14,7 +14,7 @@ class Hl7Controller {
   constructor() {
     // 初始化訊息處理器映射
     this.messageHandlers = new Map([
-      ['OML^O33^OML^O33', this.handleOmlO33.bind(this)],
+      ['OML^O33^OML_O33', this.handleOmlO33.bind(this)],
       ['ORL^O34', this.handleOrlO34.bind(this)],
       ['QBP^Q11^QBP_Q11', this.handleQbpQ11.bind(this)] 
     ]);
@@ -116,7 +116,7 @@ class Hl7Controller {
       console.log('SPM部分:', spm);
       
       try {
-        const messageType = 'OML^O33';
+        const messageType = 'OML^O33^OML_O33';
         const messageControlId = this.extractMsgControlId(message);
         const sender = this.extractSender(message);
         const receiver = this.extractReceiver(message);
