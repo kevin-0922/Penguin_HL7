@@ -2,7 +2,6 @@ require("dotenv").config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const hl7Routes = require('./routes/hl7Routes');
 const viteExpress = require('vite-express');
 
 // 明確導入數據庫以確保連接初始化
@@ -26,8 +25,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.text({ type: 'application/hl7-v2' }));
 
-// API 路由
-app.use('/api/hl7', hl7Routes);
+require('./routes')(app);//載入路由
 
 // 測試數據庫連接
 app.get('/api/db-test', async (req, res) => {
@@ -58,7 +56,6 @@ app.get('/api/db-test', async (req, res) => {
 const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   console.log('HL7 消息數據庫已初始化完成');
-  console.log(`API 測試地址: http://localhost:${PORT}/api/db-test`);
 });
 
 // 綁定 Vite
@@ -66,6 +63,12 @@ viteExpress.bind(app, server);
 
 // 錯誤處理中間件
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
+  console.error("捕獲到未處理的錯誤:", err.stack);
+  if (res.headersSent) {
+    return next(err);
+  }
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || '伺服器發生內部錯誤。',
+  });
 });
