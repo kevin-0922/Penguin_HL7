@@ -4,6 +4,7 @@ module.exports = (app) => {
 
     app.use('/api/hl7', require('./api/hl7message')());
     app.use('/api/mllp', require('./api/hl7mllp')());
+    app.use('/dicom', require('./api/dicomOrder')());
   
 
   
