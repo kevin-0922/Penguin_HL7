@@ -1,0 +1,79 @@
+專案資料夾結構與職責分析：
+
+主要資料夾：
+   `api/`:
+       職責: 存放各個 API 端點的具體路由處理邏輯。`routes.js` 檔案會將特定路徑的請求導向到此目錄下的對應處理器。每個子目錄（例如 `pacs`, `fhirConverter`, `pasManager`）通常對應一組相關的 API。
+       內容: JavaScript 檔案，每個檔案或資料夾實現一組 API 端點的請求處理函式 (request handlers) 或 Express Routers。
+
+   `models/`:
+       職責: 存放資料庫模型定義 (主要在 `models/postgres/model/` 下，使用 Sequelize ORM) 以及與資料存取、資料結構轉換和業務邏輯相關的模組。
+       內容:
+           `postgres/`: 包含 Sequelize 的連線設定 (`index.js`) 和實際的資料庫表模型定義 (`model/` 子目錄)。
+           其他子目錄如 `pacs/`, `fhirConverter/`, `pasManager/` 等，可能包含與這些特定醫療領域相關的資料處理邏輯、輔助函式或與外部系統互動的客戶端。
+
+   `node_modules/`:
+       職責: 標準的 Node.js 資料夾，用於存放專案所依賴的所有 npm 套件。
+       內容: 由 npm 或 yarn 自動管理的套件檔案。
+
+   `public/`:
+       職責: 存放完全公開的靜態資源，這些資源不需要使用者登入即可透過瀏覽器直接存取。在 `routes.js` 中透過 `express.static` 提供服務。
+       內容: HTML 檔案 (例如 `login.html`, `404.html`)、CSS 樣式表、公開的 JavaScript 檔案、圖片、字型等。
+
+   `scripts/`:
+       職責: 存放各種輔助腳本，用於開發、部署、維護等任務。
+       內容: 包含如 `insertExample.js` 的檔案，通常用於資料庫種子腳本 (Seeding)、資料庫遷移輔助或批次處理任務。
+
+   `src/`:
+       職責: 這是專案後端應用程式主要的原始碼目錄，包含核心業務邏輯。路徑別名 `@src`, `@middlewares`, `@controllers`, `@services`, `@utils` 都指向此目錄或其子目錄。
+       內容與推測的子目錄結構:
+           `controllers/` (`@controllers`): 存放控制器 (Controllers)，負責接收 HTTP 請求，調用服務層處理業務邏輯，並回傳應答。
+           `middlewares/` (`@middlewares`): 存放 Express 中介軟體 (Middlewares)，用於處理身份驗證、日誌記錄、錯誤處理等。
+           `services/` (`@services`): 存放服務層 (Services)，封裝核心業務邏輯，與資料模型互動。
+           `utils/` (`@utils`): 存放通用的輔助函式或工具模組，如日期格式化、日誌記錄器設定等。
+
+其他重要檔案的職責：
+
+   `server.js`: 應用程式的進入點。負責初始化 Express 應用、設定中介軟體、連接資料庫、定義路由的引入點以及啟動 HTTP/HTTPS 伺服器。
+   `routes.js`: 定義應用程式的主要路由結構。它將不同的 URL 路徑映射到 `api/` 目錄下相應的處理邏輯，並套用如登入驗證等中介軟體。
+   `package.json`: Node.js 專案的描述檔，包含專案名稱、版本、依賴套件、執行腳本 (`scripts` 部分)、路徑別名 (`_moduleAliases`) 等。
+   `.env copy.template`: 環境變數的範本檔案。開發者需要複製此檔案為 `.env` 並填入實際的環境特定設定。
+   `pm2.config.js`: PM2 的設定檔。PM2 是一個 Node.js 應用程式的進程管理器。
+   `nginx.conf`: Nginx 的設定檔。Nginx 常作為反向代理伺服器。
+   `docker-compose.yml`, `Dockerfile.example`: 用於 Docker 容器化部署的設定檔。
+   `.eslintrc.js`: ESLint 的設定檔，用於程式碼風格檢查和語法檢查。
+   `jsconfig.json`: 用於設定 JavaScript 專案的選項，例如路徑別名，讓編輯器能更好地理解專案結構。
+
+
+
+
+路由組織模式說明：
+在 `routes.js` 中，您可能會看到類似以下的路由掛載寫法：
+
+```javascript
+app.use(
+  '/api/someFeature',
+  require(path.join(__dirname, './api/someFeature'))() // 注意最後的 ()
+);
+```
+
+這種寫法涉及到以下幾個關鍵點：
+
+1.  `path.join(__dirname, './api/someFeature')`:
+       `__dirname`: Node.js 的全域變數，代表目前執行腳本所在的目錄的絕對路徑。
+       `path.join()`: Node.js `path` 模組的方法，用於以跨平台的方式將路徑片段組合成一個完整的路徑。
+       這整句的目的是建構一個指向特定 API 模組目錄（例如 `./api/someFeature/`）的絕對路徑。
+
+2.  `require(absolute_path_to_module)`:
+       Node.js 的 `require()` 函式用於載入模組。
+       當 `require()` 一個目錄路徑時，Node.js 預設會嘗試載入該目錄下的 `index.js` 檔案。
+       關鍵點：在這種模式下，被載入的 `index.js` 檔案 (例如 `./api/someFeature/index.js`) 通常會 `module.exports` 一個函式，而不是直接導出一個 Express Router 物件。
+
+3.  `()` (最後的括號):
+       因為 `require(absolute_path_to_module)` 的執行結果是上一步中從模組導出的那個函式。
+       所以，緊跟在 `require(...)` 後面的 `()` 就是立即呼叫 (執行) 這個函式。
+       這個被導出的函式在執行時，通常會建立、配置並回傳一個 Express Router 實例。這個 Router 實例上定義了所有與 `someFeature` 相關的具體子路由。
+
+總結： `require(path.join(__dirname, './api/someFeature'))()` 的完整意義是：
+「載入位於 `./api/someFeature/index.js` 的模組，該模組導出了一個函式。然後，立即執行這個函式，並將其回傳的 Express Router 實例用於處理 `/api/someFeature` 路徑下的請求。」
+
+這種模式允許將不同功能的路由邏輯分散到各自的模組中，每個模組的 `index.js` 作為一個「工廠」或「產生器」，在被呼叫時才產生並提供配置好的路由處理器。 

@@ -136,7 +136,6 @@ dist
 /public/build*
 /ssl_key
 /public_auth/build
-/temp
 /files
 node_modules
 package-lock.json
