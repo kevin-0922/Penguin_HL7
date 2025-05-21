@@ -29,7 +29,7 @@ const OBRSection = ({messageType}) => {
 
       <FormSection title="OBR (觀察要求)">
         {/* OBR-1 Set ID */}
-        <FormField label="序號 (OBR-1)" required>
+        <FormField label="序號 (OBR-1)" enName='Set ID'required>
           <input
             type="text"
             id="setId"
@@ -40,7 +40,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-2 Placer Order Number */}
-        <FormField label="申請方訂單編號 (OBR-2)" required>
+        <FormField label="申請方訂單編號 (OBR-2)" enName='Placer Order Number' required>
           <input
             type="text"
             id="placerOrderNumber"
@@ -52,7 +52,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-3 Filler Order Number */}
-        <FormField label="執行方訂單編號 (OBR-3)" required>
+        <FormField label="執行方訂單編號 (OBR-3)" enName='Filler Order Number'required>
           <input
             type="text"
             id="fillerOrderNumber"
@@ -64,7 +64,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-4 Universal Service Identifier */}
-        <FormField label="通用服務識別碼 (OBR-4)" required>
+        <FormField label="通用服務識別碼 (OBR-4)" enName="Universal Service Identifier" required>
           <input
             type="text"
             id="universalServiceIdentifier"
@@ -76,7 +76,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-5 Priority */}
-        <FormField label="優先順序 (OBR-5)">
+        <FormField label="優先順序 (OBR-5)" enName='Priority'>
           <select
             id="priority"
             value={obrData?.priority || ''}
@@ -92,7 +92,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-6 Requested DateTime */}
-        <FormField label="請求日期時間 (OBR-6)">
+        <FormField label="請求日期時間 (OBR-6)" enName='Requested DateTime' required>
           <input
             type="datetime-local"
             id="requestedDateTime"
@@ -103,7 +103,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-7 Observation DateTime */}
-        <FormField label="觀察日期時間 (OBR-7)" required>
+        <FormField label="觀察日期時間 (OBR-7)" enName='Observation Date/Time'required>
           <input
             type="datetime-local"
             id="observationDateTime"
@@ -114,7 +114,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-8 Observation End DateTime */}
-        <FormField label="觀察結束日期時間 (OBR-8)">
+        <FormField label="觀察結束日期時間 (OBR-8)" enName='Observation End Date/Time'>
           <input
             type="datetime-local"
             id="observationEndDateTime"
@@ -125,7 +125,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-9 Collection Volume */}
-        <FormField label="採集量 (OBR-9)">
+        <FormField label="採集量 (OBR-9)" enName='Collection Volume'>
           <input
             type="text"
             id="collectionVolume"
@@ -137,7 +137,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-10 Collector Identifier */}
-        <FormField label="採集者識別碼 (OBR-10)">
+        <FormField label="採集者識別碼 (OBR-10)" enName='Collector Identifier'>
           <input
             type="text"
             id="collectorIdentifier"
@@ -149,7 +149,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-11 Specimen Action Code */}
-        <FormField label="標本操作代碼 (OBR-11)">
+        <FormField label="標本操作代碼 (OBR-11)" ENName='Specimen Action Code'>
           <select
             id="specimenActionCode"
             value={obrData?.specimenActionCode || ''}
@@ -165,7 +165,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-12 Danger Code */}
-        <FormField label="危險代碼 (OBR-12)">
+        <FormField label="危險代碼 (OBR-12)" enName='Danger Code'>
           <input
             type="text"
             id="dangerCode"
@@ -177,7 +177,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-13 Relevant Clinical Info */}
-        <FormField label="相關臨床資訊 (OBR-13)">
+        <FormField label="相關臨床資訊 (OBR-13)" enName='Relevant Clinical Information'>
           <textarea
             id="relevantClinicalInfo"
             value={obrData?.relevantClinicalInfo || ''}
@@ -189,7 +189,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-14 Specimen Received DateTime */}
-        <FormField label="標本接收日期時間 (OBR-14)">
+        <FormField label="標本接收日期時間 (OBR-14)" enName='Specimen Received Date/Time'>
           <input
             type="datetime-local"
             id="specimenReceivedDateTime"
@@ -200,7 +200,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-15 Specimen Source */}
-        <FormField label="標本來源 (OBR-15)">
+        <FormField label="標本來源 (OBR-15)" enName='Specimen Source'>
           <input
             type="text"
             id="specimenSource"
@@ -212,7 +212,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-16 Ordering Provider */}
-        <FormField label="開單醫師 (OBR-16)" required>
+        <FormField label="開單醫師 (OBR-16)" enName='Ordering Provider' required>
           <input
             type="text"
             id="orderingProvider"
@@ -224,7 +224,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-17 Order Callback Phone Number */}
-        <FormField label="訂單回撥電話號碼 (OBR-17)">
+        <FormField label="訂單回撥電話號碼 (OBR-17)" enName='Order Callback Phone Number'>
           <input
             type="tel"
             id="orderCallbackPhoneNumber"
@@ -236,7 +236,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-18 Placer Field 1 */}
-        <FormField label="申請方欄位1 (OBR-18)">
+        <FormField label="申請方欄位1 (OBR-18)" enName='Placer Field 1'>
           <input
             type="text"
             id="placerField1"
@@ -248,7 +248,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-19 Placer Field 2 */}
-        <FormField label="申請方欄位2 (OBR-19)">
+        <FormField label="申請方欄位2 (OBR-19)" enName='Placer Field 2'>
           <input
             type="text"
             id="placerField2"
@@ -260,7 +260,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-20 Filler Field 1 */}
-        <FormField label="執行方欄位1 (OBR-20)">
+        <FormField label="執行方欄位1 (OBR-20)" enName='Filler Field 1'>
           <input
             type="text"
             id="fillerField1"
@@ -272,7 +272,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-21 Filler Field 2 */}
-        <FormField label="執行方欄位2 (OBR-21)">
+        <FormField label="執行方欄位2 (OBR-21)" enName='Filler Field 2'>
           <input
             type="text"
             id="fillerField2"
@@ -284,7 +284,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-22 Results Rpt Status Chng DateTime */}
-        <FormField label="結果報告狀態變更日期時間 (OBR-22)">
+        <FormField label="結果報告狀態變更日期時間 (OBR-22)" enName='Results Rpt/Status Chng - Date/Time'>
           <input
             type="datetime-local"
             id="resultsRptStatusChngDateTime"
@@ -295,7 +295,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-23 Charge to Practice */}
-        <FormField label="收費實踐 (OBR-23)">
+        <FormField label="收費實踐 (OBR-23)" enName='Charge to Practice'>
           <input
             type="text"
             id="chargeToPractice"
@@ -307,7 +307,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-24 Diagnostic Serv Sect ID */}
-        <FormField label="診斷服務部門ID (OBR-24)">
+        <FormField label="診斷服務部門ID (OBR-24)" enName='Diagnostic Serv Sect ID'>
           <select
             id="diagnosticServSectId"
             value={obrData?.diagnosticServSectId || ''}
@@ -324,7 +324,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-25 Result Status */}
-        <FormField label="結果狀態 (OBR-25)" required>
+        <FormField label="結果狀態 (OBR-25)" enName='Result Status' required>
           <select
             id="resultStatus"
             value={obrData?.resultStatus || ''}
@@ -344,7 +344,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-26 Parent Result */}
-        <FormField label="父結果 (OBR-26)">
+        <FormField label="父結果 (OBR-26)" enName='Parent Result'>
           <input
             type="text"
             id="parentResult"
@@ -356,7 +356,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-27 Quantity/Timing */}
-        <FormField label="數量/時間 (OBR-27)">
+        <FormField label="數量/時間 (OBR-27)" enName='Quantity/Timing'>
           <input
             type="text"
             id="quantityTiming"
@@ -368,7 +368,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-28 Result Copies To */}
-        <FormField label="結果副本發送至 (OBR-28)">
+        <FormField label="結果副本發送至 (OBR-28)" enName='Result Copies To'>
           <input
             type="text"
             id="resultCopiesTo"
@@ -380,7 +380,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-29 Parent */}
-        <FormField label="父項目 (OBR-29)">
+        <FormField label="父項目 (OBR-29)" enName='Parent'>
           <input
             type="text"
             id="parent"
@@ -392,7 +392,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-30 Transportation Mode */}
-        <FormField label="運輸模式 (OBR-30)">
+        <FormField label="運輸模式 (OBR-30)" enName='Transportation Mode'>
           <select
             id="transportationMode"
             value={obrData?.transportationMode || ''}
@@ -409,7 +409,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-31 Reason for Study */}
-        <FormField label="檢查原因 (OBR-31)">
+        <FormField label="檢查原因 (OBR-31)" enName='Reason for Study'>
           <textarea
             id="reasonForStudy"
             value={obrData?.reasonForStudy || ''}
@@ -421,7 +421,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-32 Principal Result Interpreter */}
-        <FormField label="主要結果解釋者 (OBR-32)">
+        <FormField label="主要結果解釋者 (OBR-32)" enName='Principal Result Interpreter'>
           <input
             type="text"
             id="principalResultInterpreter"
@@ -433,7 +433,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-33 Assistant Result Interpreter */}
-        <FormField label="助理結果解釋者 (OBR-33)">
+        <FormField label="助理結果解釋者 (OBR-33)" enName='Assistant Result Interpreter'>
           <input
             type="text"
             id="assistantResultInterpreter"
@@ -445,7 +445,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-34 Technician */}
-        <FormField label="技術員 (OBR-34)">
+        <FormField label="技術員 (OBR-34)" enName='Technician'>
           <input
             type="text"
             id="technician"
@@ -457,7 +457,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-35 Transcriptionist */}
-        <FormField label="轉錄員 (OBR-35)">
+        <FormField label="轉錄員 (OBR-35)" enName='Transcriptionist'>
           <input
             type="text"
             id="transcriptionist"
@@ -469,7 +469,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-36 Scheduled DateTime */}
-        <FormField label="排程日期時間 (OBR-36)">
+        <FormField label="排程日期時間 (OBR-36)" enName='Scheduled Date/Time'>
           <input
             type="datetime-local"
             id="scheduledDateTime"
@@ -480,7 +480,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-37 Number of Sample Containers */}
-        <FormField label="樣本容器數量 (OBR-37)">
+        <FormField label="樣本容器數量 (OBR-37)" enName='Number of Sample Containers'>
           <input
             type="number"
             id="numberOfSampleContainers"
@@ -493,7 +493,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-38 Transport Logistics of Collected Sample */}
-        <FormField label="採集樣本的運輸物流 (OBR-38)">
+        <FormField label="採集樣本的運輸物流 (OBR-38)" enName='Transport Logistics of Collected Sample'>
           <textarea
             id="transportLogisticsOfCollectedSample"
             value={obrData?.transportLogisticsOfCollectedSample || ''}
@@ -505,7 +505,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-39 Collectors Comment */}
-        <FormField label="採集者評論 (OBR-39)">
+        <FormField label="採集者評論 (OBR-39)" enName="Collector's Comment">
           <textarea
             id="collectorsComment"
             value={obrData?.collectorsComment || ''}
@@ -517,7 +517,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-40 Transport Arrangement Responsibility */}
-        <FormField label="運輸安排責任 (OBR-40)">
+        <FormField label="運輸安排責任 (OBR-40)" enName='Transport Arrangement Responsibility'>
           <input
             type="text"
             id="transportArrangementResponsibility"
@@ -529,7 +529,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-41 Transport Arranged */}
-        <FormField label="運輸已安排 (OBR-41)">
+        <FormField label="運輸已安排 (OBR-41)" enName='Transport Arranged'>
           <select
             id="transportArranged"
             value={obrData?.transportArranged || ''}
@@ -544,7 +544,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-42 Escort Required */}
-        <FormField label="需要護送 (OBR-42)">
+        <FormField label="需要護送 (OBR-42)" enName='Escort Required'>
           <select
             id="escortRequired"
             value={obrData?.escortRequired || ''}
@@ -559,7 +559,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-43 Planned Patient Transport Comment */}
-        <FormField label="計劃的病人運輸評論 (OBR-43)">
+        <FormField label="計劃的病人運輸評論 (OBR-43)" enName='Planned Patient Transport Comment'>
           <textarea
             id="plannedPatientTransportComment"
             value={obrData?.plannedPatientTransportComment || ''}
@@ -571,7 +571,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-44 Procedure Code */}
-        <FormField label="程序代碼 (OBR-44)">
+        <FormField label="程序代碼 (OBR-44)" enName='Procedure Code'>
           <input
             type="text"
             id="procedureCode"
@@ -583,7 +583,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-45 Procedure Code Modifier */}
-        <FormField label="程序代碼修飾符 (OBR-45)">
+        <FormField label="程序代碼修飾符 (OBR-45)" enName='Procedure Code Modifier'>
           <input
             type="text"
             id="procedureCodeModifier"
@@ -595,7 +595,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-46 Placer Supplemental Service Information */}
-        <FormField label="申請方補充服務資訊 (OBR-46)">
+        <FormField label="申請方補充服務資訊 (OBR-46)" enName='Placer Supplemental Service Information'>
           <textarea
             id="placerSupplementalServiceInformation"
             value={obrData?.placerSupplementalServiceInformation || ''}
@@ -607,7 +607,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-47 Filler Supplemental Service Information */}
-        <FormField label="執行方補充服務資訊 (OBR-47)">
+        <FormField label="執行方補充服務資訊 (OBR-47)" enName='Filler Supplemental Service Information'>
           <textarea
             id="fillerSupplementalServiceInformation"
             value={obrData?.fillerSupplementalServiceInformation || ''}
@@ -619,7 +619,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-48 Medically Necessary Duplicate Procedure Reason */}
-        <FormField label="醫療必要重複程序原因 (OBR-48)">
+        <FormField label="醫療必要重複程序原因 (OBR-48)" enName='Medically Necessary Duplicate Procedure Reason'>
           <textarea
             id="medicallyNecessaryDuplicateProcedureReason"
             value={obrData?.medicallyNecessaryDuplicateProcedureReason || ''}
@@ -631,7 +631,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-49 Result Handling */}
-        <FormField label="結果處理 (OBR-49)">
+        <FormField label="結果處理 (OBR-49)" enName='Result Handling'>
           <input
             type="text"
             id="resultHandling"
@@ -643,7 +643,7 @@ const OBRSection = ({messageType}) => {
         </FormField>
 
         {/* OBR-50 Parent Universal Service Identifier */}
-        <FormField label="父通用服務識別碼 (OBR-50)">
+        <FormField label="父通用服務識別碼 (OBR-50)" enName='Parent Universal Service Identifier'>
           <input
             type="text"
             id="parentUniversalServiceIdentifier"
