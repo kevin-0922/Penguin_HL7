@@ -26,9 +26,9 @@ const PIDSection = ({messageType}) => {
         </p>
       </div>
 
-      <FormSection title="PID (病人識別)">
+      <FormSection title="PID (病人識別)" >
         {/* PID-2 Patient ID */}
-        <FormField label="病患編號 (PID-2)">
+        <FormField label="病患編號 (PID-2)" enName='Patient ID' required>
           <input
             type="text"
             id="patientId"
@@ -41,7 +41,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-3 Patient Identifier List */}
-        <FormField label="病患識別號碼清單 (PID-3)" required>
+        <FormField label="病患識別號碼清單 (PID-3)" enName='- Patient Identifier List' required>
           <input
             type="text"
             id="patientIdList"
@@ -54,7 +54,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-4 Alternate Patient ID */}
-        <FormField label="替代病患編號 (PID-4)">
+        <FormField label="替代病患編號 (PID-4)" enName='- Alternate Patient ID'>
           <input
             type="text"
             id="alternatePatientId"
@@ -67,7 +67,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-5 Patient Name */}
-        <FormField label="病患姓名 (PID-5)" required>
+        <FormField label="病患姓名 (PID-5)" enName='Patient Name'  required>
           <input
             type="text"
             id="patientName"
@@ -80,7 +80,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-6 Mother's Maiden Name */}
-        <FormField label="母親娘家姓氏 (PID-6)">
+        <FormField label="母親娘家姓氏 (PID-6)" enName="Mother's Maiden Name">
           <input
             type="text"
             id="motherMaidenName"
@@ -93,7 +93,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-7 Birth Date */}
-        <FormField label="出生日期時間 (PID-7)" required>
+        <FormField label="出生日期時間 (PID-7)" enName='Date/Time Of Birth' required>
           <input
             type="datetime-local"
             id="birthDateTime"
@@ -105,7 +105,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-8 Sex */}
-        <FormField label="法定性別 (PID-8)" required>
+        <FormField label="法定性別 (PID-8)" enName='Administrative Sex'required>
           <select
             id="sex"
             name="sex"
@@ -122,7 +122,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-9 Patient Alias */}
-        <FormField label="病患別稱 (PID-9)">
+        <FormField label="病患別稱 (PID-9)" enName='Patient Alias'>
           <input
             type="text"
             id="alias"
@@ -135,7 +135,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-10 Race */}
-        <FormField label="種族 (PID-10)">
+        <FormField label="種族 (PID-10)" enName='Race'>
           <select
             id="race"
             name="race"
@@ -155,7 +155,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-11 Patient Address */}
-        <FormField label="病患地址 (PID-11)">
+        <FormField label="病患地址 (PID-11)" enName='Patient Address'>
           <input
             type="text"
             id="patientAddress"
@@ -168,7 +168,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-12 County Code */}
-        <FormField label="縣市代碼 (PID-12)">
+        <FormField label="縣市代碼 (PID-12)" enName='County Code'>
           <input
             type="text"
             id="countryCode"
@@ -181,7 +181,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-13 Phone Number - Home */}
-        <FormField label="住家電話 (PID-13)">
+        <FormField label="住家電話 (PID-13)" enName='Phone Number - Home'>
           <input
             type="tel"
             id="phoneNumberHome"
@@ -194,7 +194,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-14 Phone Number - Business */}
-        <FormField label="工作電話 (PID-14)">
+        <FormField label="工作電話 (PID-14)" enName='Phone Number - Business'>
           <input
             type="tel"
             id="phoneNumberBusiness"
@@ -207,7 +207,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-15 Primary Language */}
-        <FormField label="主要使用語言 (PID-15)">
+        <FormField label="主要使用語言 (PID-15)" enName='Primary Language'>
           <input
             type="text"
             id="primaryLanguage"
@@ -220,7 +220,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-16 Marital Status */}
-        <FormField label="婚姻狀況 (PID-16)">
+        <FormField label="婚姻狀況 (PID-16)" enName='Marital Status'>
           <select
             id="maritalStatus"
             name="maritalStatus"
@@ -239,7 +239,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-17 Religion */}
-        <FormField label="宗教信仰 (PID-17)">
+        <FormField label="宗教信仰 (PID-17)" enName='Religion'>
           <select
             id="religion"
             name="religion"
@@ -260,7 +260,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-18 Patient Account Number */}
-        <FormField label="病患帳戶編號 (PID-18)">
+        <FormField label="病患帳戶編號 (PID-18)" enName='Patient Account Number'>
           <input
             type="text"
             id="accountNumber"
@@ -273,7 +273,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-19 SSN Number */}
-        <FormField label="身分證字號 (PID-19)">
+        <FormField label="身分證字號 (PID-19)" enName='SSN Number - Patient'>
           <input
             type="text"
             id="ssnNumber"
@@ -286,7 +286,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-20 Driver's License Number */}
-        <FormField label="駕駛執照號碼 (PID-20)">
+        <FormField label="駕駛執照號碼 (PID-20)" enName="Driver's License Number">
           <input
             type="text"
             id="driversLicense"
@@ -299,7 +299,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-21 Mother's Identifier */}
-        <FormField label="母親識別號 (PID-21)">
+        <FormField label="母親識別號 (PID-21)" enName="Mother's Identifier">
           <input
             type="text"
             id="mothersIdentifier"
@@ -312,7 +312,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-22 Ethnic Group */}
-        <FormField label="民族群體 (PID-22)">
+        <FormField label="民族群體 (PID-22)" enName='Ethnic Group'>
           <input
             type="text"
             id="ethnicGroup"
@@ -325,7 +325,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-23 Birth Place */}
-        <FormField label="出生地點 (PID-23)">
+        <FormField label="出生地點 (PID-23)" enName='Birth Place'>
           <input
             type="text"
             id="birthPlace"
@@ -338,7 +338,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-24 Multiple Birth Indicator */}
-        <FormField label="多胞胎標記 (PID-24)">
+        <FormField label="多胞胎標記 (PID-24)" enName='Multiple Birth Indicator'>
           <select
             id="multipleBirthIndicator"
             name="multipleBirthIndicator"
@@ -353,7 +353,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-25 Birth Order */}
-        <FormField label="出生順序 (PID-25)">
+        <FormField label="出生順序 (PID-25)" enName='Birth Order'>
           <input
             type="number"
             id="birthOrder"
@@ -367,7 +367,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-26 Citizenship */}
-        <FormField label="國籍 (PID-26)">
+        <FormField label="國籍 (PID-26)" enName='Citizenship'>
           <input
             type="text"
             id="citizenship"
@@ -380,7 +380,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-27 Veterans Military Status */}
-        <FormField label="退伍軍人身份 (PID-27)">
+        <FormField label="退伍軍人身份 (PID-27)" enName='Veterans Military Status'>
           <input
             type="text"
             id="veteransMilitaryStatus"
@@ -393,7 +393,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-28 Nationality */}
-        <FormField label="民族 (PID-28)">
+        <FormField label="民族 (PID-28)" enName="Nationality">
           <input
             type="text"
             id="nationality"
@@ -406,7 +406,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-29 Patient Death Date and Time */}
-        <FormField label="死亡日期時間 (PID-29)">
+        <FormField label="死亡日期時間 (PID-29)" enName='Patient Death Date and Time'>
           <input
             type="datetime-local"
             id="patientDeathDateTime"
@@ -418,7 +418,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-30 Patient Death Indicator */}
-        <FormField label="死亡標記 (PID-30)">
+        <FormField label="死亡標記 (PID-30)" enName='Patient Death Indicator'>
           <select
             id="patientDeathIndicator"
             name="patientDeathIndicator"
@@ -433,7 +433,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-31 Identity Unknown Indicator */}
-        <FormField label="身分不明標記 (PID-31)">
+        <FormField label="身分不明標記 (PID-31)" enName='Identity Unknown Indicator'>
           <select
             id="identityUnknownIndicator"
             name="identityUnknownIndicator"
@@ -448,7 +448,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-32 Identity Reliability Code */}
-        <FormField label="身分可靠性代碼 (PID-32)">
+        <FormField label="身分可靠性代碼 (PID-32)" enName='Identity Reliability Code'>
           <input
             type="text"
             id="identityReliabilityCode"
@@ -461,7 +461,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-33 Last Update Date/Time */}
-        <FormField label="最後更新日期時間 (PID-33)">
+        <FormField label="最後更新日期時間 (PID-33)" enName='Last Update Date/Time'>
           <input
             type="datetime-local"
             id="lastUpdateDateTime"
@@ -473,7 +473,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-34 Last Update Facility */}
-        <FormField label="最後更新設施 (PID-34)">
+        <FormField label="最後更新設施 (PID-34)" enName='Last Update Facility'>
           <input
             type="text"
             id="lastUpdateFacility"
@@ -486,7 +486,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-35 Species Code */}
-        <FormField label="物種代碼 (PID-35)">
+        <FormField label="物種代碼 (PID-35)" enName='Species Code'>
           <input
             type="text"
             id="speciesCode"
@@ -499,7 +499,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-36 Breed Code */}
-        <FormField label="品種代碼 (PID-36)">
+        <FormField label="品種代碼 (PID-36)" enName='Breed Code'>
           <input
             type="text"
             id="breedCode"
@@ -512,7 +512,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-37 Strain */}
-        <FormField label="菌株 (PID-37)">
+        <FormField label="菌株 (PID-37)" enName='Strain'>
           <input
             type="text"
             id="strain"
@@ -525,7 +525,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-38 Production Class Code */}
-        <FormField label="生產類別代碼 (PID-38)">
+        <FormField label="生產類別代碼 (PID-38)" enName='Production Class Code'>
           <input
             type="text"
             id="productionClassCode"
@@ -538,7 +538,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* PID-39 Tribal Citizenship */}
-        <FormField label="部落公民身份 (PID-39)">
+        <FormField label="部落公民身份 (PID-39)" enName='Tribal Citizenship'>
           <input
             type="text"
             id="tribalCitizenship"
@@ -551,7 +551,7 @@ const PIDSection = ({messageType}) => {
         </FormField>
 
         {/* 多胞胎數量 (額外欄位，不是標準HL7欄位) */}
-        <FormField label="多胞胎數量">
+        <FormField label="多胞胎數量" enName='Multiple Birth Count'>
           <input
             type="number"
             id="multipleBirthCount"
