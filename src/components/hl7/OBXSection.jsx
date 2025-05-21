@@ -28,7 +28,7 @@ const OBXSection = ({messageType}) => {
 
       <FormSection title="OBX (觀察結果)">
         {/* OBX-1 Set ID */}
-        <FormField label="序號 (OBX-1)">
+        <FormField label="序號 (OBX-1)" enName='Set ID' >
           <input
             type="text"
             id="setId"
@@ -40,7 +40,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-2 Value Type */}
-        <FormField label="值類型 (OBX-2)" required>
+        <FormField label="值類型 (OBX-2)"  enName='Value Type'required>
           <select
             id="valueType"
             value={obxData?.valueType || ''}
@@ -60,7 +60,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-3 Observation Identifier */}
-        <FormField label="觀察識別碼 (OBX-3)" required>
+        <FormField label="觀察識別碼 (OBX-3)" enName='Observation Identifier' required>
           <input
             type="text"
             id="observationIdentifier"
@@ -72,7 +72,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-4 Observation Sub-ID */}
-        <FormField label="觀察子識別碼 (OBX-4)">
+        <FormField label="觀察子識別碼 (OBX-4)" enName='Observation Sub-ID'>
           <input
             type="text"
             id="observationSubId"
@@ -84,7 +84,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-5 Observation Value */}
-        <FormField label="觀察值 (OBX-5)">
+        <FormField label="觀察值 (OBX-5)" enName='Observation Value'>
           <textarea
             id="observationValue"
             value={obxData?.observationValue || ''}
@@ -96,7 +96,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-6 Units */}
-        <FormField label="單位 (OBX-6)">
+        <FormField label="單位 (OBX-6)" enName='Units'>
           <input
             type="text"
             id="units"
@@ -108,7 +108,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-7 References Range */}
-        <FormField label="參考範圍 (OBX-7)">
+        <FormField label="參考範圍 (OBX-7)" enName='References Range'>
           <input
             type="text"
             id="referencesRange"
@@ -120,7 +120,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-8 Abnormal Flags */}
-        <FormField label="異常標記 (OBX-8)">
+        <FormField label="異常標記 (OBX-8)" enName='Abnormal Flags'>
           <select
             id="abnormalFlags"
             value={obxData?.abnormalFlags || ''}
@@ -138,7 +138,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-9 Probability */}
-        <FormField label="概率 (OBX-9)">
+        <FormField label="概率 (OBX-9)" enName='Probability'>
           <input
             type="number"
             id="probability"
@@ -153,7 +153,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-10 Nature of Abnormal Test */}
-        <FormField label="異常測試性質 (OBX-10)">
+        <FormField label="異常測試性質 (OBX-10)" enName='Nature of Abnormal Test' >
           <select
             id="natureOfAbnormalTest"
             value={obxData?.natureOfAbnormalTest || ''}
@@ -168,7 +168,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-11 Observation Result Status */}
-        <FormField label="觀察結果狀態 (OBX-11)" required>
+        <FormField label="觀察結果狀態 (OBX-11)"  enName='Observation Result Status' required>
           <select
             id="observationResultStatus"
             value={obxData?.observationResultStatus || ''}
@@ -186,7 +186,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-12 Effective Date of Reference Range */}
-        <FormField label="參考範圍生效日期 (OBX-12)">
+        <FormField label="參考範圍生效日期 (OBX-12)" enName='Effective Date of Reference Range'>
           <input
             type="datetime-local"
             id="effectiveDateOfReferenceRange"
@@ -197,7 +197,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-13 User Defined Access Checks */}
-        <FormField label="用戶定義訪問檢查 (OBX-13)">
+        <FormField label="用戶定義訪問檢查 (OBX-13)" enName='User Defined Access Checks'>
           <input
             type="text"
             id="userDefinedAccessChecks"
@@ -209,7 +209,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-14 DateTime of the Observation */}
-        <FormField label="觀察日期時間 (OBX-14)">
+        <FormField label="觀察日期時間 (OBX-14)" enName='Date/Time of the Observation'>
           <input
             type="datetime-local"
             id="dateTimeOfTheObservation"
@@ -220,7 +220,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-15 Producers ID */}
-        <FormField label="生產者識別碼 (OBX-15)">
+        <FormField label="生產者識別碼 (OBX-15)" enName="Producer's ID">
           <input
             type="text"
             id="producersId"
@@ -232,7 +232,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-16 Responsible Observer */}
-        <FormField label="負責觀察者 (OBX-16)">
+        <FormField label="負責觀察者 (OBX-16)" enName='Responsible Observer'>
           <input
             type="text"
             id="responsibleObserver"
@@ -244,7 +244,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-17 Observation Method */}
-        <FormField label="觀察方法 (OBX-17)">
+        <FormField label="觀察方法 (OBX-17)" enName='Observation Method'>
           <input
             type="text"
             id="observationMethod"
@@ -256,7 +256,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-18 Equipment Instance Identifier */}
-        <FormField label="設備實例識別碼 (OBX-18)">
+        <FormField label="設備實例識別碼 (OBX-18)" enName='Equipment Instance Identifier'>
           <input
             type="text"
             id="equipmentInstanceIdentifier"
@@ -268,7 +268,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-19 DateTime of the Analysis */}
-        <FormField label="分析日期時間 (OBX-19)">
+        <FormField label="分析日期時間 (OBX-19)" enName='Date/Time of the Analysis'>
           <input
             type="datetime-local"
             id="dateTimeOfTheAnalysis"
@@ -279,7 +279,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-20 Observation Site */}
-        <FormField label="觀察地點 (OBX-20)">
+        <FormField label="觀察地點 (OBX-20)" enName=' Observation Site'>
           <input
             type="text"
             id="observationSite"
@@ -291,7 +291,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-21 Observation Instance Identifier */}
-        <FormField label="觀察實例識別碼 (OBX-21)">
+        <FormField label="觀察實例識別碼 (OBX-21)" enName='Observation Instance Identifier'>
           <input
             type="text"
             id="observationInstanceIdentifier"
@@ -303,7 +303,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-22 Mood Code */}
-        <FormField label="情緒代碼 (OBX-22)">
+        <FormField label="情緒代碼 (OBX-22)" enName='Mood Code'>
           <select
             id="moodCode"
             value={obxData?.moodCode || ''}
@@ -319,7 +319,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-23 Performing Organization Name */}
-        <FormField label="執行組織名稱 (OBX-23)">
+        <FormField label="執行組織名稱 (OBX-23)" enName='Performing Organization Name'>
           <input
             type="text"
             id="performingOrganizationName"
@@ -331,7 +331,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-24 Performing Organization Address */}
-        <FormField label="執行組織地址 (OBX-24)">
+        <FormField label="執行組織地址 (OBX-24)" enName='Performing Organization Address'>
           <textarea
             id="performingOrganizationAddress"
             value={obxData?.performingOrganizationAddress || ''}
@@ -343,7 +343,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-25 Performing Organization Medical Director */}
-        <FormField label="執行組織醫療主任 (OBX-25)">
+        <FormField label="執行組織醫療主任 (OBX-25)" enName='Performing Organization Medical Director'>
           <input
             type="text"
             id="performingOrganizationMedicalDirector"
