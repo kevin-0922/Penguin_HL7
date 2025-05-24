@@ -1,3 +1,6 @@
+const util = require('util');
+// 導入資料庫中的 run 函數
+const { run } = require('../../database/db');
 // 統一導入所有解析器
 const {
   parseMSH,
@@ -5,6 +8,8 @@ const {
   parseORC,
   parsePID,
   parseSPM,
+  parseOBX,
+  parseSAC,
 } = require('../../utils/parsers');
 
 const {
@@ -17,12 +22,17 @@ const { buildAckResponse } = require('../../utils/formatters/ackMessage');
 
 // 處理OML^O33訊息
 async function handleOmlO33(message) {
-  console.log('message測試:', message);
+  console.log('message測試:');
+  console.log(util.inspect(message, {
+    depth: null,           // 無限制的物件深度
+    maxArrayLength: null,  // 無限制的陣列長度
+    maxStringLength: null, // 無限制的字串長度
+    colors: true           // 如果你想在 terminal 顯示顏色
+  }));
   try {
     let hl7Msg;
     try {
       // 規範化換行符
-      const normalizedMessage = message.replace(/\r\n|\n/g, '\r');
       hl7Msg = createHL7Adapter(message);
       console.log('成功將消息解析為HL7對象');
     } catch (parseError) {
@@ -36,6 +46,8 @@ async function handleOmlO33(message) {
     const orc = parseORC(hl7Msg);
     const obr = parseOBR(hl7Msg);
     const spm = parseSPM(hl7Msg);
+    const obx = parseOBX(hl7Msg);
+    const sac = parseSAC(hl7Msg);
     
     // 只在控制台輸出訊息內容和解析結果
     console.log('==== 處理 OML^O33 訊息 ====');
@@ -44,7 +56,10 @@ async function handleOmlO33(message) {
     console.log('ORC部分:', orc);
     console.log('OBR部分:', obr);
     console.log('SPM部分:', spm);
+    console.log('OBX部分:', obx);
+    console.log('SAC部分:', sac);
     
+
     try {
       const messageType = 'OML^O33^OML_O33';
       const messageControlId = extractMsgControlId(message);
@@ -123,6 +138,12 @@ const createHL7Adapter = (message) => {
   // 分割消息為段落
   const segments = message.split(/\r\n|\r|\n/);
   console.log(`找到 ${segments.length} 個段落`);
+  console.log(util.inspect(segments, {
+    depth: null,           // 無限制的物件深度
+    maxArrayLength: null,  // 無限制的陣列長度
+    maxStringLength: null, // 無限制的字串長度
+    colors: true           // 如果你想在 terminal 顯示顏色
+  }));
   
   // 創建適配器對象
   return {
@@ -132,10 +153,8 @@ const createHL7Adapter = (message) => {
         console.log(`找不到 ${segmentType} 段落`);
         return null;
       }
-      
       console.log(`找到 ${segmentType} 段落:`, segment);
       const fields = segment.split('|');
-      
       return {
         fields: fields.map((value, i) => ({ value })),
         get: function(index) {

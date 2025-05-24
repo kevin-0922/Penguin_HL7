@@ -1,9 +1,12 @@
 function parseMSH(message) {
-    const lines = message.split(/\r\n|\r|\n/); // 處理不同換行符號
-    const mshLine = lines.find(line => line.startsWith('MSH'));
-    if (!mshLine) throw new Error('找不到MSH段');
+    const msh = message.getSegment("MSH");
+
+    if (!msh) throw new Error('找不到MSH段');
   
-    const fields = mshLine.split('|');
+    const fields = msh.fields.map((field, index) => ({
+        field: index + 1,
+        components: field.value,
+    }));
     return {
       sendingApplication: fields[2] || '',
       sendingFacility: fields[3] || '',

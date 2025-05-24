@@ -1,6 +1,6 @@
 const handleOmlO33 = require('../../services/hl7/handleOmlO33.js');
 const handleQbpQ11 = require('../../services/hl7/handleQbpQ11.js');
-
+const util = require('util');
 // 定義訊息處理器映射
 const messageHandlers = {
   'OML^O33^OML_O33': handleOmlO33,
@@ -12,9 +12,13 @@ const handleHttpRequest = async (req, res) => {
   try {
     // 從請求體中獲取HL7訊息
     const hl7Message = req.body.message;
-    
-    console.log('收到HTTP HL7訊息請求:', hl7Message);
-    
+    console.log('收到HTTP HL7訊息請求:');
+    console.log(util.inspect(hl7Message, {
+      depth: null,           // 無限制的物件深度
+      maxArrayLength: null,  // 無限制的陣列長度
+      maxStringLength: null, // 無限制的字串長度
+      colors: true           // 如果你想在 terminal 顯示顏色
+    }));
     // 處理HL7訊息並產生回應
     const response = await processHl7Message(hl7Message);
     //console.log('response:', response);

@@ -54,7 +54,7 @@ const O33Form = () => {
   const handleSend = async () => {
     try {
       const response = await axios.post(
-        "/api/hl7/receive",
+        "/api/hl7/hl7order",
         { message: hl7Message },
         {
           headers: {

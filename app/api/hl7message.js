@@ -6,9 +6,7 @@ const router = express.Router();
 const centralHl7Controller = require("../controllers/hl7/hl7Controller");
 
 module.exports = () => {
-  router.get("/hl7order", centralHl7Controller.getDicomOrder);
-
-
+  router.post("/hl7order", centralHl7Controller.handleHttpRequest);
 
   return router;
 };

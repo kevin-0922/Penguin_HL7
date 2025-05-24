@@ -2,14 +2,19 @@ const parseMSH = require('./parseMSH');
 const parseOBR = require('./parseOBR');
 const parseORC = require('./parseORC');
 const parsePID = require('./parsePID');
-const parseQPD = require('./parseQPD');
 const parseSPM = require('./parseSPM');
+const parseOBX = require('./parseOBX');
+const parseSAC = require('./parseSAC');
+const parseQPD = require('./parseQPD');
+
 
 module.exports = {
   parseMSH,
   parseOBR,
   parseORC,
   parsePID,
-  parseQPD,
-  parseSPM
+  parseSPM,
+  parseOBX,
+  parseSAC,
+  parseQPD
 }; 
