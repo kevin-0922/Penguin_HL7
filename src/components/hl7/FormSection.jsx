@@ -2,17 +2,17 @@ import { useSelector } from 'react-redux';
 
 const FormSection = ({ title, children, className = '' }) => {
   return (
-    <div className={`bg-white p-6 rounded-lg shadow-md mb-6 ${className}`}>
-      <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">
+    <details className={`bg-white p-6 rounded-lg shadow-md mb-6 ${className}`}>
+      <summary className="text-2xl font-bold text-gray-800 pb-2 border-b cursor-pointer">
         {title}
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      </summary>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
         {children}
       </div>
       <div className="mt-4 text-sm text-gray-500">
         <p>註：標示 <span className="text-red-500">*</span> 為必填欄位</p>
       </div>
-    </div>
+    </details>
   );
 };
 

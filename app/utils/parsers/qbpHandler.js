@@ -49,4 +49,8 @@
 
 // module.exports = {
 //   handleQBPQuery
+<<<<<<< HEAD
 // };
+=======
+// };
+>>>>>>> main

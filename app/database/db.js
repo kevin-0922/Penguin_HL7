@@ -155,29 +155,21 @@ function run(sql, params = []) {
 }
 
 // 監聽進程結束，關閉數據庫連接
-process.on('exit', () => {
-  console.log('關閉數據庫連接...');
-  db.close((err) => {
-    if (err) {
-      console.error('關閉數據庫失敗:', err.message);
-    } else {
-      console.log('數據庫連接已關閉');
-    }
-  });
-});
-
-// 捕獲CTRL+C信號
 process.on('SIGINT', () => {
   console.log('接收到終止信號，關閉數據庫連接...');
-  db.close((err) => {
-    if (err) {
-      console.error('關閉數據庫失敗:', err.message);
-      process.exit(1);
-    } else {
-      console.log('數據庫連接已關閉');
+  if (db) {
+    db.close((err) => {
+      if (err) {
+        console.error('關閉數據庫失敗:', err.message);
+      } else {
+        console.log('數據庫連接已關閉');
+      }
       process.exit(0);
-    }
-  });
+    });
+  } else {
+    console.log('數據庫連接已關閉');
+    process.exit(0);
+  }
 });
 
 module.exports = { db, query, get, run }; 
