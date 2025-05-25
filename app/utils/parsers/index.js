@@ -6,6 +6,9 @@ const parseSPM = require('./parseSPM');
 const parseOBX = require('./parseOBX');
 const parseSAC = require('./parseSAC');
 const parseQPD = require('./parseQPD');
+const parseMSA = require('./parseMSA');
+const parseQAK = require('./parseQAK');
+
 
 
 module.exports = {
@@ -16,5 +19,7 @@ module.exports = {
   parseSPM,
   parseOBX,
   parseSAC,
-  parseQPD
+  parseQPD,
+  parseMSA,
+  parseQAK
 }; 

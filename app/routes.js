@@ -17,5 +17,5 @@ module.exports = (app) => {
         message: `請求的 API 端點 '${req.originalUrl}' 未找到。`
       });
     });
-  
+
   };
