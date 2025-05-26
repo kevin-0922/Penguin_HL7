@@ -383,18 +383,6 @@ const ORCSection = ({messageType}) => {
         </FormField>
         {/* ORC-27Filler's Expected Availability Date/Time*/}
         <FormField label="填充方的預計可用日期/時間 (ORC-27)" enName="Filler's Expected Availability Date/Time">
-          {/*<select
-            id="advancedConfidentialityIndicator"
-            name="advancedConfidentialityIndicator"
-            value={orcData?.advancedConfidentialityIndicator || ''}
-            onChange={handleInputChange}
-            className={selectClassName}
-          >
-            <option value="">請選擇...</option>
-            <option value="N">正常</option>
-            <option value="R">限制性</option>
-            <option value="V">非常限制</option>
-          </select>?*/}
           <input
             type="datetime-local"
             id="FillersExpectedAvailabilityDateandTime"
@@ -405,35 +393,8 @@ const ORCSection = ({messageType}) => {
             placeholder="請輸入填充方的預計可用日期/時間"
           ></input>
         </FormField>
-        {/* ORC-27 Ordering Provider Supplement */}
-        <FormField label="開單醫師補充資訊 (ORC-28)">
-          <textarea
-            id="orderingProviderSupplement"
-            name="orderingProviderSupplement"
-            value={orcData?.orderingProviderSupplement || ''}
-            onChange={handleInputChange}
-            className={inputClassName}
-            placeholder="請輸入開單醫師補充資訊"
-            rows="3"
-          />
-        </FormField>
-
-        
-
-        {/* ORC-29 Order Status Effective DateTime */}
-        <FormField label="訂單狀態生效日期時間 (ORC-29)">
-          <input
-            type="datetime-local"
-            id="orderStatusEffectiveDateTime"
-            name="orderStatusEffectiveDateTime"
-            value={orcData?.orderStatusEffectiveDateTime || ''}
-            onChange={handleInputChange}
-            className={dateTimeClassName}
-          />
-        </FormField>
-
-        {/* ORC-30 Confidentiality Code */}
-        <FormField label="保密代碼 (ORC-30)">
+        {/* ORC-28 Confidentiality Code */}
+        <FormField label="保密代碼 (ORC-28)" enName='Confidentiality Code'>
           <select
             id="confidentialityCode"
             name="confidentialityCode"
@@ -442,16 +403,20 @@ const ORCSection = ({messageType}) => {
             className={selectClassName}
           >
             <option value="">請選擇...</option>
-            <option value="U">一般性</option>
-            <option value="L">低度機密</option>
-            <option value="M">中度機密</option>
-            <option value="H">高度機密</option>
-            <option value="V">極機密</option>
+            <option value="AID">愛滋病患者(AIDS patient)</option>
+            <option value="EMP">醫院員工(Employee)</option>
+            <option value="ETH">酒精/藥物治療患者(Alcohol/drug treatment patient)</option>
+            <option value="HIV">HIV陽性患者(HIV(+) patient)</option>
+            <option value="PSY">精神病患者(Psychiatric patient)</option>
+            <option value="R">保密(Restricted)</option>
+            <option value="U">一般(Usual control)</option>
+            <option value="UWM">未婚媽媽(Unwed nonther)</option>
+            <option value="V">非常保密(Very restricted)</option>
+            <option value="VIP">重要人士(Very important person or celebrity)</option>
           </select>
         </FormField>
-
-        {/* ORC-31 Order Type */}
-        <FormField label="訂單類型 (ORC-31)">
+        {/* ORC-29 Order Type */}
+        <FormField label="訂單類型 (ORC-29)">
           <select
             id="orderType"
             name="orderType"
@@ -460,11 +425,43 @@ const ORCSection = ({messageType}) => {
             className={selectClassName}
           >
             <option value="">請選擇...</option>
-            <option value="I">住院</option>
-            <option value="O">門診</option>
-            <option value="E">急診</option>
-            <option value="A">門診預約</option>
+            <option value="I">住院醫囑(Inpatient Order)</option>
+            <option value="O">門診醫囑(	Outpatient Order)</option>
           </select>
+        </FormField>
+
+        
+
+        {/* ORC-30  */}
+        <FormField label="授權模式(ORC-30)">
+          <select>
+            <option value="">請選擇...</option>
+            <option value="EL">電子方式(Electronic)</option>
+            <option value="EM">電子郵件(E-mail)</option>
+            <option value="FA">傳真(Fax)</option>
+            <option value="IP">當面(In Person)</option>
+            <option value="MA">郵件(Mail)</option>
+            <option value="PA">紙本(Papar)</option>
+            <option value="PH">電話(Phone)</option>
+            <option value="RE">自動系統(Reflexive (Automated system))</option>
+            <option value="VC">視訊會議(Video-conference)</option>
+            <option value="VO">語音(Voice)</option>
+          </select>
+        </FormField>
+
+
+
+        {/* */}
+        <FormField label="父醫囑的通用服務標識符 (ORC-31)">
+          <input
+            type="text"
+            id="parentUniversalServiceIdentifier"
+            name="parentUniversalServiceIdentifier"
+            value={orcData?.parentUniversalServiceIdentifier || ''}
+            onChange={handleInputChange}
+            className={inputClassName}
+            placeholder="請輸入父醫囑的通用服務標識符"
+          />
         </FormField>
       </FormSection>
     </>
