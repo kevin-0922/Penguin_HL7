@@ -28,23 +28,23 @@ const SACSection = ({messageType}) => {
 
       <FormSection title="SAC (容器)">
         {/* SAC-2 Accession Identifier */}
-        <FormField label="容器位置 (SAC-2)" required>
+        <FormField label="樣本號碼 (SAC-2)"  enName='Accession Identifier' required>
           <input
             type="text"
-            id="containerLocation"
-            name="containerLocation"
-            value={sacData.containerLocation || ''}
+            id="AccessionIdentifier"
+            name="AccessionIdentifier"
+            value={sacData.AccessionIdentifier || ''}
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入容器位置"
           />
         </FormField>
 
-        {/* SAC-3 Container Status */}
-        <FormField label="容器接收狀態 (SAC-3)" required>
+        {/* SAC-3 Container Identifier*/}
+        <FormField label="容器接收狀態 (SAC-3)"  required>
           <select
-            id="containerStatus"
-            name="containerStatus"
+            id="ContainerIdentifier"
+            name="ContainerIdentifier"
             value={sacData.containerStatus || ''}
             onChange={handleInputChange}
             className={selectClassName}

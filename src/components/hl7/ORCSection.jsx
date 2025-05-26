@@ -416,7 +416,7 @@ const ORCSection = ({messageType}) => {
           </select>
         </FormField>
         {/* ORC-29 Order Type */}
-        <FormField label="訂單類型 (ORC-29)">
+        <FormField label="訂單類型 (ORC-29)" enName='Order Type'>
           <select
             id="orderType"
             name="orderType"
@@ -432,9 +432,15 @@ const ORCSection = ({messageType}) => {
 
         
 
-        {/* ORC-30  */}
+        {/* ORC-30   Enterer Authorization Mode*/}
         <FormField label="授權模式(ORC-30)">
-          <select>
+          <select
+          	 id='EntererAuthorizationMode'
+            name='EntererAuthorizationMode'
+            value={orcData?.EntererAuthorizationMode || ''}
+            onChange={handleInputChange}
+            className={selectClassName}
+          >
             <option value="">請選擇...</option>
             <option value="EL">電子方式(Electronic)</option>
             <option value="EM">電子郵件(E-mail)</option>
@@ -451,8 +457,8 @@ const ORCSection = ({messageType}) => {
 
 
 
-        {/* */}
-        <FormField label="父醫囑的通用服務標識符 (ORC-31)">
+        {/* ORC-31  Parent Universal Service Identifier*/}
+        <FormField label="父醫囑的通用服務標識符 (ORC-31)" enName='Parent Universal Service Identifier'>
           <input
             type="text"
             id="parentUniversalServiceIdentifier"
