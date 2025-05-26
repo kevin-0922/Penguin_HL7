@@ -433,7 +433,7 @@ const ORCSection = ({messageType}) => {
         
 
         {/* ORC-30   Enterer Authorization Mode*/}
-        <FormField label="授權模式(ORC-30)">
+        <FormField label="授權模式(ORC-30)" enName='Enterer Authorization Mode'>
           <select
           	 id='EntererAuthorizationMode'
             name='EntererAuthorizationMode'
