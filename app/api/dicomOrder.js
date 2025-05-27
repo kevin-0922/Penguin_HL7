@@ -7,8 +7,7 @@ const dicomOrderController = require("../controllers/dicomOrder/dicomOrderContro
 
 module.exports = () => {
   router.get("/hl7order", dicomOrderController.getDicomOrder);
-
-
+  router.post("/hl7status/:orderId", dicomOrderController.updateOrderStatus);
 
   return router;
 };

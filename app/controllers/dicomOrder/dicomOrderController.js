@@ -199,3 +199,10 @@ exports.getDicomOrder = (req, res) => {
     });
   }
 };
+
+exports.updateOrderStatus = (req, res) => {
+  const { orderId } = req.params;
+  const { status } = req.body;
+  console.log(`訂單ID: ${orderId}, 狀態: ${status}`);
+  res.status(200).json({ message: "訂單狀態已更新" });
+};

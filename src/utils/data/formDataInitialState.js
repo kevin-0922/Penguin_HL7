@@ -94,138 +94,139 @@ const spmInitialState = {
 
 // SAC段落初始值 (最多44項)
 const sacInitialState = {
-  containerLocation: '',                // SAC-2: 容器位置
-  containerStatus: '',                  // SAC-3: 容器接收狀態
-  containerType: '',                    // SAC-4: 容器類型
-  containerCondition: '',               // SAC-5: 容器條件
-  separatorType: '',                    // SAC-6: 分離器類型
-  capType: '',                          // SAC-7: 填充等級
-  additive: '',                         // SAC-8: 添加劑
-  specimenVolume: '',                   // SAC-9: 檢體量
-  specimenVolumeUnits: '',              // SAC-10: 檢體單位量
-  specimenVolumeExtracted: '',          // SAC-11: 檢體處理量
-  specimenVolumeExtractedUnits: '',     // SAC-12: 檢體處理量單位
-  containerConfirmationCount: '',       // SAC-13: 容器確認數
-  containerBarcode: '',                 // SAC-14: 容器條碼
-  containerPosition: '',                // SAC-15: 容器位置
-  containerWeight: '',                  // SAC-16: 容器重量
-  containerWeightUnits: '',             // SAC-17: 容器重量單位
-  containerVolume: '',                  // SAC-18: 容器體積
-  containerVolumeUnits: '',             // SAC-19: 容器體積單位
-  containerTemperature: '',             // SAC-20: 容器體積溫度
-  containerTemperatureUnits: '',        // SAC-21: 容器溫度單位
-  containerTareWeight: '',              // SAC-22: 容器溫度
-  containerTareWeightUnits: '',         // SAC-23: 容器空重單位
-  barrierType: '',                      // SAC-24: 障礙類型
-  barrierDeltaHeight: '',               // SAC-25: 底部障礙差距高度
-  containerHeight: '',                  // SAC-26: 容器高度
-  containerHeightUnits: '',             // SAC-27: 容器高度單位
-  containerDiameter: '',                // SAC-28: 容器直徑
-  containerDiameterUnits: '',           // SAC-29: 容器直徑單位
-  barrierThickness: '',                 // SAC-30: 障礙厚度
-  bottomBarrierThickness: '',           // SAC-31: 底部障礙厚度
-  bottomBarrierThicknessUnits: '',      // SAC-32: 底部障礙厚度單位
-  containerGrossWeight: '',             // SAC-33: 容器總重量
-  containerGrossWeightUnits: '',        // SAC-34: 容器總重量單位
-  containerGrossVolume: '',             // SAC-35: 容器總容積
-  containerGrossVolumeUnits: '',        // SAC-36: 容器總容積單位
-  containerGrossVolumeLimit: '',        // SAC-37: 容器總容積限制
-  containerGrossVolumeLimitUnits: '',   // SAC-38: 容器總容積限制單位
-  containerGrossWeightLimit: '',        // SAC-39: 容器總重量限制
-  containerGrossWeightLimitUnits: '',   // SAC-40: 容器總重量限制單位
-  containerCount: '',                   // SAC-41: 容器數量
-  containerCatalogNumber: '',           // SAC-42: 容器目錄號
-  containerLotNumber: '',               // SAC-43: 容器批號
-  containerManufacturer: ''             // SAC-44: 容器製造商
+
+  accessionIdentifier: '',            // SAC-2: 訪問識別碼
+  containerIdentifier: '',            // SAC-3: 容器識別碼
+  primaryContainerIdentifier: '',     // SAC-4: 主要(父)容器識別碼
+  equipmentContainerIdentifier: '',   // SAC-5: 設備容器識別碼
+  specimenSource: '',                 // SAC-6: 標本來源
+  registrationDateTime: '',           // SAC-7: 登記日期/時間
+  containerStatus: '',                // SAC-8: 容器狀態
+  carrierType: '',                    // SAC-9: 載體類型
+  carrierIdentifier: '',              // SAC-10: 載體識別碼
+  positionInCarrier: '',              // SAC-11: 載體中的位置
+  trayType: '',                       // SAC-12: 托盤類型
+  trayIdentifier: '',                 // SAC-13: 托盤識別碼
+  positionInTray: '',                 // SAC-14: 托盤中的位置
+  location: '',                       // SAC-15: 位置
+  containerHeight: '',                // SAC-16: 容器高度
+  containerDiameter: '',              // SAC-17: 容器直徑
+  barrierDelta: '',                   // SAC-18: 障礙增量
+  bottomDelta: '',                    // SAC-19: 底部增量
+  containerHeightDiameterDeltaUnits: '', // SAC-20: 容器高度/直徑/增量單位
+  containerVolume: '',                // SAC-21: 容器體積
+  availableSpecimenVolume: '',        // SAC-22: 可用標本體積
+  initialSpecimenVolume: '',          // SAC-23: 初始標本體積
+  volumeUnits: '',                    // SAC-24: 體積單位
+  separatorType: '',                  // SAC-25: 分離器類型
+  capType: '',                        // SAC-26: 蓋類型
+  additive: '',                       // SAC-27: 添加劑
+  specimenComponent: '',              // SAC-28: 標本組件
+  dilutionFactor: '',                 // SAC-29: 稀釋因子
+  treatment: '',                      // SAC-30: 處理
+  temperature: '',                    // SAC-31: 溫度
+  hemolysisIndex: '',                 // SAC-32: 溶血指數
+  hemolysisIndexUnits: '',            // SAC-33: 溶血指數單位
+  lipemiaIndex: '',                   // SAC-34: 脂血指數
+  lipemiaIndexUnits: '',              // SAC-35: 脂血指數單位
+  icterusIndex: '',                   // SAC-36: 黃疸指數
+  icterusIndexUnits: '',              // SAC-37: 黃疸指數單位
+  fibrinIndex: '',                    // SAC-38: 纖維蛋白指數
+  fibrinIndexUnits: '',               // SAC-39: 纖維蛋白指數單位
+  systemInducedContaminants: '',      // SAC-40: 系統引起的污染物
+  drugInterference: '',               // SAC-41: 藥物干擾
+  artificialBlood: '',                // SAC-42: 人工血液
+  specialHandlingCode: '',            // SAC-43: 特殊處理代碼
+  otherEnvironmentalFactors: ''       // SAC-44: 其他環境因素
 };
 
 // ORC段落初始值 (最多31項)
 const orcInitialState = {
-  orderControl: '',                 // ORC-1: 訂單控制碼
-  placerOrderNumber: '',            // ORC-2: 請求方訂單號碼
-  fillerOrderNumber: '',            // ORC-3: 執行方訂單號碼
-  placerGroupNumber: '',            // ORC-4: 請求方組號
+  orderControl: '',                 // ORC-1: 訂單控制
+  placerOrderNumber: '',            // ORC-2: 申請方訂單編號
+  fillerOrderNumber: '',            // ORC-3: 執行方訂單編號
+  placerGroupNumber: '',            // ORC-4: 申請方群組編號
   orderStatus: '',                  // ORC-5: 訂單狀態
-  responseFlag: '',                 // ORC-6: 回應標誌
+  responseFlag: '',                 // ORC-6: 回應標記
   quantityTiming: '',               // ORC-7: 數量/時間
-  parent: '',                       // ORC-8: 父記錄
+  parent: '',                       // ORC-8: 父項目
   dateTimeOfTransaction: '',        // ORC-9: 交易日期時間
-  enteredBy: '',                    // ORC-10: 錄入人
-  verifiedBy: '',                   // ORC-11: 驗證人
-  orderingProvider: '',             // ORC-12: 醫囑開立醫生
-  enterersLocation: '',             // ORC-13: 錄入地點
-  callBackPhoneNumber: '',          // ORC-14: 回電號碼
-  orderEffectiveDateTime: '',       // ORC-15: 醫囑生效日期時間
-  orderControlCodeReason: '',       // ORC-16: 訂單控制碼原因
-  enteringOrganization: '',         // ORC-17: 錄入組織
-  enteringDevice: '',               // ORC-18: 錄入設備
-  actionBy: '',                     // ORC-19: 行動者
-  advancedBeneficiaryNoticeCode: '', // ORC-20: 高級受益人通知代碼
-  orderingFacilityName: '',         // ORC-21: 訂單機構名稱
-  orderingFacilityAddress: '',      // ORC-22: 訂單機構地址
-  orderingFacilityPhoneNumber: '',  // ORC-23: 訂單機構電話號碼
-  orderingProviderAddress: '',      // ORC-24: 醫囑開立醫生地址
+  enteredBy: '',                    // ORC-10: 輸入者
+  verifiedBy: '',                   // ORC-11: 確認者
+  orderingProvider: '',             // ORC-12: 開單醫師
+  enterersLocation: '',             // ORC-13: 輸入者位置
+  callBackPhoneNumber: '',          // ORC-14: 回電電話號碼
+  orderEffectiveDateTime: '',       // ORC-15: 訂單生效日期時間
+  orderControlCodeReason: '',       // ORC-16: 訂單控制代碼原因
+  enteringOrganization: '',         // ORC-17: 輸入組織
+  enteringDevice: '',               // ORC-18: 輸入設備
+  actionBy: '',                     // ORC-19: 執行者
+  advancedBeneficiaryNoticeCode: '', // ORC-20: 預先受益人通知代碼
+  orderingFacilityName: '',         // ORC-21: 開單設施名稱
+  orderingFacilityAddress: '',      // ORC-22: 開單設施地址
+  orderingFacilityPhoneNumber: '',  // ORC-23: 開單設施電話號碼
+  orderingProviderAddress: '',      // ORC-24: 開單醫師地址
   orderStatusModifier: '',          // ORC-25: 訂單狀態修飾符
-  advancedConfidentialityIndicator: '', // ORC-26: 高級機密性指標
-  orderingProviderSupplement: '',   // ORC-27: 醫囑開立醫生補充
-  advancedBeneficiaryNoticeOverrideReason: '', // ORC-28: 高級受益人通知覆蓋原因
-  orderStatusEffectiveDateTime: '', // ORC-29: 訂單狀態生效日期時間
-  confidentialityCode: '',          // ORC-30: 機密代碼
-  orderType: ''                     // ORC-31: 訂單類型
+  advancedBeneficiaryNoticeOverrideReason: '', // ORC-26: 預先受益人通知覆蓋原因
+  fillersExpectedAvailabilityDateTime: '', // ORC-27: 填充者預期可用日期/時間
+  confidentialityCode: '',          // ORC-28: 保密代碼
+  orderType: '',                    // ORC-29: 訂單類型
+  entererAuthorizationMode: '',     // ORC-30: 輸入者授權模式
+  parentUniversalServiceIdentifier: '' // ORC-31: 父通用服務識別碼
 };
 
 // OBR段落初始值 (最多50項)
 const obrInitialState = {
-  setId: '',                         // OBR-1: 設置ID
-  placerOrderNumber: '',             // OBR-2: 請求方訂單號碼
-  fillerOrderNumber: '',             // OBR-3: 執行方訂單號碼
-  universalServiceIdentifier: '',    // OBR-4: 通用服務標識符
-  priority: '',                      // OBR-5: 優先級
+  setId: '',                         // OBR-1: 序號
+  placerOrderNumber: '',             // OBR-2: 申請方訂單編號
+  fillerOrderNumber: '',             // OBR-3: 執行方訂單編號
+  universalServiceIdentifier: '',    // OBR-4: 通用服務識別碼
+  priority: '',                      // OBR-5: 優先順序
   requestedDateTime: '',             // OBR-6: 請求日期時間
   observationDateTime: '',           // OBR-7: 觀察日期時間
   observationEndDateTime: '',        // OBR-8: 觀察結束日期時間
   collectionVolume: '',              // OBR-9: 採集量
-  collectorIdentifier: '',           // OBR-10: 採集者標識符
+  collectorIdentifier: '',           // OBR-10: 採集者識別碼
   specimenActionCode: '',            // OBR-11: 標本操作代碼
   dangerCode: '',                    // OBR-12: 危險代碼
-  relevantClinicalInfo: '',          // OBR-13: 相關臨床信息
+  relevantClinicalInfo: '',          // OBR-13: 相關臨床資訊
   specimenReceivedDateTime: '',      // OBR-14: 標本接收日期時間
   specimenSource: '',                // OBR-15: 標本來源
-  orderingProvider: '',              // OBR-16: 醫囑開立醫生
-  orderCallbackPhoneNumber: '',      // OBR-17: 醫囑回電號碼
-  placerField1: '',                  // OBR-18: 請求方欄位1
-  placerField2: '',                  // OBR-19: 請求方欄位2
+  orderingProvider: '',              // OBR-16: 開單醫師
+  orderCallbackPhoneNumber: '',      // OBR-17: 訂單回撥電話號碼
+  placerField1: '',                  // OBR-18: 申請方欄位1
+  placerField2: '',                  // OBR-19: 申請方欄位2
   fillerField1: '',                  // OBR-20: 執行方欄位1
   fillerField2: '',                  // OBR-21: 執行方欄位2
   resultsRptStatusChngDateTime: '',  // OBR-22: 結果報告狀態變更日期時間
-  chargeToPractice: '',              // OBR-23: 收費信息
-  diagnosticServSectId: '',          // OBR-24: 診斷服務科室ID
+  chargeToPractice: '',              // OBR-23: 收費實踐
+  diagnosticServSectId: '',          // OBR-24: 診斷服務部門ID
   resultStatus: '',                  // OBR-25: 結果狀態
   parentResult: '',                  // OBR-26: 父結果
   quantityTiming: '',                // OBR-27: 數量/時間
-  resultCopiesTo: '',                // OBR-28: 結果副本接收者
-  parent: '',                        // OBR-29: 父記錄
+  resultCopiesTo: '',                // OBR-28: 結果副本發送至
+  parent: '',                        // OBR-29: 父項目
   transportationMode: '',            // OBR-30: 運輸模式
-  reasonForStudy: '',                // OBR-31: 研究原因
+  reasonForStudy: '',                // OBR-31: 檢查原因
   principalResultInterpreter: '',    // OBR-32: 主要結果解釋者
-  assistantResultInterpreter: '',    // OBR-33: 輔助結果解釋者
+  assistantResultInterpreter: '',    // OBR-33: 助理結果解釋者
   technician: '',                    // OBR-34: 技術員
-  transcriptionist: '',              // OBR-35: 謄寫員
+  transcriptionist: '',              // OBR-35: 轉錄員
   scheduledDateTime: '',             // OBR-36: 排程日期時間
   numberOfSampleContainers: '',      // OBR-37: 樣本容器數量
   transportLogisticsOfCollectedSample: '', // OBR-38: 採集樣本的運輸物流
   collectorsComment: '',             // OBR-39: 採集者評論
   transportArrangementResponsibility: '', // OBR-40: 運輸安排責任
   transportArranged: '',             // OBR-41: 運輸已安排
-  escortRequired: '',                // OBR-42: 是否需要護送
-  plannedPatientTransportComment: '', // OBR-43: 計劃的患者運輸備註
+  escort: '',                        // OBR-42: 需要護送
+  plannedPatientTransportComment: '', // OBR-43: 計劃的病人運輸評論
   procedureCode: '',                 // OBR-44: 程序代碼
   procedureCodeModifier: '',         // OBR-45: 程序代碼修飾符
-  placerSupplementalServiceInformation: '', // OBR-46: 請求方補充服務信息
-  fillerSupplementalServiceInformation: '', // OBR-47: 執行方補充服務信息
-  medicallyNecessaryDuplicateProcedureReason: '', // OBR-48: 醫學上必要的重複程序原因
+  placerSupplementalServiceInformation: '', // OBR-46: 申請方補充服務資訊
+  fillerSupplementalServiceInformation: '', // OBR-47: 執行方補充服務資訊
+  medicallyNecessaryDuplicateProcedureReason: '', // OBR-48: 醫療必要重複程序原因
   resultHandling: '',                // OBR-49: 結果處理
-  parentUniversalServiceIdentifier: '' // OBR-50: 父通用服務標識符
+  parentUniversalServiceIdentifier: '' // OBR-50: 父通用服務識別碼
 };
 
 // OBX段落初始值 (最多25項)

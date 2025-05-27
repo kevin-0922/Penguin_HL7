@@ -1,7 +1,7 @@
 ## 1. 簡介
 
- API 名稱：XXX 系統對外服務 API
- 功能概述：簡述此 API 的主要用途、適用場景與核心價值。
+ API 名稱：關於hl7操作
+ 功能概述：可以取得當前排的單子與更新單子現況
  使用對象：說明甲方、合作夥伴或第三方系統等。
 
 ---
@@ -28,10 +28,9 @@ Base URL：
 ### 4.1 取得當前單子
 
  方法：GET
- 路徑：`/users`
+ 路徑：`dicom/hl7order`
  描述：獲取目前單子
  請求範例：
-
   http
   GET dicom/hl7order
   Host: localhost:3000
@@ -43,6 +42,7 @@ Base URL：
   {
     "data": [
       {
+        "orderId":00000001
         "00100020": "37386152",
         "00100010": "王小明",
         "00100030": "1990-01-01",
@@ -77,3 +77,46 @@ Base URL：
   
 
 ---
+
+
+
+### 4.2 更新單子狀況
+方法：POST
+路徑：`dicom/hl7status/{orderId}`
+描述：掃片完成後更新訂單狀態
+
+請求範例：
+  http
+  POST dicom/hl7status/00000001
+  Host: localhost:3000
+  Content-Type: application/json
+  {
+    PID-3:xxxxx
+  }
+
+ 備註:
+ - 請傳送需要被更新的即可
+  
+
+回應範例：
+  json
+  {
+    "success": true,
+    "message": "訂單狀態已更新",
+    "data": {
+      "orderId": "00000001",
+      "updateTime": "2023-11-30T08:45:12Z"
+    }
+  }
+  
+錯誤範例：
+  json
+  {
+    "success": false,
+    "code": 1003,
+    "message": "NotFound",
+    "details": "找不到指定訂單編號"
+  }
+  
+
+

@@ -38,7 +38,7 @@ function initializeDatabase() {
       message_control_id TEXT NOT NULL,
       sender TEXT NOT NULL,
       receiver TEXT NOT NULL,
-      message_content JSON NOT NULL,  -- 改為 JSON 格式，儲存結構化的 HL7 訊息
+      message_content JSON NOT NULL, 
       status TEXT DEFAULT 'sent',
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )`, (err) => {
@@ -69,6 +69,20 @@ function initializeDatabase() {
       }
     });
     
+    // 創建切片排程表
+    db.run(`CREATE TABLE IF NOT EXISTS slicing_schedule (
+      order_id TEXT PRIMARY KEY,
+      message_content JSON NOT NULL,
+      status TEXT DEFAULT 'pending',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )`, (err) => {
+      if (err) {
+        console.error('創建 slicing_schedule 表失敗:', err.message);
+      } else {
+        console.log('slicing_schedule 表已創建或已存在');
+      }
+    });
+    
     // 檢查數據庫表是否存在和工作正常
     db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='sent_messages'", (err, row) => {
       if (err) {
@@ -90,6 +104,16 @@ function initializeDatabase() {
       }
     });
     
+    db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='slicing_schedule'", (err, row) => {
+      if (err) {
+        console.error('檢查表結構失敗:', err.message);
+      } else if (row) {
+        console.log('確認: slicing_schedule 表存在並可訪問');
+      } else {
+        console.warn('警告: slicing_schedule 表似乎未成功創建');
+      }
+    });
+    
     // 執行數據庫測試查詢
     console.log('執行數據庫測試查詢...');
     db.get("SELECT COUNT(*) as count FROM sent_messages", (err, row) => {
@@ -105,6 +129,14 @@ function initializeDatabase() {
         console.error('測試查詢 received_messages 失敗:', err.message);
       } else {
         console.log(`測試查詢成功: received_messages 表中有 ${row.count} 條記錄`);
+      }
+    });
+    
+    db.get("SELECT COUNT(*) as count FROM slicing_schedule", (err, row) => {
+      if (err) {
+        console.error('測試查詢 slicing_schedule 失敗:', err.message);
+      } else {
+        console.log(`測試查詢成功: slicing_schedule 表中有 ${row.count} 條記錄`);
       }
     });
     
