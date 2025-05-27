@@ -24,7 +24,7 @@ const { buildAckResponse } = require('../../utils/formatters/ackMessage');
 const generateOrderId = () => {
   const timestamp = new Date().getTime();
   const random = Math.floor(Math.random() * 10000);
-  return `ORD-${timestamp}-${random}`;
+  return `${timestamp}${random}`;
 };
 
 // 將 HL7 訊息轉換為 JSON 格式

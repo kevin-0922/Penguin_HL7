@@ -204,4 +204,19 @@ process.on('SIGINT', () => {
   }
 });
 
-module.exports = { db, query, get, run }; 
+// 在 db.js 中
+function all(sql, params = []) {
+  return new Promise((resolve, reject) => {
+    db.all(sql, params, (err, rows) => {
+      if (err) {
+        console.error('SQL 錯誤:', err.message);
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
+
+
+module.exports = { db, query, get, run,all }; 

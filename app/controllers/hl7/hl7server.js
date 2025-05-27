@@ -5,7 +5,7 @@ const { run } = require('../../database/db');
 const generateOrderId = () => {
   const timestamp = new Date().getTime();
   const random = Math.floor(Math.random() * 10000);
-  return `ORD-${timestamp}-${random}`;
+  return `${timestamp}${random}`;
 };
 
 // 檢測訊息類型
