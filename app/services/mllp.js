@@ -60,11 +60,11 @@ async function sendViaSocket(host, port, message) {
       // 準備MLLP封裝的消息
       const mllpMessage = Buffer.concat([MLLP_HEADER, Buffer.from(message), MLLP_TRAILER]);
 
-      // 輸出發送的消息格式
-      console.log("封裝後的MLLP訊息:");
-      console.log("-".repeat(50));
-      console.log(mllpMessage.toString("hex")); // 十六進制輸出
-      console.log("-".repeat(50));
+      // // 輸出發送的消息格式
+      // console.log("封裝後的MLLP訊息:");
+      // console.log("-".repeat(50));
+      // console.log(mllpMessage.toString("hex")); // 十六進制輸出
+      // console.log("-".repeat(50));
 
       // 發送消息
       console.log("正在發送HL7消息...");
@@ -81,17 +81,17 @@ async function sendViaSocket(host, port, message) {
       if (trailerIndex >= 0) {
         responseReceived = true;
 
-        // 顯示十六進制形式
-        console.log("\n原始接收數據 (十六進制):");
-        console.log("-".repeat(50));
-        console.log(responseData.toString("hex"));
-        console.log("-".repeat(50));
+        // // 顯示十六進制形式
+        // console.log("\n原始接收數據 (十六進制):");
+        // console.log("-".repeat(50));
+        // console.log(responseData.toString("hex"));
+        // console.log("-".repeat(50));
 
-        // 顯示字節表示
-        console.log("\n原始接收數據 (字節表示):");
-        console.log("-".repeat(50));
-        console.log(responseData);
-        console.log("-".repeat(50));
+        // // 顯示字節表示
+        // console.log("\n原始接收數據 (字節表示):");
+        // console.log("-".repeat(50));
+        // console.log(responseData);
+        // console.log("-".repeat(50));
 
         // 檢查回應是否符合MLLP格式並解析
         if (responseData[0] === MLLP_HEADER[0]) {
@@ -99,7 +99,7 @@ async function sendViaSocket(host, port, message) {
           const hl7Content = responseData.slice(1, trailerIndex).toString("utf-8");
 
           // 按段落分行顯示
-          console.log("\nHL7響應 (按段落分行):");
+          console.log("\nHL7回應 (按段落分行):");
           console.log("-".repeat(50));
           const segments = hl7Content.split("\r");
           segments.forEach((segment) => {

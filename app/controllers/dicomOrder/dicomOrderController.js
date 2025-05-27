@@ -1,6 +1,6 @@
 const { processOrderUpdate } = require('../../services/dicom/hl7status');
-const { MLLPRequest } = require('../../utils/mllp');  // 引入 MLLPRequest
-const { run, get, all } = require('../../database/db');    // 引入資料庫操作
+const { MLLPRequest } = require('../../services/mllp');  // 引入 MLLPRequest
+const { all } = require('../../database/db');    // 引入資料庫操作
 
 const {
   parseMSH,
@@ -21,67 +21,63 @@ const ERROR_CODES = {
   SERVER_ERROR: { code: 1004, message: "ServerError", httpStatus: 500 },
 };
 
-// 找不到的段落跳過
-// K11 假資料 只包含 QAK:
-const k11RawMessageExample = `QAK|QUERYID456|AA|1.3.6.1.4.1.5962.1.2.0.1739193339.66766.0^StudyInstanceUID^DCM`;
-//文件Example
-//const k11RawMessageExample = `MSH|^~\&|MT-DICOMPATH||EH_ENRICH||20250407095611||RSP^K11^RSP_K11|e9017860-e3c6-4754-888f-c681e59684d7|P|2.5.1|||||||||LAB-81^IHE\rMSA|AA|MSG001001\rQAK|IWOS|OK|WOS^^\rQPD|IWOS^Imaging WOS^IHEDIA|0667eaf1-d177-4f82-9112-c9f1187d6cb2|PR-24-1220-A2-1\r`
-// k11範例
-//const k11RawMessageExample = `MSH|^~\\&|HIS_APP|HIS_FACILITY|YOUR_APP|YOUR_FACILITY|202505251030||RSP^K11^RSP_K11|MSGID456|P|2.5.1|||AL|NE\rMSA|AA|QUERYID\rQAK|QUERYID456|AA|1.3.6.1.4.1.5962.1.2.0.1739193339.66766.0^StudyInstanceUID^DCM\rQRD|202505251025|R|D|1234567890|Q11^Find Candidates By Name^HL70471|PATIENT_ID_TYPE|M^MATCHED|1|RD^Record Display^HL70391||||||||\rPID|||37386152^^^HospitalID^MR||王小明^DAVID||19900101|F|||123 Main St^^City^State^ZIP^CN||(123)456-7890|||M|Black|||||\rPV1||O|ER^^^ER_UNIT^Room101|||||||||||||||||||||||||||||||||||||\rORC|NW|SP19-000425^Placer|FILLER-ORDER-001^Filler||CM|||||202505251020||||||||||||\rOBR|1|SP19-000425^Placer|FILLER-ORDER-001^Filler|0001^X-Ray Chest^L9999|||202505251020|||||||||||||||||||||||||||`;
+const MockField = (fieldString, componentSeparator = '^', subcomponentSeparator = '&') => {
+  const value = fieldString.split(componentSeparator).map(comp => {
+    return comp.split(subcomponentSeparator);
+  });
+  
+  return {
+    value,
+    originalValue: fieldString,
+    toString: () => {
+      return value && value[0] && value[0][0] ? value[0][0].toString() : '';
+    }
+  };
+};
 
-//模擬 hl7-parser
-class MockField {
-  constructor(fieldString, componentSeparator = '^', subcomponentSeparator = '&') {
-    this.value = fieldString.split(componentSeparator).map(comp => {
-      return comp.split(subcomponentSeparator);
-    });
-    this.originalValue = fieldString;
-  }
-  toString() {
-    return this.value && this.value[0] && this.value[0][0] ? this.value[0][0].toString() : '';
-  }
-}
+const MockSegment = (segmentString, fieldSeparator = '|', componentSeparator = '^', subcomponentSeparator = '&') => {
+  const parts = segmentString.split(fieldSeparator);
+  const segmentName = parts[0];
+  const fields = [];
 
-class MockSegment {
-  constructor(segmentString, fieldSeparator = '|', componentSeparator = '^', subcomponentSeparator = '&') {
-    const parts = segmentString.split(fieldSeparator);
-    this.segmentName = parts[0];
-    this.fields = [];
-
-    if (this.segmentName === 'MSH') {
-      this.fields.push(new MockField(fieldSeparator, componentSeparator, subcomponentSeparator));
-      const encodingChars = parts[1] || '^~\\&';
-      this.fields.push(new MockField(encodingChars, componentSeparator, subcomponentSeparator));
-      for (let i = 2; i < parts.length; i++) {
-        this.fields.push(new MockField(parts[i], componentSeparator, subcomponentSeparator));
-      }
-    } else {
-      for (let i = 1; i < parts.length; i++) {
-        this.fields.push(new MockField(parts[i], componentSeparator, subcomponentSeparator));
-      }
+  if (segmentName === 'MSH') {
+    fields.push(MockField(fieldSeparator, componentSeparator, subcomponentSeparator));
+    const encodingChars = parts[1] || '^~\\&';
+    fields.push(MockField(encodingChars, componentSeparator, subcomponentSeparator));
+    for (let i = 2; i < parts.length; i++) {
+      fields.push(MockField(parts[i], componentSeparator, subcomponentSeparator));
+    }
+  } else {
+    for (let i = 1; i < parts.length; i++) {
+      fields.push(MockField(parts[i], componentSeparator, subcomponentSeparator));
     }
   }
-}
 
-class MockMessage {
-  constructor(hl7String) {
-    this.hl7String = hl7String;
-    this.segments = [];
-    const segmentStrings = hl7String.split('\r').filter(s => s.trim() !== '');
+  return {
+    segmentName,
+    fields
+  };
+};
 
-    segmentStrings.forEach(s => {
-      this.segments.push(new MockSegment(s, '|', '^', '&'));
-    });
-  }
+const MockMessage = (hl7String) => {
+  const segments = [];
+  const segmentStrings = hl7String.split('\r').filter(s => s.trim() !== '');
 
-  getSegment(segmentName) {
-    return this.segments.find(s => s.segmentName === segmentName);
-  }
+  segmentStrings.forEach(s => {
+    segments.push(MockSegment(s, '|', '^', '&'));
+  });
 
-  split(separator) {
-    return this.hl7String.split(separator);
-  }
-}
+  return {
+    hl7String,
+    segments,
+    getSegment: (segmentName) => {
+      return segments.find(s => s.segmentName === segmentName);
+    },
+    split: (separator) => {
+      return hl7String.split(separator);
+    }
+  };
+};
 // --- 模擬結束 ---
 
 /**
@@ -158,7 +154,7 @@ exports.getDicomOrder = async (req, res) => {
         }
         
         // 解析K11回應
-        const message = new MockMessage(k11Response);
+        const message = MockMessage(k11Response);
         const parsedK11 = {};
 
         const parseSegmentSafely = (parserFunction, segmentName) => {
@@ -204,6 +200,7 @@ exports.getDicomOrder = async (req, res) => {
         
         // 構建DICOM結果 (使用與原來相同的字段映射)
         const dicomResult = {
+          "orderId": order.order_id,  // 添加訂單ID以供前端識別
           "00100020": getParsedFieldValue(parsedK11.PID, 3, 0, 0) || qak3Value, // 優先使用PID-3，否則使用QAK-3作為患者ID
           "00100010": getParsedFieldValue(parsedK11.PID, 5, 0, 0), 
           "00100030": (getParsedFieldValue(parsedK11.PID, 7, 0, 0) || '').slice(0, 8),
@@ -247,8 +244,6 @@ exports.getDicomOrder = async (req, res) => {
           "00082228": getParsedFieldValue(parsedK11.SPM, 8, 0, 0),
           "00082230": getParsedFieldValue(parsedK11.SPM, 9, 0, 0),
           "00080058": parsedK11.QAK ? getParsedFieldValue(parsedK11.QAK, 2, 0, 0) : "",
-
-          "orderId": order.order_id  // 添加訂單ID以供前端識別
         };
         
         // 檢查是否沒有任何有意義的數據被解析
@@ -266,7 +261,7 @@ exports.getDicomOrder = async (req, res) => {
     if (dicomResults.length === 0) {
       return res.status(ERROR_CODES.NOT_FOUND.httpStatus).json({
         code: ERROR_CODES.NOT_FOUND.code,
-        message: "未找到有效的DICOM訂單"
+        message: "未找到有效的DICOM訂單或無法連線至伺服器"
       });
     }
     

@@ -1,4 +1,4 @@
-const { MLLPRequest } = require('../../utils/mllp');
+const { MLLPRequest } = require('../../services/mllp');
 const { run } = require('../../database/db');
 
 // 生成唯一的訂單 ID

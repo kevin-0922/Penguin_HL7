@@ -1,6 +1,6 @@
 // 引入需要的模組
 const { run, get } = require('../../database/db');
-const { MLLPRequest } = require('../../utils/mllp');
+const { MLLPRequest } = require('../mllp');
 
 
 /**
