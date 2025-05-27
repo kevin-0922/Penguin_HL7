@@ -13,7 +13,7 @@ const {
   parseQPD,
   parseMSA,
   parseQAK
-} = require('../../utils/parsers');
+} = require('../../utils/parsers/index');
 
 const ERROR_CODES = {
   INVALID_REQUEST: { code: 1001, message: "InvalidRequest", httpStatus: 400 },
