@@ -1,5 +1,5 @@
-const dicomMappingService = require('../../services/hl7/dicomMappingService');
 
+const { mapHl7ToDicom } = require('../../services/hl7/dicomMappingService');
 const ERROR_CODES = {
   INVALID_REQUEST: { code: 1001, message: "InvalidRequest", httpStatus: 400 },
   NOT_FOUND: { code: 1003, message: "NotFound", httpStatus: 404 },
@@ -111,7 +111,7 @@ exports.getDicomOrder = (req, res) => {
     parsedK11.QAK = parseSegmentSafely(parseQAK, "QAK");
 
     // DICOM 映射
-    const dicomResult = dicomMappingService.mapHl7ToDicom(parsedK11);
+    const dicomResult = mapHl7ToDicom(parsedK11);
 
     // 檢查是否沒有任何有意義的數據被解析/映射
     const hasData = Object.values(dicomResult).some(value => value !== "" && value !== "NO");
