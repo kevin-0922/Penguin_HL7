@@ -35,7 +35,7 @@ export class MSHSegmentGenerator extends BaseSegmentGenerator {
       'UTF-8',                                 // MSH-18: Character Set (固定)
       'zh-TW',                                // MSH-19: Principal Language (固定)
       'UTF-8',                                // MSH-20: Alternate Character Set (固定)
-      '12345^LAB^HIS'                         // MSH-21: Message Profile Identifier (固定)
+      'LAB-81^IHE'                         // MSH-21: Message Profile Identifier (固定)
     ];
 
     return segments.join('|');
