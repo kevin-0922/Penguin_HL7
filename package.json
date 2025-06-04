@@ -6,7 +6,6 @@
   "main": "server.js",
   "scripts": {
     "start": "node app/server.js",
-    "dev": "NODE_ENV=development node app/server.js",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
   },

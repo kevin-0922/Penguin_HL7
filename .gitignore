@@ -140,5 +140,8 @@ dist
 node_modules
 package-lock.json
 .DS_Store
-# SpecStory explanation file
-.specstory/.what-is-this.md
+*.env
+temp/
+app/database/*.db
+
+

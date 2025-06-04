@@ -1,0 +1,23 @@
+#前端使用
+VITE_API_URL=      #http://localhost:3000
+
+
+#-------------------------------------------
+#後端使用
+
+
+# 伺服器端口
+server_PORT=  #3000
+
+# 允許的跨域來源（CORS）
+server_CORS_ORIGIN=    #http://localhost:3000
+
+# 其他環境變數
+server_NODE_ENV=   #development
+
+# mllp環境變數
+MLLP_LOCAL_HOST =  #127.0.0.1 
+MLLP_LOCAL_PORT =  #4321
+MLLP_REMOTE_HOST =  #連接ip
+MLLP_REMOTE_PORT =  #連接port
+MLLP_TIMEOUT =  #30000
