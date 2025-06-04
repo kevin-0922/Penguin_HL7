@@ -1,5 +1,5 @@
 要記得先npm install然後啟動方法是npm run dev
-# HL7 O33 測試專案
+# HL7 專案
 
 本專案結合 **Node.js/Express** 後端與 **React** 前端，提供 HL7 訊息產生、解析與 MLLP 傳輸功能，資料儲存採用 **SQLite**。透過 `vite-express` 讓前後端共用一個伺服器運行。
 
@@ -8,7 +8,7 @@
 - 解析 HL7 並存入資料庫
 - 以 **MLLP** 協定傳送與接收 HL7
 - DICOM 訂單映射與重新傳送
-- React 表單介面方便填寫與產生 HL7 訊息
+- WEB表單介面方便填寫與產生 HL7 訊息
 
 ## 環境需求
 - Node.js 20 以上
