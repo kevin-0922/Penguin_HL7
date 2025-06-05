@@ -1,4 +1,3 @@
-要記得先npm install然後啟動方法是npm run dev
 # HL7 專案
 
 本專案結合 **Node.js/Express** 後端與 **React** 前端，提供 HL7 訊息產生、解析與 MLLP 傳輸功能，資料儲存採用 **SQLite**。透過 `vite-express` 讓前後端共用一個伺服器運行。
@@ -55,10 +54,15 @@ npm start
    ```
 
 ### Windows 執行 Docker
-在 Windows 上可使用 [Docker Desktop](https://www.docker.com/products/docker-desktop/)。安裝後開啟 **PowerShell** 或 **命令提示字元**，於專案根目錄執行與上節相同的 `docker build` 與 `docker run` 指令即可。若路徑含空格，請以雙引號括住，例如：
+在 Windows 上可使用 [Docker Desktop](https://www.docker.com/products/docker-desktop/)。
+安裝後開啟 **PowerShell** 或 **命令提示字元**，於專案根目錄執行與上節相同的 `docker build` 與 `docker run` 指令即可。
+
+### macOS 執行 Docker
+在 macOS 上可使用 [Docker Desktop for Mac](https://www.docker.com/products/docker-desktop/)。  
+安裝完成後，開啟 **終端機（Terminal）**，於專案根目錄執行與上節相同的 `docker build` 與 `docker run` 指令即可。
 
 
-啟動後瀏覽器前往 [http://localhost:xxxx(預設3000)] 即可使用。
+
 
 ## 其他說明
 - 範例環境變數都列在 `.env temple`，包含 MLLP 連線設定
