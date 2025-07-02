@@ -1,6 +1,7 @@
 // 引入需要的模組
 const { run, get } = require('../../database/db');
 const { MLLPRequest } = require('../mllp');
+const { convertJsonToHl7 } = require('../../utils/formatters/hl7Converter');
 
 
 /**
@@ -55,27 +56,9 @@ const processOrderUpdate = async (orderId, updateFields) => {
       messageContent.ORC[1] = 'XO';
     }
     
-    // 轉換為HL7格式
-    let hl7Message = '';
-    const segmentOrder = ['MSH', 'PID', 'ORC', 'OBR', 'SPM', 'SAC', 'OBX'];
-    
-    segmentOrder.forEach(segmentType => {
-      if (messageContent[segmentType]) {
-        // 開始組裝段落
-        let segment = segmentType;
-        
-        // 獲取該段落的最大欄位索引
-        const maxField = Math.max(...Object.keys(messageContent[segmentType]).map(Number));
-        
-        // 按順序添加欄位值
-        for (let i = 1; i <= maxField; i++) {
-          segment += '|' + (messageContent[segmentType][i] || '');
-        }
-        
-        // 添加到完整訊息
-        hl7Message += segment + '\r';
-      }
-    });
+    // 使用通用轉換函數將JSON轉換為HL7格式
+    // 這將正確處理MSH段落和其他所有段落
+    const hl7Message = convertJsonToHl7(messageContent);
     
     // 使用MLLP傳送更新後的訊息
     const response = await MLLPRequest(

@@ -1,5 +1,6 @@
 const { MLLPRequest } = require('../../services/mllp');
 const { run } = require('../../database/db');
+const { convertHl7ToJson } = require('../../utils/formatters/hl7Converter');
 
 // 生成唯一的訂單 ID
 const generateOrderId = () => {
@@ -30,34 +31,6 @@ const detectMessageType = (message) => {
   } catch (error) {
     console.error('檢測訊息類型時發生錯誤:', error);
     return null;
-  }
-};
-
-// 將 HL7 訊息轉換為 JSON 格式
-const convertHl7ToJson = (message) => {
-  try {
-    const result = {};
-    // 分割訊息為段落
-    const segments = message.split(/\r\n|\r|\n/).filter(s => s.trim());
-    
-    segments.forEach(segment => {
-      const fields = segment.split('|');
-      const segmentType = fields[0];
-      
-      if (!result[segmentType]) {
-        result[segmentType] = {};
-      }
-      
-      // 從索引1開始，因為索引0是段落名稱
-      for (let i = 1; i < fields.length; i++) {
-        result[segmentType][i] = fields[i];
-      }
-    });
-    
-    return result;
-  } catch (error) {
-    console.error('將 HL7 訊息轉換為 JSON 時發生錯誤:', error);
-    return { error: error.message };
   }
 };
 

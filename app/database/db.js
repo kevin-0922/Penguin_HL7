@@ -33,14 +33,14 @@ function initializeDatabase() {
   db.serialize(() => {
     // 創建發送消息表
     db.run(`CREATE TABLE IF NOT EXISTS sent_messages (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      message_type TEXT NOT NULL,
-      message_control_id TEXT NOT NULL,
-      sender TEXT NOT NULL,
-      receiver TEXT NOT NULL,
-      message_content JSON NOT NULL, 
-      status TEXT DEFAULT 'sent',
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      id INTEGER PRIMARY KEY AUTOINCREMENT,    -- 發送消息的唯一標識
+      message_type TEXT NOT NULL,               -- 消息類型
+      message_control_id TEXT NOT NULL,         -- 消息控制 ID
+      sender TEXT NOT NULL,                     -- 發送者
+      receiver TEXT NOT NULL,                   -- 接收者
+      message_content JSON NOT NULL,            -- 消息內容
+      status TEXT DEFAULT 'sent',               -- 消息狀態
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 創建時間
     )`, (err) => {
       if (err) {
         console.error('創建 sent_messages 表失敗:', err.message);
@@ -51,15 +51,15 @@ function initializeDatabase() {
 
     // 創建接收消息表
     db.run(`CREATE TABLE IF NOT EXISTS received_messages (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      message_type TEXT NOT NULL,
-      message_control_id TEXT NOT NULL,
-      sender TEXT NOT NULL,
-      receiver TEXT NOT NULL,
-      message_content JSON NOT NULL,  -- 改為 JSON 格式，儲存結構化的 HL7 訊息
-      status TEXT DEFAULT 'received',
-      response_message_id INTEGER,
-      received_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      id INTEGER PRIMARY KEY AUTOINCREMENT,    -- 接收消息的唯一標識
+      message_type TEXT NOT NULL,               -- 消息類型
+      message_control_id TEXT NOT NULL,         -- 消息控制 ID
+      sender TEXT NOT NULL,                     -- 發送者
+      receiver TEXT NOT NULL,                   -- 接收者
+      message_content JSON NOT NULL,            -- 消息內容
+      status TEXT DEFAULT 'received',           -- 消息狀態
+      response_message_id INTEGER,              -- 回應消息的 ID
+      received_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 接收時間
       FOREIGN KEY (response_message_id) REFERENCES sent_messages (id)
     )`, (err) => {
       if (err) {
@@ -71,10 +71,10 @@ function initializeDatabase() {
     
     // 創建切片排程表
     db.run(`CREATE TABLE IF NOT EXISTS slicing_schedule (
-      order_id TEXT PRIMARY KEY,
-      message_content JSON NOT NULL,
-      status TEXT DEFAULT 'pending',
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      order_id TEXT PRIMARY KEY,               -- 訂單 ID
+      message_content JSON NOT NULL,            -- 消息內容
+      status TEXT DEFAULT 'pending',            -- 狀態
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 創建時間
     )`, (err) => {
       if (err) {
         console.error('創建 slicing_schedule 表失敗:', err.message);
@@ -144,7 +144,7 @@ function initializeDatabase() {
   });
 }
 
-// promise包裝的查詢函數
+// 查詢函數 (回傳多筆紀錄)
 function query(sql, params = []) {
   return new Promise((resolve, reject) => {
     db.all(sql, params, (err, rows) => {
@@ -158,7 +158,9 @@ function query(sql, params = []) {
   });
 }
 
-// promise包裝的獲取單行函數
+
+
+// 獲取單行函數
 function get(sql, params = []) {
   return new Promise((resolve, reject) => {
     db.get(sql, params, (err, row) => {
@@ -172,7 +174,7 @@ function get(sql, params = []) {
   });
 }
 
-// promise包裝的執行函數
+// 包裝的執行函數 (用於 INSERT, UPDATE, DELETE)
 function run(sql, params = []) {
   return new Promise((resolve, reject) => {
     db.run(sql, params, function(err) {
@@ -204,19 +206,9 @@ process.on('SIGINT', () => {
   }
 });
 
-// 在 db.js 中
-function all(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.all(sql, params, (err, rows) => {
-      if (err) {
-        console.error('SQL 錯誤:', err.message);
-        reject(err);
-      } else {
-        resolve(rows);
-      }
-    });
-  });
-}
 
 
-module.exports = { db, query, get, run,all }; 
+
+module.exports = { db, query, get, run }; 
+
+
