@@ -1,10 +1,12 @@
 import { generateO33Message } from './messages/O33MessageGenerator';
 import { generateQ11Message } from './messages/Q11MessageGenerator';
+import { generateO01Message } from './messages/O01MessageGenerator';
 
 // 直接將消息類型映射到對應的生成器函數
 const MESSAGE_GENERATORS = {
   'O33': generateO33Message,
-  'Q11': generateQ11Message
+  'Q11': generateQ11Message,
+  'O01': generateO01Message
   // 這裡可以直接添加其他消息類型
 };
 

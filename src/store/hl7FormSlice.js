@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { o33DataInitialState,q11DataInitialState } from '../utils/data/formDataInitialState';
+import { o33DataInitialState, q11DataInitialState, o01DataInitialState } from '../utils/data/formDataInitialState';
 
 
 const messageTypeToInitialState = {
   'O33': o33DataInitialState,
   'Q11': q11DataInitialState,
-
+  'O01': o01DataInitialState
 };
 
 // 預設消息類型 - 可以設為空或第一個可用的消息類型
@@ -18,6 +18,7 @@ const hl7FormSlice = createSlice({
     forms: {
       'O33': o33DataInitialState,
       'Q11': q11DataInitialState,
+      'O01': o01DataInitialState
       //可新增訊息
     }
   },

@@ -28,6 +28,7 @@ const O01Form = () => {
     const { id, value } = e.target;
     dispatch(
       updateFormData({
+        messageType: 'O01',
         segment,
         field: id,
         value,
@@ -38,7 +39,7 @@ const O01Form = () => {
   // 處理表單提交
   const handleSubmit = (e) => {
     e.preventDefault();
-    const generatedMessage = generateCompleteHL7Message(formData, 'O33');
+    const generatedMessage = generateCompleteHL7Message(formData, 'O01');
     setHL7Message(generatedMessage);
     setShowModal(true);
   };
@@ -75,7 +76,7 @@ const O01Form = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">OML^O33 數位病理工作流程訊息</h1>
+      <h1 className="text-2xl font-bold mb-6">ORM^O01 醫囑管理訊息</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <ErrorBoundary>
@@ -100,10 +101,6 @@ const O01Form = () => {
 
         <ErrorBoundary>
           <OBRSection messageType="O01"/>
-        </ErrorBoundary>
-
-        <ErrorBoundary>
-          <OBXSection messageType="O01"/>
         </ErrorBoundary>
 
         <ErrorBoundary>

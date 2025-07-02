@@ -14,6 +14,134 @@ const mshInitialState = {
   applicationAckType: ''          // MSH-16: Application Acknowledgment Type
 };
 
+// PV1段落初始值 (最多45項)
+const pv1InitialState = {
+  setId: '1',                     // PV1-1: 序號
+  patientClass: '',               // PV1-2: 病患類別
+  assignedPatientLocation: '',    // PV1-3: 指定病患位置
+  admissionType: '',              // PV1-4: 入院類型
+  preadmitNumber: '',             // PV1-5: 預先入院號碼
+  priorPatientLocation: '',       // PV1-6: 先前病患位置
+  attendingDoctor: '',            // PV1-7: 主治醫師
+  referringDoctor: '',            // PV1-8: 轉診醫師
+  consultingDoctor: '',           // PV1-9: 會診醫師
+  hospitalService: '',            // PV1-10: 醫院服務
+  temporaryLocation: '',          // PV1-11: 臨時位置
+  preadmitTestIndicator: '',      // PV1-12: 預先入院測試指示器
+  readmissionIndicator: '',       // PV1-13: 再入院指示器
+  admitSource: '',                // PV1-14: 入院來源
+  ambulatoryStatus: '',           // PV1-15: 門診狀態
+  vipIndicator: '',               // PV1-16: VIP指示器
+  admittingDoctor: '',            // PV1-17: 接收醫師
+  patientType: '',                // PV1-18: 病患類型
+  visitNumber: '',                // PV1-19: 訪視號碼
+  financialClass: '',             // PV1-20: 財務類別
+  chargePriceIndicator: '',       // PV1-21: 收費價格指示器
+  courtesyCode: '',               // PV1-22: 優惠代碼
+  creditRating: '',               // PV1-23: 信用評級
+  contractCode: '',               // PV1-24: 合約代碼
+  contractEffectiveDate: '',      // PV1-25: 合約生效日期
+  contractAmount: '',             // PV1-26: 合約金額
+  contractPeriod: '',             // PV1-27: 合約期間
+  interestCode: '',               // PV1-28: 利息代碼
+  transferToBadDebtCode: '',      // PV1-29: 轉為壞賬代碼
+  transferToBadDebtDate: '',      // PV1-30: 轉為壞賬日期
+  badDebtAgencyCode: '',          // PV1-31: 壞賬機構代碼
+  badDebtTransferAmount: '',      // PV1-32: 壞賬轉移金額
+  badDebtRecoveryAmount: '',      // PV1-33: 壞賬恢復金額
+  deleteAccountIndicator: '',     // PV1-34: 刪除帳戶指示器
+  deleteAccountDate: '',          // PV1-35: 刪除帳戶日期
+  dischargeDisposition: '',       // PV1-36: 出院處置
+  dischargedToLocation: '',       // PV1-37: 出院至位置
+  dietType: '',                   // PV1-38: 飲食類型
+  servicingFacility: '',          // PV1-39: 服務設施
+  bedStatus: '',                  // PV1-40: 床位狀態
+  accountStatus: '',              // PV1-41: 帳戶狀態
+  pendingLocation: '',            // PV1-42: 待定位置
+  priorTemporaryLocation: '',     // PV1-43: 先前臨時位置
+  admitDateTime: '',              // PV1-44: 入院日期時間
+  dischargeDateTime: ''           // PV1-45: 出院日期時間
+};
+
+// DG1段落初始值 (最多21項)
+const dg1InitialState = {
+  setId: '1',                     // DG1-1: 序號
+  diagnosisCodingMethod: '',      // DG1-2: 診斷編碼方法
+  diagnosisCode: '',              // DG1-3: 診斷代碼
+  diagnosisDescription: '',       // DG1-4: 診斷描述
+  diagnosisDateTime: '',          // DG1-5: 診斷日期時間
+  diagnosisType: '',              // DG1-6: 診斷類型
+  majorDiagnosisCategory: '',     // DG1-7: 主要診斷類別
+  diagnosticRelatedGroup: '',     // DG1-8: 診斷相關群組
+  drgApprovalIndicator: '',       // DG1-9: DRG批准指示器
+  drgGrouperReviewCode: '',       // DG1-10: DRG分組審查代碼
+  outlierType: '',                // DG1-11: 離群值類型
+  outlierDays: '',                // DG1-12: 離群值天數
+  outlierCost: '',                // DG1-13: 離群值成本
+  grouperVersionAndType: '',      // DG1-14: 分組器版本和類型
+  diagnosisPriority: '',          // DG1-15: 診斷優先級
+  diagnosingClinician: '',        // DG1-16: 診斷醫師
+  diagnosisClassification: '',    // DG1-17: 診斷分類
+  confidentialIndicator: '',      // DG1-18: 保密指示器
+  attestationDateTime: '',        // DG1-19: 認證日期時間
+  diagnosisIdentifier: '',        // DG1-20: 診斷標識符
+  diagnosisActionCode: ''         // DG1-21: 診斷操作代碼
+};
+
+// IPC段落初始值 (最多50項)
+const ipcInitialState = {
+  setId: '1',                     // IPC-1: 序號
+  accessKey: '',                  // IPC-2: 存取金鑰
+  insurancePlanId: '',            // IPC-3: 保險計劃 ID
+  insuranceCompany: '',           // IPC-4: 保險公司
+  insuranceCompanyAddress: '',    // IPC-5: 保險公司地址
+  insuranceCompanyContactPerson: '', // IPC-6: 保險公司聯絡人
+  insuranceCompanyPhoneNumber: '', // IPC-7: 保險公司電話號碼
+  groupNumber: '',                // IPC-8: 群組號碼
+  groupName: '',                  // IPC-9: 群組名稱
+  insuredGroupEmployerName: '',   // IPC-10: 被保險人群組/雇主名稱
+  insuredGroupEmployerAddress: '', // IPC-11: 被保險人群組/雇主地址
+  planEffectiveDate: '',          // IPC-12: 計劃生效日期
+  planExpirationDate: '',         // IPC-13: 計劃到期日期
+  authorizationInformation: '',   // IPC-14: 授權資訊
+  planType: '',                   // IPC-15: 計劃類型
+  nameOfInsured: '',              // IPC-16: 被保險人姓名
+  insuredRelationshipToPatient: '', // IPC-17: 被保險人與病人關係
+  insuredDateOfBirth: '',         // IPC-18: 被保險人出生日期
+  insuredAddress: '',             // IPC-19: 被保險人地址
+  assignmentOfBenefits: '',       // IPC-20: 權益轉讓
+  coordinationOfBenefits: '',     // IPC-21: 權益協調
+  coordinationOfBenefitsPriority: '', // IPC-22: 權益協調優先順序
+  noticeOfAdmissionFlag: '',      // IPC-23: 入院通知標誌
+  noticeOfAdmissionDate: '',      // IPC-24: 入院通知日期
+  reportOfEligibilityFlag: '',    // IPC-25: 資格報告標誌
+  reportOfEligibilityDate: '',    // IPC-26: 資格報告日期
+  releaseInformationCode: '',     // IPC-27: 資訊釋出代碼
+  preAdmissionCertFlag: '',       // IPC-28: 預先入院認證標誌
+  preAdmissionCertDate: '',       // IPC-29: 預先入院認證日期
+  verificationDateTime: '',       // IPC-30: 驗證日期時間
+  verificationBy: '',             // IPC-31: 驗證人
+  typeOfAgreementCode: '',        // IPC-32: 協議類型代碼
+  billType: '',                   // IPC-33: 帳單類型
+  billingAccount: '',             // IPC-34: 帳單帳戶
+  specialtyCode: '',              // IPC-35: 專業代碼
+  insuranceTypeCode: '',          // IPC-36: 保險類型代碼
+  billingStatus: '',              // IPC-37: 帳單狀態
+  lifetimeReserveDays: '',        // IPC-38: 終身預留天數
+  delayBeforeLRDay: '',           // IPC-39: 延遲前的生命保留天數
+  companyPlanCode: '',            // IPC-40: 公司計劃代碼
+  policyNumber: '',               // IPC-41: 保單號碼
+  policyDeductible: '',           // IPC-42: 保單自付額
+  policyCopay: '',                // IPC-43: 保單共付額
+  policyLimit: '',                // IPC-44: 保單限額
+  policyOutOfPocket: '',          // IPC-45: 保單自付上限
+  policyLifeTime: '',             // IPC-46: 保單終身
+  policyIcd9Code: '',             // IPC-47: 保單 ICD9 代碼
+  policyIcd10Code: '',            // IPC-48: 保單 ICD10 代碼
+  policyCpt4Code: '',             // IPC-49: 保單 CPT4 代碼
+  policyHcpcsCode: ''             // IPC-50: 保單 HCPCS 代碼
+};
+
 // PID段落初始值 (最多39項)
 const pidInitialState = {
   setId: '1',                     // PID-1: Set ID
@@ -303,13 +431,28 @@ const q11DataInitialState = {
   rcp: rcpInitialState
 };
 
+// O01消息初始值
+const o01DataInitialState = {
+  msh: mshInitialState,
+  pid: pidInitialState,
+  pv1: pv1InitialState,
+  dg1: dg1InitialState,
+  orc: orcInitialState,
+  obr: obrInitialState,
+  ipc: ipcInitialState,
+  nte: nteInitialState
+};
+
 // 導出初始狀態
-export { o33DataInitialState, q11DataInitialState };
+export { o33DataInitialState, q11DataInitialState, o01DataInitialState };
 
 // 導出各個段落的初始狀態
 export {
   mshInitialState,
   pidInitialState,
+  pv1InitialState,
+  dg1InitialState,
+  ipcInitialState,
   spmInitialState,
   sacInitialState,
   nteInitialState,

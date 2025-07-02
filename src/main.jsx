@@ -10,6 +10,7 @@ import Root from './routes/root';
 import Home from './pages/home';
 import O33Form from './pages/O33Form';
 import Q11Form from './pages/Q11Form';
+import O01Form from './pages/O01Form';
 import './index.css'
 
 const router = createBrowserRouter([
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
             {
                 path: "q11",
                 element: <Q11Form />,
+            },
+            {
+                path: "o01",
+                element: <O01Form />,
             }
         ]
     },
