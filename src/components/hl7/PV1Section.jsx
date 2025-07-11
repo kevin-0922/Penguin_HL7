@@ -73,9 +73,9 @@ const PV1Section = ({ messageType }) => {
             <option value="E">急診 (Emergency)</option>
             <option value="P">術前登記 (Pre-admit)</option>
             <option value="R">日間照護/重複就診 (Recurring patient)</option>
-            <option value="B">嬰兒 (Obstetrics)</option>
-            <option value="C">長期照護 (Recurring patient)</option>
-            <option value="N">新生兒 (Not applicable)</option>
+            <option value="B">產科 (Obstetrics)</option>
+            <option value="C">商業帳戶 (Commercial Account)</option>
+            <option value="N">不適用 (Not applicable)</option>
             <option value="U">未知 (Unknown)</option>
           </select>
         </FormField>
@@ -112,13 +112,11 @@ const PV1Section = ({ messageType }) => {
           >
             <option value="">請選擇</option>
             <option value="A">意外 (Accident)</option>
+            <option value="C">選擇性入院 (Elective)</option>
             <option value="E">急診 (Emergency)</option>
-            <option value="L">勞工與產業 (Labor and Delivery)</option>
+            <option value="L">產科分娩 (Labor and Delivery)</option>
             <option value="R">常規 (Routine)</option>
             <option value="N">新生兒 (Newborn)</option>
-            <option value="U">緊急 (Urgent)</option>
-            <option value="C">選擇性 (Elective)</option>
-            <option value="G">婦產科 (Geriatric)</option>
           </select>
         </FormField>
 
@@ -247,17 +245,15 @@ const PV1Section = ({ messageType }) => {
           enName="Preadmit Test Indicator" 
           fieldNotation="PV1-12"
         >
-          <select
+          <input
+            type="text"
             id="preadmitTestIndicator"
             name="preadmitTestIndicator"
             value={pv1Data?.preadmitTestIndicator || ""}
             onChange={handleInputChange}
-            className={selectClassName}
-          >
-            <option value="">請選擇</option>
-            <option value="Y">是 (Yes)</option>
-            <option value="N">否 (No)</option>
-          </select>
+            className={inputClassName}
+            placeholder="請輸入入院前測試指標"
+          />
         </FormField>
         
         {/* PV1-13 Re-admission Indicator */}
@@ -320,10 +316,21 @@ const PV1Section = ({ messageType }) => {
           >
             <option value="">請選擇</option>
             <option value="A0">無行動限制 (No functional limitations)</option>
-            <option value="A1">輪椅使用者 (Ambulates with assistive device)</option>
-            <option value="A2">擔架使用者 (Ambulates with help from other person)</option>
-            <option value="A3">限制行動 (Ambulates with significant limitations)</option>
-            <option value="A4">非行走能力 (Non-ambulatory)</option>
+            <option value="A1">使用輔助器具行走 (Ambulates with assistive device)</option>
+            <option value="A2">由他人協助行走 (Wheelchair/stretcher bound)</option>
+            <option value="A3">昏迷／無反應 (Comatose; non-responsive)</option>
+            <option value="A4">迷失方向 (Disoriented)</option>
+            <option value="A5">視力受損 (Vision impaired)</option>
+            <option value="A6">使用拐杖行走 (Uses cane)</option>
+            <option value="A7">使用助行器行走 (Uses walker)</option>
+            <option value="A8">重症監護 (Critically ill)</option>
+            <option value="A9">臥床 (Bed patient)</option>
+            <option value="B1">氧氣治療 (Oxygen therapy)</option>
+            <option value="B2">隔離 (Isolation)</option>
+            <option value="B3">靜脈治療 (IV therapy)</option>
+            <option value="B4">心臟監測 (Cardiac monitoring)</option>
+            <option value="B5">ECG 監測 (Leads/ECG)</option>
+            <option value="B6">疼痛管理 (Pain management)</option>
           </select>
         </FormField>
         
@@ -333,18 +340,15 @@ const PV1Section = ({ messageType }) => {
           enName="VIP Indicator" 
           fieldNotation="PV1-16"
         >
-          <select
+          <input
+            type="text"
             id="vipIndicator"
             name="vipIndicator"
             value={pv1Data?.vipIndicator || ""}
             onChange={handleInputChange}
-            className={selectClassName}
-          >
-            <option value="">請選擇</option>
-            <option value="Y">是 (Yes)</option>
-            <option value="N">否 (No)</option>
-            <option value="VIP">VIP</option>
-          </select>
+            className={inputClassName}
+            placeholder="請輸入VIP指標"
+          />
         </FormField>
         
         {/* PV1-17 Admitting Doctor */}
@@ -849,6 +853,135 @@ const PV1Section = ({ messageType }) => {
             value={pv1Data?.dischargeDateTime || ""}
             onChange={handleInputChange}
             className={dateTimeClassName}
+          />
+        </FormField>
+
+        {/* PV1-46 Current Patient Balance */}
+        <FormField 
+          label="當前病人餘額" 
+          enName="Current Patient Balance" 
+          fieldNotation="PV1-46"
+        >
+          <input
+            type="number"
+            id="currentPatientBalance"
+            name="currentPatientBalance"
+            value={pv1Data?.currentPatientBalance || ""}
+            onChange={handleInputChange}
+            className={inputClassName}
+            placeholder="請輸入當前病人餘額"
+            step="0.01"
+          />
+        </FormField>
+
+        {/* PV1-47 Total Charges */}
+        <FormField 
+          label="總費用" 
+          enName="Total Charges" 
+          fieldNotation="PV1-47"
+        >
+          <input
+            type="number"
+            id="totalCharges"
+            name="totalCharges"
+            value={pv1Data?.totalCharges || ""}
+            onChange={handleInputChange}
+            className={inputClassName}
+            placeholder="請輸入總費用"
+            step="0.01"
+          />
+        </FormField>
+
+        {/* PV1-48 Total Adjustments */}
+        <FormField 
+          label="總調整額" 
+          enName="Total Adjustments" 
+          fieldNotation="PV1-48"
+        >
+          <input
+            type="number"
+            id="totalAdjustments"
+            name="totalAdjustments"
+            value={pv1Data?.totalAdjustments || ""}
+            onChange={handleInputChange}
+            className={inputClassName}
+            placeholder="請輸入總調整額"
+            step="0.01"
+          />
+        </FormField>
+
+        {/* PV1-49 Total Payments */}
+        <FormField 
+          label="總支付額" 
+          enName="Total Payments" 
+          fieldNotation="PV1-49"
+        >
+          <input
+            type="number"
+            id="totalPayments"
+            name="totalPayments"
+            value={pv1Data?.totalPayments || ""}
+            onChange={handleInputChange}
+            className={inputClassName}
+            placeholder="請輸入總支付額"
+            step="0.01"
+          />
+        </FormField>
+
+        {/* PV1-50 Alternate Visit ID */}
+        <FormField 
+          label="替代就診ID" 
+          enName="Alternate Visit ID" 
+          fieldNotation="PV1-50"
+        >
+          <input
+            type="text"
+            id="alternateVisitId"
+            name="alternateVisitId"
+            value={pv1Data?.alternateVisitId || ""}
+            onChange={handleInputChange}
+            className={inputClassName}
+            placeholder="請輸入替代就診ID"
+          />
+        </FormField>
+
+        {/* PV1-51 Visit Indicator */}
+        <FormField 
+          label="就診指示器" 
+          enName="Visit Indicator" 
+          fieldNotation="PV1-51"
+        >
+          <select
+            id="visitIndicator"
+            name="visitIndicator"
+            value={pv1Data?.visitIndicator || ""}
+            onChange={handleInputChange}
+            className={selectClassName}
+          >
+            <option value="">請選擇</option>
+            <option value="A">急性 (Acute)</option>
+            <option value="C">慢性 (Chronic)</option>
+            <option value="N">無 (None)</option>
+            <option value="O">其他 (Other)</option>
+            <option value="R">復發 (Recurrent)</option>
+            <option value="S">單次 (Single)</option>
+          </select>
+        </FormField>
+
+        {/* PV1-52 Other Healthcare Provider */}
+        <FormField 
+          label="其他醫療提供者" 
+          enName="Other Healthcare Provider" 
+          fieldNotation="PV1-52"
+        >
+          <input
+            type="text"
+            id="otherHealthcareProvider" 
+            name="otherHealthcareProvider"
+            value={pv1Data?.otherHealthcareProvider || ""}
+            onChange={handleInputChange}
+            className={inputClassName}
+            placeholder="請輸入其他醫療提供者 (例: ID^姓名^類型)"
           />
         </FormField>
       </FormSection>

@@ -73,7 +73,7 @@ const queryByQpd = async (qpd) => {
 const buildRspK11Response = (originalMessage, msh) => {
   const currentTime = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14);
   return [
-    `MSH|^~\\&|${msh.receivingApplication}|${msh.receivingFacility}|${msh.sendingApplication}|${msh.sendingFacility}|${currentTime}||RSP^K11|${extractMsgControlId(originalMessage)}_RSP|P|2.5.1`,
+    `MSH|^~\&|${msh.receivingApplication}|${msh.receivingFacility}|${msh.sendingApplication}|${msh.sendingFacility}|${currentTime}||RSP^K11|${extractMsgControlId(originalMessage)}_RSP|P|2.5.1`,
     `MSA|AA|${extractMsgControlId(originalMessage)}`,
     `QAK|${extractMsgControlId(originalMessage)}|OK`,
     `QPD|${msh.messageType}|${extractMsgControlId(originalMessage)}`

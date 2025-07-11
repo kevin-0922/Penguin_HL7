@@ -9,7 +9,7 @@ export const generateMSHSegment = (formData) => {
   
   const segments = [
     'MSH',                                    // MSH-1: Segment ID (固定)
-    '^~\\&',                                  // MSH-2: Field Separator (固定)
+    '^~\&',                                  // MSH-2: Field Separator (固定)
     mshData.sendingApplication || '',         // MSH-3: Sending Application
     mshData.sendingFacility || '',            // MSH-4: Sending Facility
     mshData.receivingApplication || '',       // MSH-5: Receiving Application

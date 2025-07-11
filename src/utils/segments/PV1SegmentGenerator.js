@@ -58,7 +58,12 @@ export const generatePV1Segment = (data) => {
     pv1.pendingLocation || '',          // PV1-42: 待定位置
     pv1.priorTemporaryLocation || '',   // PV1-43: 先前臨時位置
     pv1.admitDateTime || '',            // PV1-44: 入院日期時間
-    pv1.dischargeDateTime || ''         // PV1-45: 出院日期時間
+    pv1.dischargeDateTime || '',        // PV1-45: 出院日期時間
+    pv1.patientStatusCode || '',        // PV1-46: 病患狀態代碼
+    pv1.patientStatusCodeDate || '',    // PV1-47: 病患狀態代碼日期
+    pv1.patientStatusCodeTime || '',    // PV1-48: 病患狀態代碼時間
+    pv1.patientStatusCodeReason || '',  // PV1-49: 病患狀態代碼原因
+    pv1.patientStatusCodeReasonCode || '' // PV1-50: 病患狀態代碼原因代碼
   ];
 
   // 組合所有段落項目

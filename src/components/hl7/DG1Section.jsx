@@ -60,24 +60,14 @@ const DG1Section = ({ messageType }) => {
           enName="Diagnosis Coding Method" 
           fieldNotation="DG1-2"
         >
-          <select
+          <input
             id="diagnosisCodingMethod"
             name="diagnosisCodingMethod"
             value={dg1Data?.diagnosisCodingMethod || ""}
             onChange={handleInputChange}
-            className={selectClassName}
-          >
-            <option value="">請選擇</option>
-            <option value="I9C">ICD-9-CM</option>
-            <option value="I10">ICD-10</option>
-            <option value="I10P">ICD-10-PCS</option>
-            <option value="SNM">SNOMED</option>
-            <option value="LN">LOINC</option>
-            <option value="ACR">ACR代碼</option>
-            <option value="UML">統一醫學語言</option>
-            <option value="SCT">SNOMED-CT</option>
-            <option value="CD">自定義代碼</option>
-          </select>
+            className={inputClassName}
+            placeholder="請輸入診斷編碼方法"
+          />
         </FormField>
 
         {/* DG1-3 Diagnosis Code */}
@@ -151,13 +141,13 @@ const DG1Section = ({ messageType }) => {
             <option value="A">入院診斷 (Admitting)</option>
             <option value="W">工作診斷 (Working)</option>
             <option value="F">最終診斷 (Final)</option>
-            <option value="T">暫時診斷 (Temporary)</option>
+            {/* <option value="T">暫時診斷 (Temporary)</option>
             <option value="P">臨床前診斷 (Preliminary)</option>
             <option value="C">諮詢/轉診診斷 (Consultant)</option>
             <option value="D">治療後診斷 (Post-procedure)</option>
             <option value="M">主要診斷 (Primary)</option>
             <option value="S">次要診斷 (Secondary)</option>
-            <option value="O">其他診斷 (Other)</option>
+            <option value="O">其他診斷 (Other)</option> */}
           </select>
         </FormField>
 
@@ -421,7 +411,7 @@ const DG1Section = ({ messageType }) => {
             className={selectClassName}
           >
             <option value="">請選擇</option>
-            <option value="A">新增 (Add)</option>
+            <option value="A">新增 (Add/Insert)</option>
             <option value="D">刪除 (Delete)</option>
             <option value="U">更新 (Update)</option>
           </select>

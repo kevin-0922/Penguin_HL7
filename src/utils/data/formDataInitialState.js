@@ -60,7 +60,12 @@ const pv1InitialState = {
   pendingLocation: '',            // PV1-42: 待定位置
   priorTemporaryLocation: '',     // PV1-43: 先前臨時位置
   admitDateTime: '',              // PV1-44: 入院日期時間
-  dischargeDateTime: ''           // PV1-45: 出院日期時間
+  dischargeDateTime: '',          // PV1-45: 出院日期時間
+  patientStatusCode: '',          // PV1-46: 病患狀態代碼
+  patientStatusCodeDate: '',      // PV1-47: 病患狀態代碼日期
+  patientStatusCodeTime: '',      // PV1-48: 病患狀態代碼時間
+  patientStatusCodeReason: '',    // PV1-49: 病患狀態代碼原因
+  patientStatusCodeReasonCode: '' // PV1-50: 病患狀態代碼原因代碼
 };
 
 // DG1段落初始值 (最多21項)
@@ -88,59 +93,18 @@ const dg1InitialState = {
   diagnosisActionCode: ''         // DG1-21: 診斷操作代碼
 };
 
-// IPC段落初始值 (最多50項)
+// IPC段落初始值 (最多9項)
 const ipcInitialState = {
-  setId: '1',                     // IPC-1: 序號
-  accessKey: '',                  // IPC-2: 存取金鑰
-  insurancePlanId: '',            // IPC-3: 保險計劃 ID
-  insuranceCompany: '',           // IPC-4: 保險公司
-  insuranceCompanyAddress: '',    // IPC-5: 保險公司地址
-  insuranceCompanyContactPerson: '', // IPC-6: 保險公司聯絡人
-  insuranceCompanyPhoneNumber: '', // IPC-7: 保險公司電話號碼
-  groupNumber: '',                // IPC-8: 群組號碼
-  groupName: '',                  // IPC-9: 群組名稱
-  insuredGroupEmployerName: '',   // IPC-10: 被保險人群組/雇主名稱
-  insuredGroupEmployerAddress: '', // IPC-11: 被保險人群組/雇主地址
-  planEffectiveDate: '',          // IPC-12: 計劃生效日期
-  planExpirationDate: '',         // IPC-13: 計劃到期日期
-  authorizationInformation: '',   // IPC-14: 授權資訊
-  planType: '',                   // IPC-15: 計劃類型
-  nameOfInsured: '',              // IPC-16: 被保險人姓名
-  insuredRelationshipToPatient: '', // IPC-17: 被保險人與病人關係
-  insuredDateOfBirth: '',         // IPC-18: 被保險人出生日期
-  insuredAddress: '',             // IPC-19: 被保險人地址
-  assignmentOfBenefits: '',       // IPC-20: 權益轉讓
-  coordinationOfBenefits: '',     // IPC-21: 權益協調
-  coordinationOfBenefitsPriority: '', // IPC-22: 權益協調優先順序
-  noticeOfAdmissionFlag: '',      // IPC-23: 入院通知標誌
-  noticeOfAdmissionDate: '',      // IPC-24: 入院通知日期
-  reportOfEligibilityFlag: '',    // IPC-25: 資格報告標誌
-  reportOfEligibilityDate: '',    // IPC-26: 資格報告日期
-  releaseInformationCode: '',     // IPC-27: 資訊釋出代碼
-  preAdmissionCertFlag: '',       // IPC-28: 預先入院認證標誌
-  preAdmissionCertDate: '',       // IPC-29: 預先入院認證日期
-  verificationDateTime: '',       // IPC-30: 驗證日期時間
-  verificationBy: '',             // IPC-31: 驗證人
-  typeOfAgreementCode: '',        // IPC-32: 協議類型代碼
-  billType: '',                   // IPC-33: 帳單類型
-  billingAccount: '',             // IPC-34: 帳單帳戶
-  specialtyCode: '',              // IPC-35: 專業代碼
-  insuranceTypeCode: '',          // IPC-36: 保險類型代碼
-  billingStatus: '',              // IPC-37: 帳單狀態
-  lifetimeReserveDays: '',        // IPC-38: 終身預留天數
-  delayBeforeLRDay: '',           // IPC-39: 延遲前的生命保留天數
-  companyPlanCode: '',            // IPC-40: 公司計劃代碼
-  policyNumber: '',               // IPC-41: 保單號碼
-  policyDeductible: '',           // IPC-42: 保單自付額
-  policyCopay: '',                // IPC-43: 保單共付額
-  policyLimit: '',                // IPC-44: 保單限額
-  policyOutOfPocket: '',          // IPC-45: 保單自付上限
-  policyLifeTime: '',             // IPC-46: 保單終身
-  policyIcd9Code: '',             // IPC-47: 保單 ICD9 代碼
-  policyIcd10Code: '',            // IPC-48: 保單 ICD10 代碼
-  policyCpt4Code: '',             // IPC-49: 保單 CPT4 代碼
-  policyHcpcsCode: ''             // IPC-50: 保單 HCPCS 代碼
-};
+  accessionIdentifier: '1',            // IPC-1: 存取識別碼
+  requestedProcedureId: '',            // IPC-2: 申請程序ID
+  studyInstanceUid: '',                // IPC-3: 研究實例UID
+  scheduledProcedureStepId: '',        // IPC-4: 排程程序步驟ID
+  modality: '',                        // IPC-5: 模態
+  protocolCode: '',                    // IPC-6: 協議代碼
+  scheduledStationName: '',            // IPC-7: 排程站台名稱
+  scheduledProcedureStepLocation: '',  // IPC-8: 排程程序步驟位置
+  scheduledProcedureStepStatus: ''     // IPC-9: 排程程序步驟狀態
+ };
 
 // PID段落初始值 (最多39項)
 const pidInitialState = {

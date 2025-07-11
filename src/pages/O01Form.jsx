@@ -8,7 +8,7 @@ import axios from "axios";
 // 導入各段落組件
 import MSHSection from "../components/hl7/MSHSection";
 import PIDSection from "../components/hl7/PIDSection";
-import PV1Section from "../components/hl7/PV1Section.jsx";
+import PV1Section from "../components/hl7/PV1Section";
 import DG1Section from "../components/hl7/DG1Section";
 import ORCSection from "../components/hl7/ORCSection";
 import OBRSection from "../components/hl7/OBRSection";

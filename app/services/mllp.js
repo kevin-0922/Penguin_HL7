@@ -1,4 +1,5 @@
 const net = require("net");
+const db = require("../database/db");
 
 // MLLP封裝常量
 const MLLP_HEADER = Buffer.from([0x0b]); // <VT>
@@ -8,16 +9,41 @@ const MLLP_TRAILER = Buffer.from([0x1c, 0x0d]); // <FS><CR>
 const config = {
   localHost: process.env.MLLP_LOCAL_HOST,
   localPort: parseInt(process.env.MLLP_LOCAL_PORT),
-  remoteHost: process.env.MLLP_REMOTE_HOST,
-  remotePort: parseInt(process.env.MLLP_REMOTE_PORT),
-  timeout: parseInt(process.env.MLLP_TIMEOUT || "30000"), // 默認30秒超時
+  remoteHost: null, // 將從資料庫動態獲取
+  remotePort: null, // 將從資料庫動態獲取
+  timeout: 30000, // 預設值，將從資料庫動態獲取
 };
+
+// 從資料庫加載 MLLP 配置
+async function loadMllpConfig() {
+  try {
+    const dbConfig = await db.getFirstMllpConfig();
+    if (dbConfig) {
+      config.remoteHost = dbConfig.remote_host;
+      config.remotePort = parseInt(dbConfig.remote_port);
+      config.timeout = parseInt(dbConfig.timeout || "30000");
+      console.log('已從資料庫載入 MLLP 配置');
+    } else {
+      console.log('未找到 MLLP 配置，使用預設值');
+    }
+  } catch (error) {
+    console.error('載入 MLLP 配置失敗:', error);
+  }
+}
 
 async function MLLPRequest(message) {
   try {
     // 檢查請求體是否存在
     if (!message) {
       throw new Error("請求體為空，無法處理HL7訊息");
+    }
+
+    // 加載最新配置
+    await loadMllpConfig();
+    
+    // 檢查配置是否有效
+    if (!config.remoteHost || !config.remotePort) {
+      throw new Error("MLLP 配置無效，請先設置遠端伺服器資訊");
     }
 
     // 獲取HL7訊息並確保是字符串格式

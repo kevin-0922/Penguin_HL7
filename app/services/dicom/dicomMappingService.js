@@ -38,7 +38,7 @@ const MockSegment = (
 
   if (segmentName === "MSH") {
     fields.push(MockField(fieldSeparator, componentSeparator, subcomponentSeparator));
-    const encodingChars = parts[1] || "^~\\&";
+    const encodingChars = parts[1] || "^~\&";
     fields.push(MockField(encodingChars, componentSeparator, subcomponentSeparator));
     for (let i = 2; i < parts.length; i++) {
       fields.push(MockField(parts[i], componentSeparator, subcomponentSeparator));
@@ -84,7 +84,7 @@ const generateQ11Message = (sac3Value) => {
   const messageId = `Q11-${Date.now()}`;
   const currentDate = new Date().toISOString().replace(/[-:T]/g, "").substring(0, 14);
 
-  return `MSH|^~\\&|SCANNER|SCANNER_FACILITY|HIS|HIS_FACILITY|${currentDate}||QBP^Q11^QBP_Q11|${messageId}|P|2.5.1|||NE|AL|TW|UTF-8|zh-TW|UTF-8|LAB-81^IHE\rQPD|IWOS^Imaging WOS^IHEDIA|${messageId}|${sac3Value}\rRCP|I||`;
+  return `MSH|^~\&|SCANNER|SCANNER_FACILITY|HIS|HIS_FACILITY|${currentDate}||QBP^Q11^QBP_Q11|${messageId}|P|2.5.1|||NE|AL|TW|UTF-8|zh-TW|UTF-8|LAB-81^IHE\rQPD|IWOS^Imaging WOS^IHEDIA|${messageId}|${sac3Value}\rRCP|I||`;
 };
 
 /**

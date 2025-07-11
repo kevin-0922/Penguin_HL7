@@ -69,7 +69,7 @@ function initializeDatabase() {
       }
     });
     
-    // 創建切片排程表
+    // 創建切片排程表 (OML^O33)
     db.run(`CREATE TABLE IF NOT EXISTS slicing_schedule (
       order_id TEXT PRIMARY KEY,               -- 訂單 ID
       message_content JSON NOT NULL,            -- 消息內容
@@ -80,6 +80,59 @@ function initializeDatabase() {
         console.error('創建 slicing_schedule 表失敗:', err.message);
       } else {
         console.log('slicing_schedule 表已創建或已存在');
+      }
+    });
+    
+    // 創建醫療訂單表 (ORM^O01)
+    db.run(`CREATE TABLE IF NOT EXISTS orm_o01_orders (
+      order_id TEXT PRIMARY KEY,                -- 訂單 ID
+      patient_id TEXT NOT NULL,                 -- 病人 ID
+      patient_name TEXT,                        -- 病人姓名
+      order_status TEXT NOT NULL,               -- 訂單狀態
+      ordering_provider TEXT,                   -- 開立醫師
+      order_datetime TEXT,                      -- 訂單日期時間
+      order_details JSON NOT NULL,              -- 訂單詳細資料
+      message_control_id TEXT NOT NULL,         -- 對應的訊息控制 ID
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 創建時間
+    )`, (err) => {
+      if (err) {
+        console.error('創建 orm_o01_orders 表失敗:', err.message);
+      } else {
+        console.log('orm_o01_orders 表已創建或已存在');
+      }
+    });
+    
+    // 創建醫療訂單回應表 (ORM^O02)
+    db.run(`CREATE TABLE IF NOT EXISTS orm_o02_responses (
+      response_id TEXT PRIMARY KEY,             -- 回應 ID
+      order_id TEXT NOT NULL,                   -- 關聯的訂單 ID
+      response_status TEXT NOT NULL,            -- 回應狀態
+      response_datetime TEXT,                   -- 回應日期時間
+      response_details JSON NOT NULL,           -- 回應詳細資料
+      message_control_id TEXT NOT NULL,         -- 對應的訊息控制 ID
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 創建時間
+      FOREIGN KEY (order_id) REFERENCES orm_o01_orders (order_id)
+    )`, (err) => {
+      if (err) {
+        console.error('創建 orm_o02_responses 表失敗:', err.message);
+      } else {
+        console.log('orm_o02_responses 表已創建或已存在');
+      }
+    });
+    
+    // 創建MLLP配置表
+    db.run(`CREATE TABLE IF NOT EXISTS mllp_config (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,     -- 配置ID
+      remote_host TEXT NOT NULL,                -- 遠程主機地址
+      remote_port TEXT NOT NULL,                -- 遠程端口
+      timeout TEXT NOT NULL,                    -- 連接超時時間
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 創建時間
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- 更新時間
+    )`, (err) => {
+      if (err) {
+        console.error('創建 mllp_config 表失敗:', err.message);
+      } else {
+        console.log('mllp_config 表已創建或已存在');
       }
     });
     
@@ -114,6 +167,37 @@ function initializeDatabase() {
       }
     });
     
+    db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='orm_o01_orders'", (err, row) => {
+      if (err) {
+        console.error('檢查表結構失敗:', err.message);
+      } else if (row) {
+        console.log('確認: orm_o01_orders 表存在並可訪問');
+      } else {
+        console.warn('警告: orm_o01_orders 表似乎未成功創建');
+      }
+    });
+    
+    db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='orm_o02_responses'", (err, row) => {
+      if (err) {
+        console.error('檢查表結構失敗:', err.message);
+      } else if (row) {
+        console.log('確認: orm_o02_responses 表存在並可訪問');
+      } else {
+        console.warn('警告: orm_o02_responses 表似乎未成功創建');
+      }
+    });
+    
+    // 檢查MLLP配置表是否存在
+    db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='mllp_config'", (err, row) => {
+      if (err) {
+        console.error('檢查表結構失敗:', err.message);
+      } else if (row) {
+        console.log('確認: mllp_config 表存在並可訪問');
+      } else {
+        console.warn('警告: mllp_config 表似乎未成功創建');
+      }
+    });
+    
     // 執行數據庫測試查詢
     console.log('執行數據庫測試查詢...');
     db.get("SELECT COUNT(*) as count FROM sent_messages", (err, row) => {
@@ -137,6 +221,31 @@ function initializeDatabase() {
         console.error('測試查詢 slicing_schedule 失敗:', err.message);
       } else {
         console.log(`測試查詢成功: slicing_schedule 表中有 ${row.count} 條記錄`);
+      }
+    });
+    
+    db.get("SELECT COUNT(*) as count FROM orm_o01_orders", (err, row) => {
+      if (err) {
+        console.error('測試查詢 orm_o01_orders 失敗:', err.message);
+      } else {
+        console.log(`測試查詢成功: orm_o01_orders 表中有 ${row.count} 條記錄`);
+      }
+    });
+    
+    db.get("SELECT COUNT(*) as count FROM orm_o02_responses", (err, row) => {
+      if (err) {
+        console.error('測試查詢 orm_o02_responses 失敗:', err.message);
+      } else {
+        console.log(`測試查詢成功: orm_o02_responses 表中有 ${row.count} 條記錄`);
+      }
+    });
+    
+    // 測試查詢MLLP配置表
+    db.get("SELECT COUNT(*) as count FROM mllp_config", (err, row) => {
+      if (err) {
+        console.error('測試查詢 mllp_config 失敗:', err.message);
+      } else {
+        console.log(`測試查詢成功: mllp_config 表中有 ${row.count} 條記錄`);
       }
     });
     
@@ -188,6 +297,50 @@ function run(sql, params = []) {
   });
 }
 
+// 獲取第一個MLLP配置
+async function getFirstMllpConfig() {
+  try {
+    return await get("SELECT * FROM mllp_config ORDER BY id DESC LIMIT 1");
+  } catch (error) {
+    console.error('獲取MLLP配置失敗:', error);
+    throw error;
+  }
+}
+
+// 插入新的MLLP配置
+async function insertMllpConfig(remoteHost, remotePort, timeout) {
+  try {
+    const now = new Date().toISOString();
+    return await run(
+      "INSERT INTO mllp_config (remote_host, remote_port, timeout, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
+      [remoteHost, remotePort, timeout, now, now]
+    );
+  } catch (error) {
+    console.error('插入MLLP配置失敗:', error);
+    throw error;
+  }
+}
+
+// 更新MLLP配置
+async function updateMllpConfig(remoteHost, remotePort, timeout) {
+  try {
+    const now = new Date().toISOString();
+    const config = await getFirstMllpConfig();
+    
+    if (!config) {
+      return await insertMllpConfig(remoteHost, remotePort, timeout);
+    }
+    
+    return await run(
+      "UPDATE mllp_config SET remote_host = ?, remote_port = ?, timeout = ?, updated_at = ? WHERE id = ?",
+      [remoteHost, remotePort, timeout, now, config.id]
+    );
+  } catch (error) {
+    console.error('更新MLLP配置失敗:', error);
+    throw error;
+  }
+}
+
 // 監聽進程結束，關閉數據庫連接
 process.on('SIGINT', () => {
   console.log('接收到終止信號，關閉數據庫連接...');
@@ -209,6 +362,14 @@ process.on('SIGINT', () => {
 
 
 
-module.exports = { db, query, get, run }; 
+module.exports = { 
+  db, 
+  query, 
+  get, 
+  run,
+  getFirstMllpConfig,
+  insertMllpConfig,
+  updateMllpConfig
+}; 
 
 

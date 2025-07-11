@@ -60,15 +60,6 @@ async function handleOmlO33(message) {
     const obx = parseOBX(hl7Msg);
     const sac = parseSAC(hl7Msg);
     
-    // 只在控制台輸出訊息內容和解析結果
-    // console.log('==== 處理 OML^O33 訊息 ====');
-    // console.log('MSH部分:', msh);
-    // console.log('PID部分:', pid);
-    // console.log('ORC部分:', orc);
-    // console.log('OBR部分:', obr);
-    // console.log('SPM部分:', spm);
-    // console.log('OBX部分:', obx);
-    // console.log('SAC部分:', sac);
     
     // 將 HL7 訊息轉換為 JSON 格式
     const jsonMessage = convertHl7ToJson(message);
@@ -150,13 +141,13 @@ const buildO34Response = (message, msh, pid) => {
     
     // 構建O34回應
     return [
-      `MSH|^~\\&|${sendingApp}|${sendingFacility}|${receivingApp}|${receivingFacility}|${timestamp}||ORL^O34|${messageControlId}_ACK|P|2.5.1`,
+      `MSH|^~\&|${sendingApp}|${sendingFacility}|${receivingApp}|${receivingFacility}|${timestamp}||ORL^O34|${messageControlId}_ACK|P|2.5.1`,
       `MSA|AA|${messageControlId}|Message processed successfully`,
       `PID|1||${pid?.patientId || ''}^^^MRN||${pid?.patientName || ''}||||||||||||||||`
     ].join('\r');
   } catch (error) {
     console.error('構建O34回應時發生錯誤:', error);
-    return `MSH|^~\\&|ERROR|ERROR|ERROR|ERROR|${new Date().toISOString().replace(/[-:T]/g, '').substring(0, 14)}||ORL^O34|ERROR|P|2.5.1\rMSA|AE|ERROR|Error constructing O34 response: ${error.message}`;
+    return `MSH|^~\&|ERROR|ERROR|ERROR|ERROR|${new Date().toISOString().replace(/[-:T]/g, '').substring(0, 14)}||ORL^O34|ERROR|P|2.5.1\rMSA|AE|ERROR|Error constructing O34 response: ${error.message}`;
   }
 };
 
