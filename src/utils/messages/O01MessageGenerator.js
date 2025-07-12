@@ -32,3 +32,8 @@ export const generateO01Message = (formData) => {
   
   return segments.join('\r');
 }; 
+
+
+
+
+

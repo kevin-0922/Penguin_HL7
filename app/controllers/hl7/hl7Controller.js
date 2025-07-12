@@ -3,6 +3,8 @@ const handleQbpQ11 = require('../../services/hl7/handleQbpQ11.js');
 const handleOrmO01 = require('../../services/hl7/handleOrmO01.js');
 const util = require('util');
 const parseMSH = require('../../utils/parsers/parseMSH');
+const { buildAckResponse } = require('../../utils/formatters/ackMessage');
+
 // 定義訊息處理器映射
 const messageHandlers = {
   'OML^O33^OML_O33': handleOmlO33,
@@ -43,15 +45,25 @@ const handleHttpRequest = async (req, res) => {
 // 處理HL7訊息
 const processHl7Message = async (message) => {
   try {
-        // 提取訊息類型
-    const mshData = parseMSH(message);
-    const messageType = mshData.messageType;
-    console.log('messageType:', messageType);
+    // 解析字串消息
+    const mshSegment = message.split('\r').find(seg => seg.startsWith('MSH'));
+    if (!mshSegment) {
+      throw new Error('找不到 MSH 段落');
+    }
+    
+    // 從MSH段落提取訊息類型
+    const fields = mshSegment.split('|');
+    if (fields.length < 10) {
+      throw new Error('MSH 段落缺少必要欄位');
+    }
+    
+    const messageType = fields[8];
+    console.log('訊息類型:', messageType);
+    
     const handler = messageHandlers[messageType];
-    console.log('handler:', handler);
     if (!handler) {
       console.warn(`沒有找到 ${messageType} 類型的處理器`);
-      return buildAckResponse(message, 'AR', `Unsupported message type: ${messageType}`);
+      return buildAckResponse(message, 'AR', `不支援的訊息類型: ${messageType}`);
     }
     
     // 使用處理器處理訊息
@@ -61,8 +73,6 @@ const processHl7Message = async (message) => {
     return buildAckResponse(message, 'AE', error.message);
   }
 };
-
-
 
 // 導出函數
 module.exports = {

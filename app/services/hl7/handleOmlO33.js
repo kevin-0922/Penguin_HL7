@@ -38,6 +38,13 @@ async function handleOmlO33(message) {
     colors: true           // 如果你想在 terminal 顯示顏色
   }));
   try {
+    // 檢查消息類型
+    if (typeof message !== 'string') {
+      console.error('消息不是字串類型:', typeof message);
+      message = JSON.stringify(message);
+      console.log('已轉換為字串:', message);
+    }
+    
     // 生成唯一的訂單 ID
     const orderId = generateOrderId();
     
