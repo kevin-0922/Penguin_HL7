@@ -1,12 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateFormData } from "../../store/hl7FormSlice";
-import FormSection, {
-  FormField,
-  inputClassName,
-  selectClassName,
-  dateTimeClassName,
-} from "./FormSection";
+import FormSection, { FormField, inputClassName } from "./FormSection";
 
 const IPCSection = ({ messageType }) => {
   const dispatch = useDispatch();
@@ -35,7 +30,7 @@ const IPCSection = ({ messageType }) => {
 
       <FormSection title="IPC (影像程序控制)">
         {/* IPC-1 Accession Identifier */}
-        <FormField label="存取識別碼" enName="Accession Identifier" fieldNotation="IPC-1" required>
+        <FormField label="存取識別碼" enName="Accession Identifier" fieldNotation="IPC-1">
           <input
             type="text"
             id="accessionIdentifier"
@@ -44,17 +39,12 @@ const IPCSection = ({ messageType }) => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入存取識別碼"
-            required
+            required_test
           />
         </FormField>
 
         {/* IPC-2 Requested Procedure ID */}
-        <FormField
-          label="申請程序ID"
-          enName="Requested Procedure ID"
-          fieldNotation="IPC-2"
-          required
-        >
+        <FormField label="申請程序ID" enName="Requested Procedure ID" fieldNotation="IPC-2">
           <input
             type="text"
             id="requestedProcedureId"
@@ -63,12 +53,12 @@ const IPCSection = ({ messageType }) => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入申請程序ID"
-            required
+            required_test
           />
         </FormField>
 
         {/* IPC-3 Study Instance UID */}
-        <FormField label="研究實例UID" enName="Study Instance UID" fieldNotation="IPC-3" required>
+        <FormField label="研究實例UID" enName="Study Instance UID" fieldNotation="IPC-3">
           <input
             type="text"
             id="studyInstanceUid"
@@ -77,7 +67,7 @@ const IPCSection = ({ messageType }) => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入研究實例UID"
-            required
+            required_test
           />
         </FormField>
 
@@ -86,7 +76,6 @@ const IPCSection = ({ messageType }) => {
           label="排程程序步驟ID"
           enName="Scheduled Procedure Step ID"
           fieldNotation="IPC-4"
-          required
         >
           <input
             type="text"
@@ -96,7 +85,7 @@ const IPCSection = ({ messageType }) => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入排程程序步驟ID"
-            required
+            required_test
           />
         </FormField>
 

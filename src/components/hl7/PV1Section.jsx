@@ -57,7 +57,6 @@ const PV1Section = ({ messageType }) => {
           label="病患類別" 
           enName="Patient Class" 
           fieldNotation="PV1-2"
-          required
         >
           <select
             id="patientClass"
@@ -65,7 +64,7 @@ const PV1Section = ({ messageType }) => {
             value={pv1Data?.patientClass || ""}
             onChange={handleInputChange}
             className={selectClassName}
-            required
+            required_test
           >
             <option value="">請選擇</option>
             <option value="I">住院 (Inpatient)</option>

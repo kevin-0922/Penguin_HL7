@@ -25,9 +25,9 @@ const generateOrderId = () => {
   return `ORD${timestamp}${random}`;
 };
 
-// 處理ORM^O01訊息
-async function handleOrmO01(message) {
-  console.log('收到 ORM^O01 訊息:');
+// 處理OMG^O19訊息
+async function handleOrmO19(message) {
+  console.log('收到 OMG^O19 訊息:');
   console.log(util.inspect(message, {
     depth: null,
     maxArrayLength: null,
@@ -38,8 +38,6 @@ async function handleOrmO01(message) {
   try {
     // 生成唯一的訂單 ID
     const orderId = generateOrderId();
-    // 生成唯一的回應 ID
-    const responseId = `RESP${new Date().getTime()}${Math.floor(Math.random() * 10000)}`;
     
     // 創建 HL7 適配器
     let hl7Msg;
@@ -72,7 +70,7 @@ async function handleOrmO01(message) {
     const orderControl = orc?.orderControl || 'NW';
     
     try {
-      const messageType = 'ORM^O01^ORM_O01';
+      const messageType = 'OMG^O19^OMG_O19';
       const sender = extractSender(message);
       const receiver = extractReceiver(message);
       
@@ -83,11 +81,11 @@ async function handleOrmO01(message) {
         VALUES (?, ?, ?, ?, ?, ?)`,
         [messageType, messageControlId, sender, receiver, JSON.stringify(jsonMessage), 'received']
       );
-      console.log('ORM^O01 訊息已儲存到資料庫');
+      console.log('OMG^O19 訊息已儲存到資料庫');
       
-      // 處理醫療訂單 (包含放射科訂單，因為O01直接等同於RAD-01)
+      // 處理醫療訂單 (包含放射科訂單，因為O19直接等同於RAD-01)
       await run(
-        `INSERT INTO orm_o01_orders
+        `INSERT INTO omg_o19_orders
         (order_id, patient_id, patient_name, order_status, ordering_provider, order_datetime, order_details, message_control_id)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
         [
@@ -101,53 +99,10 @@ async function handleOrmO01(message) {
           messageControlId
         ]
       );
-      console.log('ORM^O01 訊息已儲存到醫療訂單表，訂單 ID:', orderId);
+      console.log('OMG^O19 訊息已儲存到醫療訂單表，訂單 ID:', orderId);
       
     } catch (dbError) {
-      console.error('儲存 ORM^O01 訊息時發生錯誤:', dbError);
-      // 儲存失敗不影響後續處理
-    }
-    
-    // 構建 O02 回應訊息
-    const o02Response = buildO02Response(message, msh, pid, orc, orderId);
-    console.log('生成 O02 回應:', o02Response);
-    
-    // 將 O02 回應訊息轉換為 JSON 格式
-    const jsonO02Response = convertHl7ToJson(o02Response);
-    console.log('轉換後的 O02 JSON 格式:', jsonO02Response);
-    
-    try {
-      const messageControlId = extractMsgControlId(message) + '_O02';
-      const sender = extractReceiver(message); // 角色互換
-      const receiver = extractSender(message); // 角色互換
-      
-      // 儲存發送的回應訊息到資料庫
-      const sentResult = await run(
-        `INSERT INTO sent_messages 
-        (message_type, message_control_id, sender, receiver, message_content, status)
-        VALUES (?, ?, ?, ?, ?, ?)`,
-        ['ORR^O02^ORR_O02', messageControlId, sender, receiver, JSON.stringify(jsonO02Response), 'sent']
-      );
-      console.log('O02 回應訊息已儲存到 sent_messages 表');
-      
-      // 儲存 O02 回應到專用表
-      await run(
-        `INSERT INTO orm_o02_responses
-        (response_id, order_id, response_status, response_datetime, response_details, message_control_id)
-        VALUES (?, ?, ?, ?, ?, ?)`,
-        [
-          responseId,
-          orderId,
-          'AA', // 成功回應
-          new Date().toISOString().replace(/[-:T]/g, '').substring(0, 14),
-          JSON.stringify(jsonO02Response),
-          messageControlId
-        ]
-      );
-      console.log('O02 回應訊息已儲存到 orm_o02_responses 表，回應 ID:', responseId);
-      
-    } catch (dbError) {
-      console.error('儲存 O02 回應訊息時發生錯誤:', dbError);
+      console.error('儲存 OMG^O19 訊息時發生錯誤:', dbError);
       // 儲存失敗不影響後續處理
     }
     
@@ -156,33 +111,10 @@ async function handleOrmO01(message) {
     
     return ackResponse;
   } catch (error) {
-    console.error('處理 ORM^O01 訊息時發生錯誤:', error);
+    console.error('處理 OMG^O19 訊息時發生錯誤:', error);
     return buildAckResponse(message, 'AE', error.message);
   }
 }
-
-// 構建 O02 回應訊息
-const buildO02Response = (message, msh, pid, orc, orderId) => {
-  try {
-    const timestamp = new Date().toISOString().replace(/[-:T]/g, '').substring(0, 14);
-    const messageControlId = msh.messageControlId || 'UNKNOWN';
-    const sendingApp = msh.receivingApplication || '';
-    const sendingFacility = msh.receivingFacility || '';
-    const receivingApp = msh.sendingApplication || '';
-    const receivingFacility = msh.sendingFacility || '';
-    
-    // 構建 O02 回應
-    return [
-      `MSH|^~\&|${sendingApp}|${sendingFacility}|${receivingApp}|${receivingFacility}|${timestamp}||ORR^O02^ORR_O02|${messageControlId}_O02|P|2.5.1`,
-      `MSA|AA|${messageControlId}|Order processed successfully`,
-      `PID|1||${pid?.patientId || ''}^^^MRN||${pid?.patientName || ''}||||||||||||||||`,
-      `ORC|${orc?.orderControl || 'NW'}|${orderId}|${orc?.placerOrderNumber || ''}|${orc?.fillerOrderNumber || ''}|CM||^^^${timestamp}^^R|||||${orc?.orderingProvider || ''}|||||`
-    ].join('\r');
-  } catch (error) {
-    console.error('構建 O02 回應時發生錯誤:', error);
-    return `MSH|^~\&|ERROR|ERROR|ERROR|ERROR|${new Date().toISOString().replace(/[-:T]/g, '').substring(0, 14)}||ORR^O02^ORR_O02|ERROR|P|2.5.1\rMSA|AE|ERROR|Error constructing O02 response: ${error.message}`;
-  }
-};
 
 // 創建 HL7 適配器
 const createHL7Adapter = (message) => {
@@ -211,4 +143,4 @@ const createHL7Adapter = (message) => {
   };
 };
 
-module.exports = handleOrmO01;
+module.exports = handleOrmO19;

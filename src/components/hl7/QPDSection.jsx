@@ -37,7 +37,7 @@ const QPDSection = ({messageType}) => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入查詢名稱"
-            required
+            required_test
           />
         </FormField>
 
@@ -50,7 +50,7 @@ const QPDSection = ({messageType}) => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入查詢標籤"
-            required
+            required_test
           />
         </FormField>
 
@@ -63,7 +63,7 @@ const QPDSection = ({messageType}) => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入查詢參數"
-            required
+            required_test
           />
         </FormField>
       </FormSection>

@@ -11,35 +11,23 @@ import PIDSection from "../components/hl7/PIDSection";
 import PV1Section from "../components/hl7/PV1Section";
 import DG1Section from "../components/hl7/DG1Section";
 import ORCSection from "../components/hl7/ORCSection";
+import TQ1Section from "../components/hl7/TQ1Section";
 import OBRSection from "../components/hl7/OBRSection";
 import IPCSection from "../components/hl7/IPCSection";
 
 
 import { generateCompleteHL7Message } from "../utils/hl7MessageService";
 
-const O01Form = () => {
+const O19Form = () => {
   const dispatch = useDispatch();
   const formData = useSelector((state) => state.hl7Form);
   const [hl7Message, setHL7Message] = useState("");
   const [showModal, setShowModal] = useState(false);
 
-  // 處理輸入變更
-  const handleInputChange = (segment) => (e) => {
-    const { id, value } = e.target;
-    dispatch(
-      updateFormData({
-        messageType: 'O01',
-        segment,
-        field: id,
-        value,
-      })
-    );
-  };
-
   // 處理表單提交
   const handleSubmit = (e) => {
     e.preventDefault();
-    const generatedMessage = generateCompleteHL7Message(formData, 'O01');
+    const generatedMessage = generateCompleteHL7Message(formData, 'O19');
     setHL7Message(generatedMessage);
     setShowModal(true);
   };
@@ -73,38 +61,44 @@ const O01Form = () => {
       alert(`發送失敗: ${error.response?.data?.error || error.message}`);
     }
   };
+  
+
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">ORM^O01 醫囑管理訊息</h1>
+      <h1 className="text-2xl font-bold mb-6">ORM^O19 醫囑管理訊息</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <ErrorBoundary>
-          <MSHSection messageType="O01" hl7MessageType="ORM^O01^ORM_O01"/>
+          <MSHSection messageType="O19" hl7MessageType="OMG^O19^OMG_O19"/>
         </ErrorBoundary>
 
         <ErrorBoundary>
-          <PIDSection messageType="O01"/>
+          <PIDSection messageType="O19"/>
         </ErrorBoundary>
 
         <ErrorBoundary>
-          <PV1Section messageType="O01"/>
+          <PV1Section messageType="O19"/>
         </ErrorBoundary>
 
         <ErrorBoundary>
-          <DG1Section messageType="O01"/>
+          <DG1Section messageType="O19"/>
         </ErrorBoundary>
 
         <ErrorBoundary>
-          <ORCSection messageType="O01"/>
+          <ORCSection messageType="O19"/>
         </ErrorBoundary>
 
         <ErrorBoundary>
-          <OBRSection messageType="O01"/>
+          <TQ1Section messageType="O19"/>
         </ErrorBoundary>
 
         <ErrorBoundary>
-          <IPCSection messageType="O01"/>
+          <OBRSection messageType="O19"/>
+        </ErrorBoundary>
+
+        <ErrorBoundary>
+          <IPCSection messageType="O19"/>
         </ErrorBoundary>
 
         <div className="mt-6">
@@ -122,7 +116,7 @@ const O01Form = () => {
           <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-4xl">
             <h2 className="text-xl font-bold mb-4">生成的HL7消息</h2>
             <div className="bg-gray-100 p-4 rounded-md mb-4">
-              <pre className="whitespace-pre-wrap overflow-auto max-h-96">{hl7Message}</pre>
+              <pre className="whitespace-pre-wrap overflow-auto max-h-96">{hl7Message.replace(/\r/g, '\n')}</pre>
             </div>
             <div className="flex justify-end space-x-2">
               <button
@@ -151,4 +145,4 @@ const O01Form = () => {
   );
 };
 
-export default O01Form;
+export default O19Form;

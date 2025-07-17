@@ -376,6 +376,24 @@ const nteInitialState = {
   commentType: ''               // NTE-4: 註釋類型
 };
 
+// TQ1段落初始值 (最多14項)
+const tq1InitialState = {
+  setId: '1',                     // TQ1-1: 序號
+  quantity: '',                   // TQ1-2: 數量
+  repeatPattern: '',              // TQ1-3: 重複模式
+  explicitTime: '',               // TQ1-4: 明確時間
+  relativeTimeUnits: '',          // TQ1-5: 相對時間與單位
+  serviceDuration: '',            // TQ1-6: 服務持續時間
+  startDateTime: '',              // TQ1-7: 開始日期/時間
+  endDateTime: '',                // TQ1-8: 結束日期/時間
+  priority: '',                   // TQ1-9: 優先順序
+  conditionText: '',              // TQ1-10: 條件文本
+  textInstruction: '',            // TQ1-11: 文本指示
+  conjunction: '',                // TQ1-12: 連接詞
+  occurrenceDuration: '',         // TQ1-13: 發生持續時間
+  totalOccurrences: ''            // TQ1-14: 總發生次數
+};
+
 // O33消息初始值
 const o33DataInitialState = {
   msh: mshInitialState,
@@ -395,20 +413,21 @@ const q11DataInitialState = {
   rcp: rcpInitialState
 };
 
-// O01消息初始值
-const o01DataInitialState = {
+// O19消息初始值
+const o19DataInitialState = {
   msh: mshInitialState,
   pid: pidInitialState,
   pv1: pv1InitialState,
   dg1: dg1InitialState,
   orc: orcInitialState,
+  tq1: tq1InitialState,
   obr: obrInitialState,
   ipc: ipcInitialState,
   nte: nteInitialState
 };
 
 // 導出初始狀態
-export { o33DataInitialState, q11DataInitialState, o01DataInitialState };
+export { o33DataInitialState, q11DataInitialState, o19DataInitialState };
 
 // 導出各個段落的初始狀態
 export {
@@ -421,6 +440,7 @@ export {
   sacInitialState,
   nteInitialState,
   orcInitialState,
+  tq1InitialState,
   obrInitialState,
   obxInitialState,
   qpdInitialState,

@@ -41,7 +41,7 @@ const SACSection = ({messageType}) => {
         </FormField>
 
         {/* SAC-3 Container Identifier */}
-        <FormField label="容器識別碼" enName="Container Identifier" fieldNotation="SAC-3" required>
+        <FormField label="容器識別碼" enName="Container Identifier" fieldNotation="SAC-3" >
           <input
             type="text"
             id="containerIdentifier"
@@ -49,6 +49,7 @@ const SACSection = ({messageType}) => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入容器識別碼"
+            required_test
           />
         </FormField>
 
@@ -100,12 +101,13 @@ const SACSection = ({messageType}) => {
         </FormField>
 
         {/* SAC-8 Container Status */}
-        <FormField label="容器狀態" enName="Container Status" fieldNotation="SAC-8" required>
+        <FormField label="容器狀態" enName="Container Status" fieldNotation="SAC-8" >
           <select
             id="containerStatus"
             value={sacData?.containerStatus || ''}
             onChange={handleInputChange}
             className={selectClassName}
+            required_test
           >
             <option value="">請選擇容器狀態</option>
             <option value="I">初始狀態 (I)</option>

@@ -41,12 +41,13 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-2 Value Type */}
-        <FormField label="值類型" enName="Value Type" fieldNotation="OBX-2" required>
+        <FormField label="值類型" enName="Value Type" fieldNotation="OBX-2" >
           <select
             id="valueType"
             value={obxData?.valueType || ''}
             onChange={handleInputChange}
             className={selectClassName}
+            required_test
           >
             <option value="">請選擇...</option>
             <option value="NM">數值 (NM)</option>
@@ -61,7 +62,7 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-3 Observation Identifier */}
-        <FormField label="觀察識別碼" enName='Observation Identifier' fieldNotation="OBX-3" required>
+        <FormField label="觀察識別碼" enName='Observation Identifier' fieldNotation="OBX-3" >
           <input
             type="text"
             id="observationIdentifier"
@@ -69,6 +70,7 @@ const OBXSection = ({messageType}) => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入觀察識別碼"
+            required_test
           />
         </FormField>
 
@@ -169,12 +171,13 @@ const OBXSection = ({messageType}) => {
         </FormField>
 
         {/* OBX-11 Observation Result Status */}
-        <FormField label="觀察結果狀態" enName='Observation Result Status' fieldNotation="OBX-11" required>
+        <FormField label="觀察結果狀態" enName='Observation Result Status' fieldNotation="OBX-11" >
           <select
             id="observationResultStatus"
             value={obxData?.observationResultStatus || ''}
             onChange={handleInputChange}
             className={selectClassName}
+            required_test
           >
             <option value="">請選擇...</option>
             <option value="P">初步結果 (P)</option>

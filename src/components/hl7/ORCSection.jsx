@@ -29,13 +29,14 @@ const ORCSection = ({messageType}) => {
 
       <FormSection title="ORC (通用訂單)">
         {/* ORC-1 Order Control */}
-        <FormField label="訂單控制" enName="Order Control" fieldNotation="ORC-1" required>
+        <FormField label="訂單控制" enName="Order Control" fieldNotation="ORC-1">
           <select
             id="orderControl"
             name="orderControl"
             value={orcData?.orderControl || ''}
             onChange={handleInputChange}
             className={selectClassName}
+            required_test
           >
             <option value="">請選擇...</option>
             <option value="NW">新訂單 (NW)</option>
@@ -49,7 +50,7 @@ const ORCSection = ({messageType}) => {
         </FormField>
 
         {/* ORC-2 Placer Order Number */}
-        <FormField label="申請方訂單編號" enName="Placer Order Number" fieldNotation="ORC-2" required>
+        <FormField label="申請方訂單編號" enName="Placer Order Number" fieldNotation="ORC-2" >
           <input
             type="text"
             id="placerOrderNumber"
@@ -58,11 +59,12 @@ const ORCSection = ({messageType}) => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入申請方訂單編號"
+            required_test
           />
         </FormField>
 
         {/* ORC-3 Filler Order Number */}
-        <FormField label="執行方訂單編號" enName="Filler Order Number" fieldNotation="ORC-3" required>
+        <FormField label="執行方訂單編號" enName="Filler Order Number" fieldNotation="ORC-3" >
           <input
             type="text"
             id="fillerOrderNumber"
@@ -71,6 +73,7 @@ const ORCSection = ({messageType}) => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入執行方訂單編號"
+            required_test
           />
         </FormField>
 
@@ -88,13 +91,14 @@ const ORCSection = ({messageType}) => {
         </FormField>
 
         {/* ORC-5 Order Status */}
-        <FormField label="訂單狀態" enName="Order Status" fieldNotation="ORC-5" required>
+        <FormField label="訂單狀態" enName="Order Status" fieldNotation="ORC-5" >
           <select
             id="orderStatus"
             name="orderStatus"
             value={orcData?.orderStatus || ''}
             onChange={handleInputChange}
             className={selectClassName}
+            required_test
           >
             <option value="">請選擇...</option>
             <option value="A">已核准 (A)</option>
@@ -151,7 +155,7 @@ const ORCSection = ({messageType}) => {
         </FormField>
 
         {/* ORC-9 Date/Time of Transaction */}
-        <FormField label="交易日期時間" enName="Date/Time of Transaction" fieldNotation="ORC-9" required>
+        <FormField label="交易日期時間" enName="Date/Time of Transaction" fieldNotation="ORC-9" >
           <input
             type="datetime-local"
             id="dateTimeOfTransaction"
@@ -159,6 +163,7 @@ const ORCSection = ({messageType}) => {
             value={orcData?.dateTimeOfTransaction || ''}
             onChange={handleInputChange}
             className={dateTimeClassName}
+            required_test
           />
         </FormField>
 
@@ -189,7 +194,7 @@ const ORCSection = ({messageType}) => {
         </FormField>
 
         {/* ORC-12 Ordering Provider */}
-        <FormField label="開單醫師" enName="Ordering Provider" fieldNotation="ORC-12" required>
+        <FormField label="開單醫師" enName="Ordering Provider" fieldNotation="ORC-12" >
           <input
             type="text"
             id="orderingProvider"
@@ -198,6 +203,7 @@ const ORCSection = ({messageType}) => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入開單醫師"
+            required_test
           />
         </FormField>
 

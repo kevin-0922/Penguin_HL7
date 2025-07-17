@@ -29,7 +29,7 @@ const SPMSection = ({messageType}) => {
 
       <FormSection title="SPM (標本)">
         {/* SPM-2 Specimen ID */}
-        <FormField label="標本編號" enName="Specimen ID" fieldNotation="SPM-2" required>
+        <FormField label="標本編號" enName="Specimen ID" fieldNotation="SPM-2" >
           <input
             type="text"
             id="specimenId"
@@ -38,6 +38,7 @@ const SPMSection = ({messageType}) => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入標本ID"
+            required_test
           />
         </FormField>
 
@@ -55,13 +56,14 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-4 Specimen Type */}
-        <FormField label="標本類型" enName="Specimen Type" fieldNotation="SPM-4" required>
+        <FormField label="標本類型" enName="Specimen Type" fieldNotation="SPM-4" >
           <select
             id="specimenType"
             name="specimenType"
             value={spmData?.specimenType || ''}
             onChange={handleInputChange}
             className={selectClassName}
+            required_test
           >
             <option value="">請選擇</option>
             <option value="BLD">血液 (Blood)</option>
@@ -261,7 +263,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-17 Specimen Collection Date/Time */}
-        <FormField label="標本採集日期時間" enName="Specimen Collection Date/Time" fieldNotation="SPM-17" required>
+        <FormField label="標本採集日期時間" enName="Specimen Collection Date/Time" fieldNotation="SPM-17">
           <input
             type="datetime-local"
             id="collectionDateTime"
@@ -269,6 +271,7 @@ const SPMSection = ({messageType}) => {
             value={spmData?.collectionDateTime || ''}
             onChange={handleInputChange}
             className={dateTimeClassName}
+            required_test
           />
         </FormField>
 

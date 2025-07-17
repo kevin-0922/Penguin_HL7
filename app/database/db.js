@@ -86,10 +86,7 @@ function initializeDatabase() {
     // 創建醫療訂單表 (ORM^O01)
     db.run(`CREATE TABLE IF NOT EXISTS orm_o01_orders (
       order_id TEXT PRIMARY KEY,                -- 訂單 ID
-      patient_id TEXT NOT NULL,                 -- 病人 ID
-      patient_name TEXT,                        -- 病人姓名
       order_status TEXT NOT NULL,               -- 訂單狀態
-      ordering_provider TEXT,                   -- 開立醫師
       order_datetime TEXT,                      -- 訂單日期時間
       order_details JSON NOT NULL,              -- 訂單詳細資料
       message_control_id TEXT NOT NULL,         -- 對應的訊息控制 ID
@@ -102,23 +99,7 @@ function initializeDatabase() {
       }
     });
     
-    // 創建醫療訂單回應表 (ORM^O02)
-    db.run(`CREATE TABLE IF NOT EXISTS orm_o02_responses (
-      response_id TEXT PRIMARY KEY,             -- 回應 ID
-      order_id TEXT NOT NULL,                   -- 關聯的訂單 ID
-      response_status TEXT NOT NULL,            -- 回應狀態
-      response_datetime TEXT,                   -- 回應日期時間
-      response_details JSON NOT NULL,           -- 回應詳細資料
-      message_control_id TEXT NOT NULL,         -- 對應的訊息控制 ID
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 創建時間
-      FOREIGN KEY (order_id) REFERENCES orm_o01_orders (order_id)
-    )`, (err) => {
-      if (err) {
-        console.error('創建 orm_o02_responses 表失敗:', err.message);
-      } else {
-        console.log('orm_o02_responses 表已創建或已存在');
-      }
-    });
+
     
     // 創建MLLP配置表
     db.run(`CREATE TABLE IF NOT EXISTS mllp_config (
@@ -177,15 +158,6 @@ function initializeDatabase() {
       }
     });
     
-    db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='orm_o02_responses'", (err, row) => {
-      if (err) {
-        console.error('檢查表結構失敗:', err.message);
-      } else if (row) {
-        console.log('確認: orm_o02_responses 表存在並可訪問');
-      } else {
-        console.warn('警告: orm_o02_responses 表似乎未成功創建');
-      }
-    });
     
     // 檢查MLLP配置表是否存在
     db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='mllp_config'", (err, row) => {
@@ -229,14 +201,6 @@ function initializeDatabase() {
         console.error('測試查詢 orm_o01_orders 失敗:', err.message);
       } else {
         console.log(`測試查詢成功: orm_o01_orders 表中有 ${row.count} 條記錄`);
-      }
-    });
-    
-    db.get("SELECT COUNT(*) as count FROM orm_o02_responses", (err, row) => {
-      if (err) {
-        console.error('測試查詢 orm_o02_responses 失敗:', err.message);
-      } else {
-        console.log(`測試查詢成功: orm_o02_responses 表中有 ${row.count} 條記錄`);
       }
     });
     
