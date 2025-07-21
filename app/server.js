@@ -24,9 +24,9 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.text({ type: 'application/hl7-v2' }));
-
-// 載入路由
-require('./routes')(app);
+  
+  // 載入路由
+  require('./routes')(app);
 
 // 測試數據庫連接
 app.get('/api/db-test', async (req, res) => {

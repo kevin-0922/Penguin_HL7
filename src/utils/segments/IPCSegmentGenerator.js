@@ -1,5 +1,5 @@
 /**
- * 生成 IPC 段落 (Insurance Plan Certificate)
+ * 生成 IPC 段落 (Image Procedure Control - 影像程序控制)
  * @param {Object} data - 表單資料，包含 ipc 段落資料
  * @returns {string} - 生成的 IPC 段落
  */
@@ -13,17 +13,16 @@ export const generateIPCSegment = (data) => {
 
   // 建立段落項目數組
   const ipcFields = [
-    'IPC',                              // 段落標識
-    ipc.setId || '1',                   // IPC-1: 序號
-    ipc.accessKey || '',                // IPC-2: 存取金鑰
-    ipc.insurancePlanId || '',          // IPC-3: 保險計劃 ID
-    ipc.insuranceCompany || '',         // IPC-4: 保險公司
-    ipc.insuranceCompanyAddress || '',  // IPC-5: 保險公司地址
-    ipc.insuranceCompanyContactPerson || '', // IPC-6: 保險公司聯絡人
-    ipc.insuranceCompanyPhoneNumber || '', // IPC-7: 保險公司電話號碼
-    ipc.groupNumber || '',              // IPC-8: 群組號碼
-    ipc.groupName || '',                // IPC-9: 群組名稱
-   
+    'IPC',                                 // 段落標識
+    ipc.accessionIdentifier || '',         // IPC-1: 存取識別碼
+    ipc.requestedProcedureId || '',        // IPC-2: 申請程序ID
+    ipc.studyInstanceUid || '',            // IPC-3: 研究實例UID
+    ipc.scheduledProcedureStepId || '',    // IPC-4: 排程程序步驟ID
+    ipc.modality || '',                    // IPC-5: 模態
+    ipc.protocolCode || '',                // IPC-6: 協議代碼
+    ipc.scheduledStationName || '',        // IPC-7: 排程站台名稱
+    ipc.scheduledProcedureStepLocation || '', // IPC-8: 排程程序步驟位置
+    ipc.scheduledAeTitle || ''             // IPC-9: 排程AE標題
   ];
 
   // 組合所有段落項目

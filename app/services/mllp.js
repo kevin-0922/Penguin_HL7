@@ -40,7 +40,7 @@ async function MLLPRequest(message) {
 
     // 加載最新配置
     await loadMllpConfig();
-    
+
     // 檢查配置是否有效
     if (!config.remoteHost || !config.remotePort) {
       throw new Error("MLLP 配置無效，請先設置遠端伺服器資訊");
@@ -76,13 +76,13 @@ async function sendViaSocket(host, port, message) {
     const client = new net.Socket();
     let responseData = Buffer.alloc(0);
     let responseReceived = false;
-
+    
     // 設置超時處理
     client.setTimeout(config.timeout);
-
+    
     client.on("connect", () => {
       console.log(`連接成功到 ${host}:${port}`);
-
+      
       // 準備MLLP封裝的消息
       const mllpMessage = Buffer.concat([MLLP_HEADER, Buffer.from(message), MLLP_TRAILER]);
 
@@ -97,11 +97,11 @@ async function sendViaSocket(host, port, message) {
       client.write(mllpMessage);
       console.log("消息已發送！");
     });
-
+    
     client.on("data", (data) => {
       // 累積接收到的數據
       responseData = Buffer.concat([responseData, data]);
-
+      
       // 檢查是否收到完整的MLLP消息（包含結束標記）
       const trailerIndex = responseData.indexOf(MLLP_TRAILER);
       if (trailerIndex >= 0) {
@@ -140,17 +140,17 @@ async function sendViaSocket(host, port, message) {
         client.end();
       }
     });
-
+    
     client.on("timeout", () => {
       client.destroy();
       reject(new Error(`連接超時，超過 ${config.timeout}ms 未收到回應`));
     });
-
+    
     client.on("error", (err) => {
       client.destroy();
       reject(err);
     });
-
+    
     client.on("close", () => {
       if (responseReceived) {
         // 處理接收到的數據
@@ -167,7 +167,7 @@ async function sendViaSocket(host, port, message) {
         reject(new Error("連接關閉，但未收到有效響應"));
       }
     });
-
+    
     // 連接到伺服器
     console.log(`正在連接到 ${host}:${port}...`);
     client.connect(port, host);

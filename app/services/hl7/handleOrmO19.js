@@ -86,14 +86,13 @@ async function handleOrmO19(message) {
       // 處理醫療訂單 (包含放射科訂單，因為O19直接等同於RAD-01)
       await run(
         `INSERT INTO omg_o19_orders
-        (order_id, patient_id, patient_name, order_status, ordering_provider, order_datetime, order_details, message_control_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        (order_id, patient_id, patient_name, order_status, order_datetime, order_details, message_control_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?)`,
         [
           orderId,
           pid?.patientId || '',
           pid?.patientName || '',
           orc?.orderStatus || 'NW',
-          orc?.orderingProvider || '',
           orc?.dateTimeOfTransaction || new Date().toISOString().replace(/[-:T]/g, '').substring(0, 14),
           JSON.stringify(jsonMessage),
           messageControlId

@@ -83,9 +83,11 @@ function initializeDatabase() {
       }
     });
     
-    // 創建醫療訂單表 (ORM^O01)
-    db.run(`CREATE TABLE IF NOT EXISTS orm_o01_orders (
+    // 創建醫療訂單表 (OMG^O19)
+    db.run(`CREATE TABLE IF NOT EXISTS omg_o19_orders ( 
       order_id TEXT PRIMARY KEY,                -- 訂單 ID
+      patient_id TEXT,                          -- 病患 ID
+      patient_name TEXT,                        -- 病患姓名
       order_status TEXT NOT NULL,               -- 訂單狀態
       order_datetime TEXT,                      -- 訂單日期時間
       order_details JSON NOT NULL,              -- 訂單詳細資料
@@ -93,9 +95,9 @@ function initializeDatabase() {
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 創建時間
     )`, (err) => {
       if (err) {
-        console.error('創建 orm_o01_orders 表失敗:', err.message);
+        console.error('創建 omg_o19_orders 表失敗:', err.message);
       } else {
-        console.log('orm_o01_orders 表已創建或已存在');
+        console.log('omg_o19_orders 表已創建或已存在');
       }
     });
     
@@ -148,13 +150,13 @@ function initializeDatabase() {
       }
     });
     
-    db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='orm_o01_orders'", (err, row) => {
+    db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='omg_o19_orders'", (err, row) => {
       if (err) {
         console.error('檢查表結構失敗:', err.message);
       } else if (row) {
-        console.log('確認: orm_o01_orders 表存在並可訪問');
+        console.log('確認: omg_o19_orders 表存在並可訪問');
       } else {
-        console.warn('警告: orm_o01_orders 表似乎未成功創建');
+        console.warn('警告: omg_o19_orders 表似乎未成功創建');
       }
     });
     
@@ -196,11 +198,11 @@ function initializeDatabase() {
       }
     });
     
-    db.get("SELECT COUNT(*) as count FROM orm_o01_orders", (err, row) => {
+    db.get("SELECT COUNT(*) as count FROM omg_o19_orders", (err, row) => {
       if (err) {
-        console.error('測試查詢 orm_o01_orders 失敗:', err.message);
+        console.error('測詢 omg_o19_orders 失敗:', err.message);
       } else {
-        console.log(`測試查詢成功: orm_o01_orders 表中有 ${row.count} 條記錄`);
+        console.log(`測詢成功: omg_o19_orders 表中有 ${row.count} 條記錄`);
       }
     });
     

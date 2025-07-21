@@ -119,7 +119,7 @@ const IPCSection = ({ messageType }) => {
         <FormField label="排程站台名稱" enName="Scheduled Station Name" fieldNotation="IPC-7">
           <input
             type="text"
-            id=""
+            id="scheduledStationName"
             name="scheduledStationName"
             value={ipcData?.scheduledStationName || ""}
             onChange={handleInputChange}
