@@ -1,10 +1,12 @@
-import { O33MessageGenerator } from './messages/O33MessageGenerator';
-import { Q11MessageGenerator } from './messages/Q11MessageGenerator';
+import { generateO33Message } from './messages/O33MessageGenerator';
+import { generateQ11Message } from './messages/Q11MessageGenerator';
+import { generateO19Message } from './messages/O19MessageGenerator';
 
-// 直接將消息類型映射到對應的生成器類
+// 直接將消息類型映射到對應的生成器函數
 const MESSAGE_GENERATORS = {
-  'O33': O33MessageGenerator,
-  'Q11': Q11MessageGenerator
+  'O33': generateO33Message,
+  'Q11': generateQ11Message,
+  'O19': generateO19Message
   // 這裡可以直接添加其他消息類型
 };
 
@@ -19,9 +21,9 @@ export const generateHL7Message = (formData, messageType = 'UNSELECTED') => {
     throw new Error('請先選擇消息類型');
   }
 
-  // 獲取對應的生成器類
-  const GeneratorClass = MESSAGE_GENERATORS[messageType];
-  if (!GeneratorClass) {
+  // 獲取對應的生成器函數
+  const generateMessage = MESSAGE_GENERATORS[messageType];
+  if (!generateMessage) {
     throw new Error(`未找到消息生成器: ${messageType}`);
   }
   
@@ -33,9 +35,8 @@ export const generateHL7Message = (formData, messageType = 'UNSELECTED') => {
     processedData = formData.forms[messageType];
   }
   
-  // 實例化生成器並調用生成方法，傳入處理後的數據
-  const generator = new GeneratorClass();
-  return generator.generateMessage(processedData);
+  // 直接調用生成函數，傳入處理後的數據
+  return generateMessage(processedData);
 };
 
 /**

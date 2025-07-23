@@ -1,3 +1,4 @@
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateFormData } from '../../store/hl7FormSlice';
 import FormSection, { FormField, inputClassName } from './FormSection';
@@ -36,7 +37,7 @@ const QPDSection = ({messageType}) => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入查詢名稱"
-            required
+            required_test
           />
         </FormField>
 
@@ -49,7 +50,7 @@ const QPDSection = ({messageType}) => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入查詢標籤"
-            required
+            required_test
           />
         </FormField>
 
@@ -62,7 +63,7 @@ const QPDSection = ({messageType}) => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入查詢參數"
-            required
+            required_test
           />
         </FormField>
       </FormSection>

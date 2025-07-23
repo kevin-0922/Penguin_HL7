@@ -1,10 +1,15 @@
 const handleOmlO33 = require('../../services/hl7/handleOmlO33.js');
 const handleQbpQ11 = require('../../services/hl7/handleQbpQ11.js');
+const handleOrmO19 = require('../../services/hl7/handleOrmO19.js');
 const util = require('util');
+const parseMSH = require('../../utils/parsers/parseMSH');
+const { buildAckResponse } = require('../../utils/formatters/ackMessage');
+
 // 定義訊息處理器映射
 const messageHandlers = {
   'OML^O33^OML_O33': handleOmlO33,
-  'QBP^Q11^QBP_Q11': handleQbpQ11
+  'QBP^Q11^QBP_Q11': handleQbpQ11,
+  'OMG^O19^OMG_O19': handleOrmO19
 };
 
 // 處理HTTP請求中的HL7訊息
@@ -40,16 +45,25 @@ const handleHttpRequest = async (req, res) => {
 // 處理HL7訊息
 const processHl7Message = async (message) => {
   try {
-    // 提取訊息類型
-    const messageType = extractMessageType(message);
-    console.log(`處理 ${messageType} 類型的訊息`);
+    // 解析字串消息
+    const mshSegment = message.split('\r').find(seg => seg.startsWith('MSH'));
+    if (!mshSegment) {
+      throw new Error('找不到 MSH 段落');
+    }
     
-    // 獲取對應的訊息處理器
+    // 從MSH段落提取訊息類型
+    const fields = mshSegment.split('|');
+    if (fields.length < 10) {
+      throw new Error('MSH 段落缺少必要欄位');
+    }
+    
+    const messageType = fields[8];
+    console.log('訊息類型:', messageType);
+    
     const handler = messageHandlers[messageType];
-    console.log('handler:', handler);
     if (!handler) {
       console.warn(`沒有找到 ${messageType} 類型的處理器`);
-      return buildAckResponse(message, 'AR', `Unsupported message type: ${messageType}`);
+      return buildAckResponse(message, 'AR', `不支援的訊息類型: ${messageType}`);
     }
     
     // 使用處理器處理訊息
@@ -60,36 +74,6 @@ const processHl7Message = async (message) => {
   }
 };
 
-
-// 從HL7訊息中提取訊息類型
-const extractMessageType = (message) => {
-  try {
-    // 分割訊息為段落
-    const segments = message.split('\r\n');
-    
-    // 獲取MSH段落
-    const msh = segments.find(segment => segment.startsWith('MSH'));
-    
-    if (!msh) {
-      throw new Error('Invalid HL7 message: MSH segment not found');
-    }
-    
-    // 分割MSH段落為欄位
-    const fields = msh.split('|');
-    
-    // 獲取訊息類型 (通常在MSH-9欄位)
-    if (fields.length < 10) {
-      throw new Error('Invalid MSH segment: insufficient fields');
-    }
-    
-    return fields[8].includes('^') ? fields[8] : fields[8] + '^' + fields[9];
-  } catch (error) {
-    console.error('提取訊息類型時發生錯誤:', error);
-    throw new Error(`Failed to extract message type: ${error.message}`);
-  }
-};
-
-
 // 導出函數
 module.exports = {
   handleHttpRequest,
@@ -98,77 +82,3 @@ module.exports = {
 
 
 
-
-// // 解析HL7訊息的路由處理器
-// const parseHL7Message = async (req, res) => {
-//   console.log('收到HL7訊息:', req.body);
-//   try {
-//     const { message } = req.body;
-  
-//     if (!message) {
-//       return res.status(400).json({
-//         success: false,
-//         error: '缺少HL7訊息'
-//       });
-//     }
-    
-//     // 解析訊息
-//     const parsedMessage = await parseMessage(message);
-    
-//     res.json({
-//       success: true,
-//       data: parsedMessage
-//     });
-//   } catch (error) {
-//     console.error('解析HL7訊息時發生錯誤:', error);
-//     res.status(500).json({
-//       success: false,
-//       error: error.message
-//     });
-//   }
-// };
-
-// // 解析HL7訊息
-// const parseMessage = async (message) => {
-//   try {
-//     // 分割訊息為段落
-//     const segments = message.split('\r\n');
-    
-//     // 初始化結果對象
-//     const result = {
-//       MSH: null,
-//       PID: null,
-//       ORC: null,
-//       OBR: null,
-//       SPM: null
-//     };
-    
-//     // 解析每個段落
-//     for (const segment of segments) {
-//       const segmentType = segment.substring(0, 3);
-      
-//       switch (segmentType) {
-//         case 'MSH':
-//           result.MSH = parseMSH(segment);
-//           break;
-//         case 'PID':
-//           result.PID = parsePID(segment);
-//           break;
-//         case 'ORC':
-//           result.ORC = parseORC(segment);
-//           break;
-//         case 'OBR':
-//           result.OBR = parseOBR(segment);
-//           break;
-//         case 'SPM':
-//           result.SPM = parseSPM(segment);
-//           break;
-//       }
-//     }
-    
-//     return result;
-//   } catch (error) {
-//     console.error('解析HL7訊息時發生錯誤:', error);
-//     throw new Error(`Failed to parse message: ${error.message}`);
-//   }
-// };

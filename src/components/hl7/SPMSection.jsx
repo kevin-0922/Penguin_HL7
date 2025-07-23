@@ -1,3 +1,4 @@
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateFormData } from '../../store/hl7FormSlice';
 import FormSection, { FormField, inputClassName, selectClassName, dateTimeClassName } from './FormSection';
@@ -28,7 +29,7 @@ const SPMSection = ({messageType}) => {
 
       <FormSection title="SPM (標本)">
         {/* SPM-2 Specimen ID */}
-        <FormField label="標本編號 (SPM-2)" required>
+        <FormField label="標本編號" enName="Specimen ID" fieldNotation="SPM-2" >
           <input
             type="text"
             id="specimenId"
@@ -37,11 +38,12 @@ const SPMSection = ({messageType}) => {
             onChange={handleInputChange}
             className={inputClassName}
             placeholder="請輸入標本ID"
+            required_test
           />
         </FormField>
 
         {/* SPM-3 Specimen Parent IDs */}
-        <FormField label="父標本編號 (SPM-3)">
+        <FormField label="父標本編號" enName="Specimen Parent ID" fieldNotation="SPM-3">
           <input
             type="text"
             id="specimenParentIds"
@@ -54,13 +56,14 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-4 Specimen Type */}
-        <FormField label="標本類型 (SPM-4)" required>
+        <FormField label="標本類型" enName="Specimen Type" fieldNotation="SPM-4" >
           <select
             id="specimenType"
             name="specimenType"
             value={spmData?.specimenType || ''}
             onChange={handleInputChange}
             className={selectClassName}
+            required_test
           >
             <option value="">請選擇</option>
             <option value="BLD">血液 (Blood)</option>
@@ -73,7 +76,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-5 Specimen Type Modifier */}
-        <FormField label="標本類型修飾符 (SPM-5)">
+        <FormField label="標本類型修飾符" enName="Specimen Type Modifier" fieldNotation="SPM-5">
           <input
             type="text"
             id="specimenTypeModifier"
@@ -86,7 +89,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-6 Specimen Additives */}
-        <FormField label="標本添加劑 (SPM-6)">
+        <FormField label="標本添加劑" enName="Specimen Additives" fieldNotation="SPM-6">
           <input
             type="text"
             id="specimenAdditives"
@@ -99,7 +102,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-7 Specimen Collection Method */}
-        <FormField label="標本採集方法 (SPM-7)">
+        <FormField label="標本採集方法" enName="Specimen Collection Method" fieldNotation="SPM-7">
           <input
             type="text"
             id="collectionMethod"
@@ -112,7 +115,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-8 Specimen Source Site */}
-        <FormField label="標本來源部位 (SPM-8)">
+        <FormField label="標本來源部位" enName="Specimen Source Site" fieldNotation="SPM-8">
           <select
             id="sourceSite"
             name="sourceSite"
@@ -129,7 +132,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-9 Specimen Source Site Modifier */}
-        <FormField label="標本來源部位修飾符 (SPM-9)">
+        <FormField label="標本來源部位修飾符" enName="Specimen Source Site Modifier" fieldNotation="SPM-9">
           <input
             type="text"
             id="sourceSiteModifier"
@@ -142,7 +145,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-10 Specimen Collection Site */}
-        <FormField label="標本採集地點 (SPM-10)">
+        <FormField label="標本採集地點" enName="Specimen Collection Site" fieldNotation="SPM-10">
           <input
             type="text"
             id="collectionSite"
@@ -155,7 +158,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-11 Specimen Role */}
-        <FormField label="標本角色 (SPM-11)">
+        <FormField label="標本角色" enName="Specimen Role" fieldNotation="SPM-11">
           <select
             id="specimenRole"
             name="specimenRole"
@@ -173,7 +176,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-12 Specimen Collection Amount */}
-        <FormField label="標本採集量 (SPM-12)">
+        <FormField label="標本採集量" enName="Specimen Collection Amount" fieldNotation="SPM-12">
           <div className="flex gap-2">
             <input
               type="text"
@@ -201,7 +204,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-13 Grouped Specimen Count */}
-        <FormField label="分組標本數量 (SPM-13)">
+        <FormField label="分組標本數量" enName="Grouped Specimen Count" fieldNotation="SPM-13">
           <input
             type="text"
             id="groupedSpecimenCount"
@@ -214,7 +217,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-14 Specimen Description */}
-        <FormField label="標本描述 (SPM-14)">
+        <FormField label="標本描述" enName="Specimen Description" fieldNotation="SPM-14">
           <textarea
             id="specimenDescription"
             name="specimenDescription"
@@ -227,7 +230,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-15 Specimen Handling Code */}
-        <FormField label="標本處理代碼 (SPM-15)">
+        <FormField label="標本處理代碼" enName="Specimen Handling Code" fieldNotation="SPM-15">
           <select
             id="handlingCode"
             name="handlingCode"
@@ -244,7 +247,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-16 Specimen Risk Code */}
-        <FormField label="標本風險代碼 (SPM-16)">
+        <FormField label="標本風險代碼" enName="Specimen Risk Code" fieldNotation="SPM-16">
           <select
             id="riskCode" 
             name="riskCode"
@@ -260,7 +263,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-17 Specimen Collection Date/Time */}
-        <FormField label="標本採集日期時間 (SPM-17)" required>
+        <FormField label="標本採集日期時間" enName="Specimen Collection Date/Time" fieldNotation="SPM-17">
           <input
             type="datetime-local"
             id="collectionDateTime"
@@ -268,11 +271,12 @@ const SPMSection = ({messageType}) => {
             value={spmData?.collectionDateTime || ''}
             onChange={handleInputChange}
             className={dateTimeClassName}
+            required_test
           />
         </FormField>
 
         {/* SPM-18 Specimen Received Date/Time */}
-        <FormField label="標本接收日期時間 (SPM-18)">
+        <FormField label="標本接收日期時間" enName="Specimen Received Date/Time" fieldNotation="SPM-18">
           <input
             type="datetime-local"
             id="receivedDateTime"
@@ -284,7 +288,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-19 Specimen Expiration Date/Time */}
-        <FormField label="標本到期日期時間 (SPM-19)">
+        <FormField label="標本到期日期時間" enName="Specimen Expiration Date/Time" fieldNotation="SPM-19">
           <input
             type="datetime-local"
             id="expirationDateTime"
@@ -296,7 +300,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-20 Specimen Availability */}
-        <FormField label="標本可用性 (SPM-20)">
+        <FormField label="標本可用性" enName="Specimen Availability" fieldNotation="SPM-20">
           <select
             id="availability"
             name="availability"
@@ -312,7 +316,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-21 Specimen Reject Reason */}
-        <FormField label="標本拒收原因 (SPM-21)">
+        <FormField label="標本拒收原因" enName="Specimen Reject Reason" fieldNotation="SPM-21">
           <select
             id="rejectionReason"
             name="rejectionReason"
@@ -331,7 +335,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-22 Specimen Quality */}
-        <FormField label="標本質量 (SPM-22)">
+        <FormField label="標本質量" enName="Specimen Quality" fieldNotation="SPM-22">
           <select
             id="specimenQuality"
             name="specimenQuality"
@@ -348,7 +352,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-23 Specimen Appropriateness */}
-        <FormField label="標本適當性 (SPM-23)">
+        <FormField label="標本適當性" enName="Specimen Appropriateness" fieldNotation="SPM-23">
           <select
             id="specimenAppropriateness"
             name="specimenAppropriateness"
@@ -364,7 +368,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-24 Specimen Condition */}
-        <FormField label="標本狀態 (SPM-24)">
+        <FormField label="標本狀態" enName="Specimen Condition" fieldNotation="SPM-24">
           <select
             id="specimenCondition"
             name="specimenCondition"
@@ -386,7 +390,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-25 Specimen Current Quantity */}
-        <FormField label="標本當前數量 (SPM-25)">
+        <FormField label="標本當前數量" enName="Specimen Current Quantity" fieldNotation="SPM-25">
           <div className="flex gap-2">
             <input
               type="number"
@@ -415,7 +419,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-26 Number of Specimen Containers */}
-        <FormField label="標本容器數量 (SPM-26)">
+        <FormField label="標本容器數量" enName="Number of Specimen Containers" fieldNotation="SPM-26">
           <input
             type="number"
             id="numberOfSpecimenContainers"
@@ -428,7 +432,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-27 Container Type */}
-        <FormField label="容器類型 (SPM-27)">
+        <FormField label="容器類型" enName="Container Type" fieldNotation="SPM-27">
           <select
             id="containerType"
             name="containerType"
@@ -449,7 +453,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-28 Container Condition */}
-        <FormField label="容器狀態 (SPM-28)">
+        <FormField label="容器狀態" enName="Container Condition" fieldNotation="SPM-28">
           <select
             id="containerCondition"
             name="containerCondition"
@@ -465,7 +469,7 @@ const SPMSection = ({messageType}) => {
         </FormField>
 
         {/* SPM-29 Specimen Child Role */}
-        <FormField label="子標本角色 (SPM-29)">
+        <FormField label="子標本角色" enName="Specimen Child Role" fieldNotation="SPM-29">
           <select
             id="specimenChildRole"
             name="specimenChildRole"
@@ -482,43 +486,7 @@ const SPMSection = ({messageType}) => {
           </select>
         </FormField>
 
-        {/* SPM-30 Accession ID */}
-        <FormField label="接收編號 (SPM-30)">
-          <input
-            type="text"
-            id="accessionId"
-            value={spmData?.accessionId || ''}
-            onChange={handleInputChange}
-            className={inputClassName}
-            placeholder="請輸入接收編號"
-          />
-        </FormField>
 
-        {/* SPM-31 Other Specimen ID */}
-        <FormField label="其他標本編號 (SPM-31)">
-          <input
-            type="text"
-            id="otherSpecimenId"
-            name="otherSpecimenId"
-            value={spmData?.otherSpecimenId || ''}
-            onChange={handleInputChange}
-            className={inputClassName}
-            placeholder="請輸入其他標本編號"
-          />
-        </FormField>
-
-        {/* SPM-32 Shipment ID */}
-        <FormField label="運送編號 (SPM-32)">
-          <input
-            type="text"
-            id="shipmentId"
-            name="shipmentId"
-            value={spmData?.shipmentId || ''}
-            onChange={handleInputChange}
-            className={inputClassName}
-            placeholder="請輸入運送編號"
-          />
-        </FormField>
       </FormSection>
     </>
   );

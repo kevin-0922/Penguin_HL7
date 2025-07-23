@@ -8,15 +8,17 @@ import axios from "axios";
 // 導入各段落組件
 import MSHSection from "../components/hl7/MSHSection";
 import PIDSection from "../components/hl7/PIDSection";
-import SPMSection from "../components/hl7/SPMSection";
-import SACSection from "../components/hl7/SACSection";
+import PV1Section from "../components/hl7/PV1Section";
+import DG1Section from "../components/hl7/DG1Section";
 import ORCSection from "../components/hl7/ORCSection";
+import TQ1Section from "../components/hl7/TQ1Section";
 import OBRSection from "../components/hl7/OBRSection";
-import OBXSection from "../components/hl7/OBXSection";
+import IPCSection from "../components/hl7/IPCSection";
+
 
 import { generateCompleteHL7Message } from "../utils/hl7MessageService";
 
-const O33Form = () => {
+const O19Form = () => {
   const dispatch = useDispatch();
   const formData = useSelector((state) => state.hl7Form);
   const [hl7Message, setHL7Message] = useState("");
@@ -25,11 +27,11 @@ const O33Form = () => {
   // 處理表單提交
   const handleSubmit = (e) => {
     e.preventDefault();
-    const generatedMessage = generateCompleteHL7Message(formData, 'O33');
+    const generatedMessage = generateCompleteHL7Message(formData, 'O19');
     setHL7Message(generatedMessage);
     setShowModal(true);
   };
- 
+
   // 複製HL7消息到剪貼簿
   const handleCopy = () => {
     navigator.clipboard.writeText(hl7Message);
@@ -59,38 +61,44 @@ const O33Form = () => {
       alert(`發送失敗: ${error.response?.data?.error || error.message}`);
     }
   };
+  
+
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">OML^O33 數位病理工作流程訊息</h1>
+      <h1 className="text-2xl font-bold mb-6">ORM^O19 醫囑管理訊息</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <ErrorBoundary>
-          <MSHSection messageType="O33" hl7MessageType="OML^O33^OML_O33"/>
+          <MSHSection messageType="O19" hl7MessageType="OMG^O19^OMG_O19"/>
         </ErrorBoundary>
 
         <ErrorBoundary>
-          <PIDSection messageType="O33"/>
+          <PIDSection messageType="O19"/>
         </ErrorBoundary>
 
         <ErrorBoundary>
-          <SPMSection messageType="O33"/>
+          <PV1Section messageType="O19"/>
         </ErrorBoundary>
 
         <ErrorBoundary>
-          <SACSection messageType="O33"/>
+          <DG1Section messageType="O19"/>
         </ErrorBoundary>
 
         <ErrorBoundary>
-          <ORCSection messageType="O33"/>
+          <ORCSection messageType="O19"/>
         </ErrorBoundary>
 
         <ErrorBoundary>
-          <OBRSection messageType="O33"/>
+          <TQ1Section messageType="O19"/>
         </ErrorBoundary>
 
         <ErrorBoundary>
-          <OBXSection messageType="O33"/>
+          <OBRSection messageType="O19"/>
+        </ErrorBoundary>
+
+        <ErrorBoundary>
+          <IPCSection messageType="O19"/>
         </ErrorBoundary>
 
         <div className="mt-6">
@@ -137,4 +145,4 @@ const O33Form = () => {
   );
 };
 
-export default O33Form;
+export default O19Form;

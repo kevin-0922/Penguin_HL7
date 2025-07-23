@@ -23,12 +23,12 @@ module.exports.buildAckResponse = (message, ackCode, textMessage) => {
 
     // 構建ACK訊息
     return [
-      `MSH|^~\\&|${receivingApp}|${receivingFacility}|${sendingApp}|${sendingFacility}|${timestamp}||ACK|${messageControlId}|P|2.5.1`,
+      `MSH|^~\&|${receivingApp}|${receivingFacility}|${sendingApp}|${sendingFacility}|${timestamp}||ACK|${messageControlId}|P|2.5.1`,
       `MSA|${ackCode}|${messageControlId}|${textMessage}`,
     ].join("\r");
   } catch (error) {
     console.error("構建ACK回應時發生錯誤:", error);
-    return `MSH|^~\\&|ERROR|ERROR|ERROR|ERROR|${new Date()
+    return `MSH|^~\&|ERROR|ERROR|ERROR|ERROR|${new Date()
       .toISOString()
       .replace(/[-:T]/g, "")
       .substring(0, 14)}||ACK|ERROR|P|2.5.1\rMSA|AE|ERROR|Error constructing ACK: ${error.message}`;

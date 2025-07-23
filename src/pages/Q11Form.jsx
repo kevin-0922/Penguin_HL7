@@ -1,3 +1,4 @@
+import React from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { updateFormData } from "../store/hl7FormSlice";
@@ -15,18 +16,6 @@ const Q11Form = () => {
   const formData = useSelector((state) => state.hl7Form);
   const [hl7Message, setHL7Message] = useState("");
   const [showModal, setShowModal] = useState(false);
-
-  // 處理輸入變更
-  const handleInputChange = (segment) => (e) => {
-    const { id, value } = e.target;
-    dispatch(
-      updateFormData({
-        segment,
-        field: id,
-        value,
-      })
-    );
-  };
 
   // 處理表單提交
   const handleSubmit = (e) => {
@@ -121,7 +110,7 @@ const Q11Form = () => {
           <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-4xl">
             <h2 className="text-xl font-bold mb-4">生成的HL7消息</h2>
             <div className="bg-gray-100 p-4 rounded-md mb-4">
-              <pre className="whitespace-pre-wrap overflow-auto max-h-96">{hl7Message}</pre>
+              <pre className="whitespace-pre-wrap overflow-auto max-h-96">{hl7Message.replace(/\r/g, '\n')}</pre>
             </div>
             <div className="flex justify-end space-x-2">
               <button

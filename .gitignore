@@ -140,3 +140,7 @@ dist
 node_modules
 package-lock.json
 .DS_Store
+temp/
+app/database/*.db
+
+
