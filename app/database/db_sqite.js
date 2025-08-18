@@ -101,20 +101,7 @@ function initializeDatabase() {
       }
     });
 
-    // 創建DICOM映射表
-    db.run(`CREATE TABLE IF NOT EXISTS dicom_tags (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      order_id TEXT NOT NULL,
-      dicom_tags TEXT NOT NULL,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (order_id) REFERENCES omg_o19_orders (order_id)
-    )`, (err) => {
-        if (err) {
-            console.error('創建 dicom_tags 表失敗:', err.message);
-        } else {
-            console.log('dicom_tags 表已創建或已存在');
-        }
-    });
+
     
 
     
@@ -175,15 +162,7 @@ function initializeDatabase() {
       }
     });
 
-    db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='dicom_tags'", (err, row) => {
-        if (err) {
-            console.error('檢查表結構失敗:', err.message);
-        } else if (row) {
-            console.log('確認: dicom_tags 表存在並可訪問');
-        } else {
-            console.warn('警告: dicom_tags 表似乎未成功創建');
-        }
-    });
+
     
     
     // 檢查MLLP配置表是否存在
@@ -231,13 +210,7 @@ function initializeDatabase() {
       }
     });
 
-    db.get("SELECT COUNT(*) as count FROM dicom_tags", (err, row) => {
-        if (err) {
-            console.error('測試查詢 dicom_tags 失敗:', err.message);
-        } else {
-            console.log(`測試查詢成功: dicom_tags 表中有 ${row.count} 條記錄`);
-        }
-    });
+
     
     // 測試查詢MLLP配置表
     db.get("SELECT COUNT(*) as count FROM mllp_config", (err, row) => {

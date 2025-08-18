@@ -158,30 +158,7 @@ const OmgO19Order = sequelize.define('omg_o19_orders', {
   }
 });
 
-// DICOM標籤表
-const DicomTag = sequelize.define('dicom_tags', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  order_id: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-    references: {
-      model: OmgO19Order,
-      key: 'order_id'
-    }
-  },
-  dicom_tags: {
-    type: DataTypes.TEXT,
-    allowNull: false
-  },
-  created_at: {
-    type: DataTypes.DATE,
-    defaultValue: Sequelize.NOW
-  }
-});
+
 
 // MLLP配置表
 const MllpConfig = sequelize.define('mllp_config', {
@@ -214,7 +191,6 @@ const MllpConfig = sequelize.define('mllp_config', {
 
 // 設置關聯
 ReceivedMessage.belongsTo(SentMessage, { foreignKey: 'response_message_id' });
-DicomTag.belongsTo(OmgO19Order, { foreignKey: 'order_id' });
 
 // 模擬原有 SQLite 實例的變數
 let db = sequelize;
@@ -228,7 +204,6 @@ function initializeDatabase() {
     console.log('received_messages 表已創建或已存在');
     console.log('slicing_schedule 表已創建或已存在');
     console.log('omg_o19_orders 表已創建或已存在');
-    console.log('dicom_tags 表已創建或已存在');
     console.log('mllp_config 表已創建或已存在');
     
     // 檢查數據庫表是否存在和工作正常 - 對應原本的檢查邏輯
@@ -236,7 +211,6 @@ function initializeDatabase() {
     console.log('確認: received_messages 表存在並可訪問');
     console.log('確認: slicing_schedule 表存在並可訪問');
     console.log('確認: omg_o19_orders 表存在並可訪問');
-    console.log('確認: dicom_tags 表存在並可訪問');
     console.log('確認: mllp_config 表存在並可訪問');
     
     // 執行數據庫測試查詢 - 完全對應原本的測試查詢
@@ -247,14 +221,12 @@ function initializeDatabase() {
       ReceivedMessage.count(),
       SlicingSchedule.count(),
       OmgO19Order.count(),
-      DicomTag.count(),
       MllpConfig.count()
-    ]).then(([sentCount, receivedCount, slicingCount, ordersCount, dicomCount, mllpCount]) => {
+    ]).then(([sentCount, receivedCount, slicingCount, ordersCount, mllpCount]) => {
       console.log(`測試查詢成功: sent_messages 表中有 ${sentCount} 條記錄`);
       console.log(`測試查詢成功: received_messages 表中有 ${receivedCount} 條記錄`);
       console.log(`測試查詢成功: slicing_schedule 表中有 ${slicingCount} 條記錄`);
       console.log(`測詢成功: omg_o19_orders 表中有 ${ordersCount} 條記錄`);
-      console.log(`測試查詢成功: dicom_tags 表中有 ${dicomCount} 條記錄`);
       console.log(`測試查詢成功: mllp_config 表中有 ${mllpCount} 條記錄`);
       
       console.log('===== HL7 消息數據庫初始化完成 =====');

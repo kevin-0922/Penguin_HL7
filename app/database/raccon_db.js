@@ -18,7 +18,78 @@ const racconSequelize = new Sequelize({
   }
 });
 
-// 定義 ups_work_item 表模型 (基於提供的 CSV 結構)
+// 定義 Patient 表模型
+const Patient = racconSequelize.define('Patient', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  x00100010: {
+    type: DataTypes.INTEGER,
+    allowNull: true
+  },
+  x00100020: {
+    type: DataTypes.STRING(255),
+    allowNull: true
+  },
+  x00100021: {
+    type: DataTypes.STRING(255),
+    allowNull: true
+  },
+  x00100030: {
+    type: DataTypes.DATEONLY,
+    allowNull: true
+  },
+  x00100032: {
+    type: DataTypes.DECIMAL,
+    allowNull: true
+  },
+  x00100040: {
+    type: DataTypes.STRING(255),
+    allowNull: true
+  },
+  x00101010: {
+    type: DataTypes.STRING(255),
+    allowNull: true
+  },
+  x00102160: {
+    type: DataTypes.STRING(255),
+    allowNull: true
+  },
+  x00104000: {
+    type: DataTypes.STRING(255),
+    allowNull: true
+  },
+  x00880130: {
+    type: DataTypes.STRING(255),
+    allowNull: true
+  },
+  x00880140: {
+    type: DataTypes.STRING(255),
+    allowNull: true
+  },
+  json: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
+  deleteStatus: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    defaultValue: 0
+  },
+  user_id: {
+    type: DataTypes.UUID,
+    allowNull: true
+  }
+}, {
+  tableName: 'patient',
+  timestamps: true,
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+});
+
+// 定義 ups_work_item 表模型 
 const UpsWorkItem = racconSequelize.define('ups_work_item', {
   id: {
     type: DataTypes.INTEGER,
@@ -149,6 +220,10 @@ const UpsWorkItem = racconSequelize.define('ups_work_item', {
   updatedAt: 'updatedAt'
 });
 
+// 建立關聯關係
+Patient.hasMany(UpsWorkItem, { foreignKey: 'patient_id' });
+UpsWorkItem.belongsTo(Patient, { foreignKey: 'patient_id' });
+
 // 測試連接
 racconSequelize.authenticate()
   .then(() => {
@@ -160,5 +235,6 @@ racconSequelize.authenticate()
 
 module.exports = {
   racconSequelize,
-  UpsWorkItem
+  UpsWorkItem,
+  Patient
 };
