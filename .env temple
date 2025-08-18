@@ -1,23 +1,33 @@
 #前端使用
-VITE_API_URL=      #http://localhost:3000
+VITE_API_URL=http://localhost:3000
 
 
 #-------------------------------------------
 #後端使用
 
-
 # 伺服器端口
-server_PORT=  #3000
+server_PORT=3000
 
 # 允許的跨域來源（CORS）
-server_CORS_ORIGIN=    #http://localhost:3000
-
-# 其他環境變數
-server_NODE_ENV=   #development
+server_CORS_ORIGIN=http://localhost:3000
 
 # mllp環境變數
-MLLP_LOCAL_HOST =  #127.0.0.1 
-MLLP_LOCAL_PORT =  #4321
-MLLP_REMOTE_HOST =  #連接ip
-MLLP_REMOTE_PORT =  #連接port
-MLLP_TIMEOUT =  #30000
+MLLP_LOCAL_HOST=127.0.0.1 
+MLLP_LOCAL_PORT=4321
+
+
+# RACCON DB
+RACCON_SQL_HOST=
+RACCON_SQL_PORT=
+RACCON_SQL_DB=
+RACCON_SQL_TYPE=
+RACCON_SQL_USERNAME=
+RACCON_SQL_PASSWORD=
+
+# PG_SQL環境變數
+SQL_HOST=
+SQL_PORT=
+SQL_DB=
+SQL_TYPE=
+SQL_USERNAME=
+SQL_PASSWORD=
