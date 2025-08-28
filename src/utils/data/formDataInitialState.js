@@ -11,7 +11,12 @@ const mshInitialState = {
   sequenceNumber: '',             // MSH-13: Sequence Number
   continuationPointer: '',        // MSH-14: Continuation Pointer
   acceptAckType: '',              // MSH-15: Accept Acknowledgment Type
-  applicationAckType: ''          // MSH-16: Application Acknowledgment Type
+  applicationAckType: '',         // MSH-16: Application Acknowledgment Type
+  countryCode: '',                // MSH-17: Country Code
+  characterSet: '',               // MSH-18: Character Set
+  principalLanguage: '',          // MSH-19: Principal Language
+  alternateCharacterSet: '',      // MSH-20: Alternate Character Set
+  messageProfileIdentifier: ''    // MSH-21: Message Profile Identifier
 };
 
 // PV1段落初始值 (最多45項)
@@ -186,7 +191,6 @@ const spmInitialState = {
 
 // SAC段落初始值 (最多44項)
 const sacInitialState = {
-
   accessionIdentifier: '',            // SAC-2: 訪問識別碼
   containerIdentifier: '',            // SAC-3: 容器識別碼
   primaryContainerIdentifier: '',     // SAC-4: 主要(父)容器識別碼
@@ -405,7 +409,6 @@ const o33DataInitialState = {
   obr: obrInitialState,
   obx: obxInitialState
 };
-
 // Q11消息初始值
 const q11DataInitialState = {
   msh: mshInitialState,
@@ -426,8 +429,21 @@ const o19DataInitialState = {
   nte: nteInitialState
 };
 
+// O23消息初始值
+const o23DataInitialState = {
+  msh: mshInitialState,
+  pid: pidInitialState,
+  pv1: pv1InitialState,
+  dg1: dg1InitialState,
+  orc: orcInitialState,
+  tq1: tq1InitialState,
+  obr: obrInitialState,
+  ipc: ipcInitialState,
+  nte: nteInitialState
+};
+
 // 導出初始狀態
-export { o33DataInitialState, q11DataInitialState, o19DataInitialState };
+export { o33DataInitialState, q11DataInitialState, o19DataInitialState, o23DataInitialState };
 
 // 導出各個段落的初始狀態
 export {

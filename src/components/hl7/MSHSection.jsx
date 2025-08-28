@@ -252,6 +252,86 @@ const MSHSection = ({messageType,hl7MessageType}) => {
             <option value="SU">Successful completion only</option>
           </select>
         </FormField>
+
+        {/* MSH-17 國家代碼 */}
+        <FormField 
+          label="國家代碼" 
+          enName="Country Code"
+          fieldNotation="MSH-17"
+        >
+          <input
+            type="text"
+            id="countryCode"
+            value={mshData?.countryCode || ''}
+            onChange={handleInputChange}
+            className={inputClassName}
+            placeholder="請輸入國家代碼"
+          />
+        </FormField>
+
+        {/* MSH-18 字元集 */}
+        <FormField 
+          label="字元集" 
+          enName="Character Set"
+          fieldNotation="MSH-18"
+        >
+          <input
+            type="text"
+            id="characterSet"
+            value={mshData?.characterSet || ''}
+            onChange={handleInputChange}
+            className={inputClassName}
+            placeholder="請輸入字元集"
+          />
+        </FormField>
+
+        {/* MSH-19 主語言 */}
+        <FormField 
+          label="主語言" 
+          enName="Principal Language"
+          fieldNotation="MSH-19"
+        >
+          <input
+            type="text"
+            id="principalLanguage"
+            value={mshData?.principalLanguage || ''}
+            onChange={handleInputChange}
+            className={inputClassName}
+            placeholder="請輸入主語言"
+          />
+        </FormField>
+
+        {/* MSH-20 替代字元集 */}
+        <FormField 
+          label="替代字元集" 
+          enName="Alternate Character Set"
+          fieldNotation="MSH-20"
+        >
+          <input
+            type="text"
+            id="alternateCharacterSet"
+            value={mshData?.alternateCharacterSet || ''}
+            onChange={handleInputChange}
+            className={inputClassName}
+            placeholder="請輸入替代字元集"
+          />
+        </FormField>
+
+        {/* MSH-21 訊息配置標識符 */}
+        <FormField 
+          label="訊息配置標識符" 
+          enName="Message Profile Identifier"
+          fieldNotation="MSH-21"
+        >
+          <input
+            type="text"
+            id="messageProfileIdentifier"
+            value={mshData?.messageProfileIdentifier || ''}
+            onChange={handleInputChange}
+            className={inputClassName}
+            placeholder="請輸入訊息配置標識符"
+          />
+        </FormField>
       </FormSection>
     </>
   );

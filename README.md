@@ -3,17 +3,19 @@
 本專案結合 **Node.js/Express** 後端與 **React** 前端，提供 HL7 訊息產生、解析與 MLLP 傳輸功能，資料儲存採用 **SQLite**。透過 `vite-express` 讓前後端共用一個伺服器運行。
 
 ## 主要功能
-- 產生 `OML^O33`、`QBP^Q11` 等 HL7 訊息
+- 產生 `OML^O33`、`QBP^Q11`、`OMG^O19`、`OMI^O23` 等 HL7 訊息
 - 解析 HL7 並存入資料庫
-- 以 **MLLP** 協定傳送與接收 HL7
-- DICOM 訂單映射與重新傳送
 - WEB表單介面方便填寫與產生 HL7 訊息
+- OMG^O19、OMI^O23轉換DICOM TAG存下至Raccon裡
+- 以 **MLLP** 協定傳送與接收至其他HL7 server
+- DICOM 訂單映射與重新傳送
 
 ## 環境需求
 - Node.js 20 以上
 - npm
 - Docker 24 以上
 - SQLite 3.49.2以上
+- 
 
 ## 安裝與建置
 1. 取得程式碼

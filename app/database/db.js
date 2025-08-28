@@ -125,7 +125,7 @@ const SlicingSchedule = sequelize.define('slicing_schedule', {
   }
 });
 
-// 醫療訂單表
+// OMG^O19表單
 const OmgO19Order = sequelize.define('omg_o19_orders', {
   order_id: {
     type: DataTypes.TEXT,
@@ -158,7 +158,38 @@ const OmgO19Order = sequelize.define('omg_o19_orders', {
   }
 });
 
-
+// OMI^O23表單
+const OmiO23Order = sequelize.define('omi_o23_orders', {
+  order_id: {
+    type: DataTypes.TEXT,
+    primaryKey: true
+  },
+  patient_id: {
+    type: DataTypes.TEXT
+  },
+  patient_name: {
+    type: DataTypes.TEXT
+  },
+  order_status: {
+    type: DataTypes.TEXT,
+    allowNull: false
+  },
+  order_datetime: {
+    type: DataTypes.TEXT
+  },
+  order_details: {
+    type: DataTypes.JSON,
+    allowNull: false
+  },
+  message_control_id: {
+    type: DataTypes.TEXT,
+    allowNull: false
+  },
+  created_at: {
+    type: DataTypes.DATE,
+    defaultValue: Sequelize.NOW
+  }
+});
 
 // MLLP配置表
 const MllpConfig = sequelize.define('mllp_config', {
@@ -204,6 +235,7 @@ function initializeDatabase() {
     console.log('received_messages 表已創建或已存在');
     console.log('slicing_schedule 表已創建或已存在');
     console.log('omg_o19_orders 表已創建或已存在');
+    console.log('omg_o23_orders 表已創建或已存在');
     console.log('mllp_config 表已創建或已存在');
     
     // 檢查數據庫表是否存在和工作正常 - 對應原本的檢查邏輯
@@ -211,6 +243,7 @@ function initializeDatabase() {
     console.log('確認: received_messages 表存在並可訪問');
     console.log('確認: slicing_schedule 表存在並可訪問');
     console.log('確認: omg_o19_orders 表存在並可訪問');
+    console.log('確認: omg_o23_orders 表存在並可訪問');
     console.log('確認: mllp_config 表存在並可訪問');
     
     // 執行數據庫測試查詢 - 完全對應原本的測試查詢
@@ -221,12 +254,14 @@ function initializeDatabase() {
       ReceivedMessage.count(),
       SlicingSchedule.count(),
       OmgO19Order.count(),
+      OmiO23Order.count(),
       MllpConfig.count()
-    ]).then(([sentCount, receivedCount, slicingCount, ordersCount, mllpCount]) => {
+    ]).then(([sentCount, receivedCount, slicingCount, ordersCount, o23OrdersCount, mllpCount]) => {
       console.log(`測試查詢成功: sent_messages 表中有 ${sentCount} 條記錄`);
       console.log(`測試查詢成功: received_messages 表中有 ${receivedCount} 條記錄`);
       console.log(`測試查詢成功: slicing_schedule 表中有 ${slicingCount} 條記錄`);
       console.log(`測詢成功: omg_o19_orders 表中有 ${ordersCount} 條記錄`);
+      console.log(`測詢成功: omg_o23_orders 表中有 ${o23OrdersCount} 條記錄`);
       console.log(`測試查詢成功: mllp_config 表中有 ${mllpCount} 條記錄`);
       
       console.log('===== HL7 消息數據庫初始化完成 =====');

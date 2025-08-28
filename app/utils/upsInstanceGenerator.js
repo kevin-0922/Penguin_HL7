@@ -2,7 +2,6 @@
  * UPS Instance UID 生成器
  * 生成基於當前詳細時間的唯一識別碼
  */
-
 /**
  * 生成基於當前詳細時間的 UPS Instance UID
  * 格式: YYYYMMDDHHMMSSSSSS (年月日時分秒毫秒)

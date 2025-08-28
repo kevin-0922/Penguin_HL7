@@ -26,9 +26,15 @@ export default function Root() {
                     </Link>
                     <Link 
                         to="/o19" 
-                        className="text-blue-600 hover:text-blue-800 font-medium cursor-pointer"
+                        className="mr-6 text-blue-600 hover:text-blue-800 font-medium cursor-pointer"
                     >
                         O19 表單
+                    </Link>
+                    <Link 
+                        to="/o23" 
+                        className="mr-6 text-blue-600 hover:text-blue-800 font-medium cursor-pointer"
+                    >
+                        O23 表單
                     </Link>
                 </nav>
             </header>

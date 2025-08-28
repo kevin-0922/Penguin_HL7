@@ -1,0 +1,312 @@
+(base) liweihong@kevin-2 Hl7_O33 % npm start
+
+> base@1.0.0 start
+> node app/server.js
+
+正在初始化 HL7 消息數據庫...
+3:16:28 AM [vite-express] Running in development mode
+Server is running on port 3000
+HL7 消息數據庫已初始化完成
+成功連接到 PostgreSQL 數據庫
+開始初始化數據庫表...
+sent_messages 表已創建或已存在
+received_messages 表已創建或已存在
+slicing_schedule 表已創建或已存在
+omg_o19_orders 表已創建或已存在
+omg_o23_orders 表已創建或已存在
+mllp_config 表已創建或已存在
+確認: sent_messages 表存在並可訪問
+確認: received_messages 表存在並可訪問
+確認: slicing_schedule 表存在並可訪問
+確認: omg_o19_orders 表存在並可訪問
+確認: omg_o23_orders 表存在並可訪問
+確認: mllp_config 表存在並可訪問
+執行數據庫測試查詢...
+測試查詢成功: sent_messages 表中有 0 條記錄
+測試查詢成功: received_messages 表中有 30 條記錄
+測試查詢成功: slicing_schedule 表中有 0 條記錄
+測詢成功: omg_o19_orders 表中有 22 條記錄
+測詢成功: omg_o23_orders 表中有 0 條記錄
+測試查詢成功: mllp_config 表中有 1 條記錄
+===== HL7 消息數據庫初始化完成 =====
+收到HTTP HL7訊息請求:
+'MSH|^~&|HIS_APP_01|MAIN_HOSPITAL|RIS_APP_02|RADIOLOGY_DEPT|20250826191056|AUTH_TOKEN_XYZ|OMG^O19^OMG_O19|MSG_CTRL_ID_12345|P|2.5.1|1||AL|AL|TW|UTF-8|zh-TW|UTF-8|LAB-81^IHE\rPID|1|987654|123|ALT-ID-54321|Lin^Li-Hua^Grace|Wang|19781102100000|F|Lily Lin|2028-9|456 Park Ave^^Kaohsiung^TW^800^C|TW|(07)555-1234|(02)666-5678|ZHT|M|BUD|ACCT-112233-01|B298765432|D456789012|MOTHER-ID-456|HAN|Tainan, TW|N|1|TW|Not a veteran|Taiwanese||N|N|Reliable|20250818140000|MAIN_HOSPITAL|HSA|Human|Not Applicable|Not Applicable|Not Applicable\rPV1|1|O|RAD-WAITING^ROOM 1^BED A|E|PRE-98765|ER^ROOM 2^BED C|789^Chang^Yi-Chun|654^Lin^Wei|321^Chen^Mei-Ling|RAD|CT-SCAN-ROOM|Y|N|6|A1|N|789^Chang^Yi-Chun|REG|V-2025-12345|IC|STD|STAFF|GOOD|CONTRACT-XYZ|2025-01-01|50000|YEAR|NONE|NA||NA|0|0|N||01|HOME|REGULAR|MAIN_HOSPITAL|O|ACTIVE|WARD-3A|ER-BAY-1|2025-08-17T09:00|2025-08-17T11:00|1500.50|2500.75|0|1000.25|AV-2025-54321|S|999^Community Clinic^L\rDG1|1|I10|R51|Headache|2025-08-17T09:05|W||DRG-123|Y|REVIEW-456|N|0|0|V3.0-Standard|1|789^Chang^Yi-Chun|Primary|N|2025-08-17T09:10|DIAG-XYZ-789|A\rORC|NW|PLC-RAD-001|FIL-RAD-002|GRP-999|IP|R|1|PARENT-ORDER-42|2025-08-17T09:10|USER-101^Smith^John|USER-202^Jones^Mary|789^Chang^Yi-Chun|ER-STATION-2|(02)5555-1234|2025-08-17T09:15|Patient Complaint|Emergency Dept|TERMINAL-ER-05|USER-101^Smith^John|ABN-123|Main General Hospital|123 Health St, Taipei|(02)1234-5678|456 Wellness Ave, Taipei|Immediate|Patient requested|2025-08-17T10:00|U|O|Electronic Signature|SERVICE-ID-PARENT-001\rTQ1|1|1|Q1H|2025-08-17T10:00|30M|30M|20250817020000|20250817023000|R|If patient reports severe headache|Administer with a full glass of water.|S|3D|72\rOBR||||C2345-1^CT Head W/O Contrast^CPT||2025-08-17T09:15|2025-08-17T10:15|2025-08-17T10:30|N/A|TECH-456^Lee^Ming|A|NONE|Patient reports severe headache after fall.|2025-08-17T09:20|N/A||(02)5555-1234|Check for trauma|Allergy to contrast medium noted|Technician: T555|Machine: CT-Scanner-2|2025-08-17T11:00|CHARGE-CODE-123|RAD|P|PARENT-RESULT-ID-1||DR-CHANG^DR-LIN||WHLC|Head trauma evaluation|DR-999^Kuo^Wei|DR-888^Hsu^Fang|TECH-456^Lee^Ming|TRAN-777^Wu^Mei|2025-08-17T10:00|0|N/A|Patient was cooperative.|Radiology Department|A|Y|Patient requires wheelchair assistance.|CTHEAD|NONE|STAT read requested.|Contrast allergy confirmed, non-contrast study performed.|N/A|STAT|\rIPC|ACN-RAD-555|CTHEAD|1.2.840.113619.2.55.3.2831184246.998.1629888819.987|SPS-999|CT|HEAD-NON-CONTRAST|CT-SCANNER-2|CT-ROOM-1|CT_SCANNER_AET'
+訊息類型: OMG^O19^OMG_O19
+收到 OMG^O19 訊息:
+'MSH|^~&|HIS_APP_01|MAIN_HOSPITAL|RIS_APP_02|RADIOLOGY_DEPT|20250826191056|AUTH_TOKEN_XYZ|OMG^O19^OMG_O19|MSG_CTRL_ID_12345|P|2.5.1|1||AL|AL|TW|UTF-8|zh-TW|UTF-8|LAB-81^IHE\rPID|1|987654|123|ALT-ID-54321|Lin^Li-Hua^Grace|Wang|19781102100000|F|Lily Lin|2028-9|456 Park Ave^^Kaohsiung^TW^800^C|TW|(07)555-1234|(02)666-5678|ZHT|M|BUD|ACCT-112233-01|B298765432|D456789012|MOTHER-ID-456|HAN|Tainan, TW|N|1|TW|Not a veteran|Taiwanese||N|N|Reliable|20250818140000|MAIN_HOSPITAL|HSA|Human|Not Applicable|Not Applicable|Not Applicable\rPV1|1|O|RAD-WAITING^ROOM 1^BED A|E|PRE-98765|ER^ROOM 2^BED C|789^Chang^Yi-Chun|654^Lin^Wei|321^Chen^Mei-Ling|RAD|CT-SCAN-ROOM|Y|N|6|A1|N|789^Chang^Yi-Chun|REG|V-2025-12345|IC|STD|STAFF|GOOD|CONTRACT-XYZ|2025-01-01|50000|YEAR|NONE|NA||NA|0|0|N||01|HOME|REGULAR|MAIN_HOSPITAL|O|ACTIVE|WARD-3A|ER-BAY-1|2025-08-17T09:00|2025-08-17T11:00|1500.50|2500.75|0|1000.25|AV-2025-54321|S|999^Community Clinic^L\rDG1|1|I10|R51|Headache|2025-08-17T09:05|W||DRG-123|Y|REVIEW-456|N|0|0|V3.0-Standard|1|789^Chang^Yi-Chun|Primary|N|2025-08-17T09:10|DIAG-XYZ-789|A\rORC|NW|PLC-RAD-001|FIL-RAD-002|GRP-999|IP|R|1|PARENT-ORDER-42|2025-08-17T09:10|USER-101^Smith^John|USER-202^Jones^Mary|789^Chang^Yi-Chun|ER-STATION-2|(02)5555-1234|2025-08-17T09:15|Patient Complaint|Emergency Dept|TERMINAL-ER-05|USER-101^Smith^John|ABN-123|Main General Hospital|123 Health St, Taipei|(02)1234-5678|456 Wellness Ave, Taipei|Immediate|Patient requested|2025-08-17T10:00|U|O|Electronic Signature|SERVICE-ID-PARENT-001\rTQ1|1|1|Q1H|2025-08-17T10:00|30M|30M|20250817020000|20250817023000|R|If patient reports severe headache|Administer with a full glass of water.|S|3D|72\rOBR||||C2345-1^CT Head W/O Contrast^CPT||2025-08-17T09:15|2025-08-17T10:15|2025-08-17T10:30|N/A|TECH-456^Lee^Ming|A|NONE|Patient reports severe headache after fall.|2025-08-17T09:20|N/A||(02)5555-1234|Check for trauma|Allergy to contrast medium noted|Technician: T555|Machine: CT-Scanner-2|2025-08-17T11:00|CHARGE-CODE-123|RAD|P|PARENT-RESULT-ID-1||DR-CHANG^DR-LIN||WHLC|Head trauma evaluation|DR-999^Kuo^Wei|DR-888^Hsu^Fang|TECH-456^Lee^Ming|TRAN-777^Wu^Mei|2025-08-17T10:00|0|N/A|Patient was cooperative.|Radiology Department|A|Y|Patient requires wheelchair assistance.|CTHEAD|NONE|STAT read requested.|Contrast allergy confirmed, non-contrast study performed.|N/A|STAT|\rIPC|ACN-RAD-555|CTHEAD|1.2.840.113619.2.55.3.2831184246.998.1629888819.987|SPS-999|CT|HEAD-NON-CONTRAST|CT-SCANNER-2|CT-ROOM-1|CT_SCANNER_AET'
+創建 HL7 適配器...
+找到 8 個段落
+成功將消息解析為 HL7 對象
+找到 MSH 段落: MSH|^~&|HIS_APP_01|MAIN_HOSPITAL|RIS_APP_02|RADIOLOGY_DEPT|20250826191056|AUTH_TOKEN_XYZ|OMG^O19^OMG_O19|MSG_CTRL_ID_12345|P|2.5.1|1||AL|AL|TW|UTF-8|zh-TW|UTF-8|LAB-81^IHE
+找到 PID 段落: PID|1|987654|123|ALT-ID-54321|Lin^Li-Hua^Grace|Wang|19781102100000|F|Lily Lin|2028-9|456 Park Ave^^Kaohsiung^TW^800^C|TW|(07)555-1234|(02)666-5678|ZHT|M|BUD|ACCT-112233-01|B298765432|D456789012|MOTHER-ID-456|HAN|Tainan, TW|N|1|TW|Not a veteran|Taiwanese||N|N|Reliable|20250818140000|MAIN_HOSPITAL|HSA|Human|Not Applicable|Not Applicable|Not Applicable
+找到 PV1 段落: PV1|1|O|RAD-WAITING^ROOM 1^BED A|E|PRE-98765|ER^ROOM 2^BED C|789^Chang^Yi-Chun|654^Lin^Wei|321^Chen^Mei-Ling|RAD|CT-SCAN-ROOM|Y|N|6|A1|N|789^Chang^Yi-Chun|REG|V-2025-12345|IC|STD|STAFF|GOOD|CONTRACT-XYZ|2025-01-01|50000|YEAR|NONE|NA||NA|0|0|N||01|HOME|REGULAR|MAIN_HOSPITAL|O|ACTIVE|WARD-3A|ER-BAY-1|2025-08-17T09:00|2025-08-17T11:00|1500.50|2500.75|0|1000.25|AV-2025-54321|S|999^Community Clinic^L
+找到 DG1 段落: DG1|1|I10|R51|Headache|2025-08-17T09:05|W||DRG-123|Y|REVIEW-456|N|0|0|V3.0-Standard|1|789^Chang^Yi-Chun|Primary|N|2025-08-17T09:10|DIAG-XYZ-789|A
+找到 ORC 段落: ORC|NW|PLC-RAD-001|FIL-RAD-002|GRP-999|IP|R|1|PARENT-ORDER-42|2025-08-17T09:10|USER-101^Smith^John|USER-202^Jones^Mary|789^Chang^Yi-Chun|ER-STATION-2|(02)5555-1234|2025-08-17T09:15|Patient Complaint|Emergency Dept|TERMINAL-ER-05|USER-101^Smith^John|ABN-123|Main General Hospital|123 Health St, Taipei|(02)1234-5678|456 Wellness Ave, Taipei|Immediate|Patient requested|2025-08-17T10:00|U|O|Electronic Signature|SERVICE-ID-PARENT-001
+找到 TQ1 段落: TQ1|1|1|Q1H|2025-08-17T10:00|30M|30M|20250817020000|20250817023000|R|If patient reports severe headache|Administer with a full glass of water.|S|3D|72
+找到 OBR 段落: OBR||||C2345-1^CT Head W/O Contrast^CPT||2025-08-17T09:15|2025-08-17T10:15|2025-08-17T10:30|N/A|TECH-456^Lee^Ming|A|NONE|Patient reports severe headache after fall.|2025-08-17T09:20|N/A||(02)5555-1234|Check for trauma|Allergy to contrast medium noted|Technician: T555|Machine: CT-Scanner-2|2025-08-17T11:00|CHARGE-CODE-123|RAD|P|PARENT-RESULT-ID-1||DR-CHANG^DR-LIN||WHLC|Head trauma evaluation|DR-999^Kuo^Wei|DR-888^Hsu^Fang|TECH-456^Lee^Ming|TRAN-777^Wu^Mei|2025-08-17T10:00|0|N/A|Patient was cooperative.|Radiology Department|A|Y|Patient requires wheelchair assistance.|CTHEAD|NONE|STAT read requested.|Contrast allergy confirmed, non-contrast study performed.|N/A|STAT|
+找到 IPC 段落: IPC|ACN-RAD-555|CTHEAD|1.2.840.113619.2.55.3.2831184246.998.1629888819.987|SPS-999|CT|HEAD-NON-CONTRAST|CT-SCANNER-2|CT-ROOM-1|CT_SCANNER_AET
+OMG^O19 訊息已儲存到資料庫
+🔄 開始轉換為 DICOM 格式...
+🔍 DICOM 轉換 - 輸入數據:
+HL7 JSON: {
+  MSH: {
+    sendingApplication: 'HIS_APP_01',
+    sendingFacility: 'MAIN_HOSPITAL',
+    receivingApplication: 'RIS_APP_02',
+    receivingFacility: 'RADIOLOGY_DEPT',
+    messageDatetime: '20250826191056',
+    messageType: 'OMG^O19^OMG_O19',
+    messageControlId: 'MSG_CTRL_ID_12345'
+  },
+  PID: {
+    patientId: '123',
+    patientName: 'Lin^Li-Hua^Grace',
+    dateOfBirth: '19781102100000',
+    sex: 'F',
+    address: '456 Park Ave^^Kaohsiung^TW^800^C',
+    phoneNumber: '(07)555-1234'
+  },
+  PV1: {
+    setId: '1',
+    patientClass: 'O',
+    assignedPatientLocation: 'RAD-WAITING^ROOM 1^BED A',
+    admissionType: 'E',
+    preadmitNumber: 'PRE-98765',
+    priorPatientLocation: 'ER^ROOM 2^BED C',
+    attendingDoctor: '789^Chang^Yi-Chun',
+    referringDoctor: '654^Lin^Wei',
+    consultingDoctor: '321^Chen^Mei-Ling',
+    hospitalService: 'RAD',
+    temporaryLocation: 'CT-SCAN-ROOM',
+    preadmitTestIndicator: 'Y',
+    readmissionIndicator: 'N',
+    admitSource: '6',
+    ambulatoryStatus: 'A1',
+    vipIndicator: 'N',
+    admittingDoctor: '789^Chang^Yi-Chun',
+    patientType: 'REG',
+    visitNumber: 'V-2025-12345',
+    financialClass: 'IC',
+    chargePriceIndicator: 'STD',
+    courtesyCode: 'STAFF',
+    creditRating: 'GOOD',
+    contractCode: 'CONTRACT-XYZ',
+    contractEffectiveDate: '2025-01-01',
+    contractAmount: '50000',
+    contractPeriod: 'YEAR',
+    interestCode: 'NONE',
+    transferToBadDebtCode: 'NA',
+    transferToBadDebtDate: '',
+    badDebtAgencyCode: 'NA',
+    badDebtTransferAmount: '0',
+    badDebtRecoveryAmount: '0',
+    deleteAccountIndicator: 'N',
+    deleteAccountDate: '',
+    dischargeDisposition: '01',
+    dischargedToLocation: 'HOME',
+    dietType: 'REGULAR',
+    servicingFacility: 'MAIN_HOSPITAL',
+    bedStatus: 'O',
+    accountStatus: 'ACTIVE',
+    pendingLocation: 'WARD-3A',
+    priorTemporaryLocation: 'ER-BAY-1',
+    admitDateTime: '2025-08-17T09:00',
+    dischargeDateTime: '2025-08-17T11:00',
+    patientStatusCode: '1500.50',
+    patientStatusCodeDate: '2500.75',
+    patientStatusCodeTime: '0',
+    patientStatusCodeReason: '1000.25',
+    patientStatusCodeReasonCode: 'AV-2025-54321'
+  },
+  DG1: {
+    setId: '1',
+    diagnosisCodingMethod: 'I10',
+    diagnosisCode: 'R51',
+    diagnosisDescription: 'Headache',
+    diagnosisDateTime: '2025-08-17T09:05',
+    diagnosisType: 'W',
+    majorDiagnosisCategory: '',
+    diagnosticRelatedGroup: 'DRG-123',
+    drgApprovalIndicator: 'Y',
+    drgGrouperReviewCode: 'REVIEW-456',
+    outlierType: 'N',
+    outlierDays: '0',
+    outlierCost: '0',
+    grouperVersionAndType: 'V3.0-Standard',
+    diagnosisPriority: '1',
+    diagnosingClinician: '789^Chang^Yi-Chun',
+    diagnosisClassification: 'Primary',
+    confidentialIndicator: 'N',
+    attestationDateTime: '2025-08-17T09:10',
+    diagnosisIdentifier: 'DIAG-XYZ-789',
+    diagnosisActionCode: 'A'
+  },
+  ORC: {
+    orderControl: 'NW',
+    placerOrderNumber: 'PLC-RAD-001',
+    fillerOrderNumber: 'FIL-RAD-002',
+    placerGroupNumber: 'GRP-999',
+    orderStatus: 'IP',
+    responseFlag: 'R',
+    quantityTiming: '1',
+    parent: 'PARENT-ORDER-42',
+    dateTimeOfTransaction: '2025-08-17T09:10',
+    enteredBy: 'USER-101^Smith^John',
+    verifiedBy: 'USER-202^Jones^Mary',
+    orderingProvider: '789^Chang^Yi-Chun',
+    enterersLocation: 'ER-STATION-2',
+    callBackPhoneNumber: '(02)5555-1234',
+    orderEffectiveDateTime: '2025-08-17T09:15',
+    orderControlCodeReason: 'Patient Complaint',
+    enteringOrganization: 'Emergency Dept',
+    enteringDevice: 'TERMINAL-ER-05',
+    actionBy: 'USER-101^Smith^John',
+    advancedBeneficiaryNoticeCode: 'ABN-123',
+    orderingFacilityName: 'Main General Hospital',
+    orderingFacilityAddress: '123 Health St, Taipei',
+    orderingFacilityPhoneNumber: '(02)1234-5678',
+    orderingProviderAddress: '456 Wellness Ave, Taipei',
+    orderStatusModifier: 'Immediate',
+    advancedBeneficiaryNoticeOverrideReason: 'Patient requested',
+    fillersExpectedAvailabilityDateTime: '2025-08-17T10:00',
+    confidentialityCode: 'U',
+    orderType: 'O',
+    entererAuthorizationMode: 'Electronic Signature',
+    parentUniversalServiceIdentifier: 'SERVICE-ID-PARENT-001'
+  },
+  TQ1: {
+    setId: '1',
+    quantity: '1',
+    repeatPattern: 'Q1H',
+    explicitTime: '2025-08-17T10:00',
+    relativeTimeUnits: '30M',
+    serviceDuration: '30M',
+    startDateTime: '20250817020000',
+    endDateTime: '20250817023000',
+    priority: 'R',
+    conditionText: 'If patient reports severe headache',
+    textInstruction: 'Administer with a full glass of water.',
+    conjunction: 'S',
+    occurrenceDuration: '3D',
+    totalOccurrences: '72'
+  },
+  OBR: {
+    setId: '',
+    placerOrderNumber: '',
+    fillerOrderNumber: '',
+    universalServiceId: 'C2345-1^CT Head W/O Contrast^CPT',
+    priority: '',
+    requestedDateTime: '2025-08-17T09:15',
+    observationDateTime: '2025-08-17T10:15',
+    observationEndDateTime: '2025-08-17T10:30',
+    collectionVolume: 'N/A',
+    collectorIdentifier: 'TECH-456^Lee^Ming',
+    specimenActionCode: 'A',
+    dangerCode: 'NONE',
+    relevantClinicalInfo: 'Patient reports severe headache after fall.',
+    specimenReceivedDateTime: '2025-08-17T09:20',
+    specimenSource: 'N/A',
+    orderingProvider: '',
+    orderCallbackPhoneNumber: '(02)5555-1234',
+    placerField1: 'Check for trauma',
+    placerField2: 'Allergy to contrast medium noted',
+    fillerField1: 'Technician: T555',
+    fillerField2: 'Machine: CT-Scanner-2',
+    resultsRptStatusChngDateTime: '2025-08-17T11:00',
+    chargeToPractice: 'CHARGE-CODE-123',
+    diagnosticServSectId: 'RAD',
+    resultStatus: 'P',
+    parentResult: 'PARENT-RESULT-ID-1',
+    quantityTiming: '',
+    resultCopiesTo: 'DR-CHANG^DR-LIN',
+    parent: '',
+    transportationMode: 'WHLC',
+    reasonForStudy: 'Head trauma evaluation',
+    principalResultInterpreter: 'DR-999^Kuo^Wei',
+    assistantResultInterpreter: 'DR-888^Hsu^Fang',
+    technician: 'TECH-456^Lee^Ming',
+    transcriptionist: 'TRAN-777^Wu^Mei',
+    scheduledDateTime: '2025-08-17T10:00',
+    numberOfSampleContainers: '0',
+    transportLogisticsOfCollectedSample: 'N/A',
+    collectorsComment: 'Patient was cooperative.',
+    transportArrangementResponsibility: 'Radiology Department',
+    transportArranged: 'A',
+    escort: 'Y',
+    plannedPatientTransportComment: 'Patient requires wheelchair assistance.',
+    procedureCode: 'CTHEAD',
+    procedureCodeModifier: 'NONE',
+    placerSupplementalServiceInformation: 'STAT read requested.',
+    fillerSupplementalServiceInformation: 'Contrast allergy confirmed, non-contrast study performed.',
+    medicallyNecessaryDuplicateProcedureReason: 'N/A',
+    resultHandling: 'STAT',
+    parentUniversalServiceIdentifier: ''
+  },
+  IPC: {
+    accessionIdentifier: 'ACN-RAD-555',
+    requestedProcedureId: 'CTHEAD',
+    studyInstanceUid: '1.2.840.113619.2.55.3.2831184246.998.1629888819.987',
+    scheduledProcedureStepId: 'SPS-999',
+    modality: 'CT',
+    protocolCode: 'HEAD-NON-CONTRAST',
+    scheduledStationName: 'CT-SCANNER-2',
+    scheduledProcedureStepLocation: 'CT-ROOM-1',
+    scheduledProcedureStepStatus: 'CT_SCANNER_AET'
+  }
+}
+🔄 發送 DICOM 數據到 API...
+UPS 數據: [
+  {
+    '00100020': { vr: 'LO', Value: [Array] },
+    '00404010': { vr: 'DA', Value: [Array] },
+    '00741204': { vr: 'CS', Value: [Array] },
+    '00741202': { vr: 'AE', Value: [Array] },
+    '00404005': { vr: 'DA', Value: [Array] },
+    '00404011': { vr: 'DA', Value: [Array] },
+    '00380010': { vr: 'LO', Value: [Array] },
+    '00380014': { vr: 'SQ', Value: [Array] },
+    '00741000': { vr: 'CS', Value: [Array] },
+    '00404008': { vr: 'TM', Value: [Array] },
+    '00404036': { vr: 'LO', Value: [Array] },
+    '00404041': { vr: 'LO', Value: [Array] },
+    '00100010': { vr: 'PN', Value: [Array] },
+    '00100030': { vr: 'DA', Value: [Array] },
+    '00100040': { vr: 'CS', Value: [Array] },
+    '00080090': { vr: 'PN', Value: [Array] },
+    '00080050': { vr: 'SH', Value: [Array] },
+    '00402016': { vr: 'LO', Value: [Array] },
+    '00321060': { vr: 'LO', Value: [Array] },
+    '00080060': { vr: 'CS', Value: [Array] },
+    '00401001': { vr: 'SH', Value: [Array] },
+    '00400009': { vr: 'SH', Value: [Array] },
+    '0020000D': { vr: 'UI', Value: [Array] },
+    '0040100A': { vr: 'SH', Value: [Array] },
+    '00401002': { vr: 'LO', Value: [Array] },
+    '00401003': { vr: 'SH', Value: [Array] }
+  }
+]
+❌ DICOM API 呼叫失敗
+錯誤詳情: {
+  message: 'Request failed with status code 400',
+  status: 400,
+  data: {
+    status: 'C309',
+    message: 'Refused: The provided value of UPS State was not "SCHEDULED"'
+  },
+  config: {
+    url: 'http://localhost:8081/dicom-web/workitems',
+    method: 'post',
+    headers: Object [AxiosHeaders] {
+      Accept: 'application/dicom+json',
+      'Content-Type': 'application/dicom+json',
+      'User-Agent': 'axios/1.8.4',
+      'Content-Length': '1357',
+      'Accept-Encoding': 'gzip, compress, deflate, br'
+    }
+  }
+}
+❌ DICOM 轉換失敗
+ORC Order Control: NW (新增訂單)
+✅ 訂單已成功插入到 omg_o19_orders 表
+ORM^O19 訊息已 inserted 到醫療訂單表，訂單 ID: ORD17562357905473853
+MSA|AA|MSG_CTRL_ID_12345|Message received and processed successfullyEPT|20250826191630||ACK|MSG_CTRL_ID_12345|P|2.5.1

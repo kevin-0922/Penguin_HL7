@@ -1,6 +1,7 @@
 const handleOmlO33 = require('../../services/hl7/handleOmlO33.js');
 const handleQbpQ11 = require('../../services/hl7/handleQbpQ11.js');
 const handleOrmO19 = require('../../services/hl7/handleOrmO19.js');
+const handleOmiO23 = require('../../services/hl7/handleOmiO23.js');
 const util = require('util');
 const parseMSH = require('../../utils/parsers/parseMSH');
 const { buildAckResponse } = require('../../utils/formatters/ackMessage');
@@ -9,7 +10,8 @@ const { buildAckResponse } = require('../../utils/formatters/ackMessage');
 const messageHandlers = {
   'OML^O33^OML_O33': handleOmlO33,
   'QBP^Q11^QBP_Q11': handleQbpQ11,
-  'OMG^O19^OMG_O19': handleOrmO19
+  'OMG^O19^OMG_O19': handleOrmO19,
+  'OMI^O23^OMI_O23': handleOmiO23
 };
 
 // 處理HTTP請求中的HL7訊息

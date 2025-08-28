@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const viteExpress = require('vite-express');
 
-// 明確導入數據庫以確保連接初始化
+// 導入資料庫
 console.log('正在初始化 HL7 消息數據庫...');
 const db = require('./database/db');
 
