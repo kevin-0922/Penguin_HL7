@@ -82,18 +82,44 @@ app.use((err, req, res, next) => {
     message: err.message || '伺服器發生內部錯誤。',
   });
 });
-const mllpServer = net.createServer((socket) => {
+
+
+const MLLP_HEADER = 0x0b;
+const MLLP_TRAILER_1 = 0x1c;
+const MLLP_TRAILER_2 = 0x0d;
+
+net.createServer(socket => {
   console.log('MLLP client connected');
 
-  socket.on('data', async (data) => {
-    const msg = data.toString('utf-8');
-    console.log('收到 HL7 訊息:', msg);
+  let buffer = Buffer.alloc(0);
 
-    // 處理 HL7 訊息
-    const ack = await processHL7Message(msg); // 你現有的 async 處理
-    // 確保加上 MLLP 封包
-    const wrappedAck = '\x0B' + ack + '\x1C\x0D';
-    socket.write(wrappedAck);
+  socket.on('data', (data) => {
+    buffer = Buffer.concat([buffer, data]);
+
+    // 判斷是否收到結尾標誌
+    if (buffer.length > 2 && 
+        buffer[buffer.length - 2] === MLLP_TRAILER_1 &&
+        buffer[buffer.length - 1] === MLLP_TRAILER_2) {
+      
+      // 去掉頭尾的MLLP控制字元 <VT> 和 <FS><CR>
+      const hl7Msg = buffer.slice(1, buffer.length - 2).toString('utf-8');
+      console.log('完整HL7訊息:', hl7Msg);
+
+      // 呼叫你的HL7處理函式 (如 processHL7Message)，得到ACK
+      processHL7Message(hl7Msg).then((ackMsg) => {
+        // 組裝ACK MLLP封包
+        const ackBuffer = Buffer.concat([
+          Buffer.from([MLLP_HEADER]),
+          Buffer.from(ackMsg, 'utf-8'),
+          Buffer.from([MLLP_TRAILER_1, MLLP_TRAILER_2])
+        ]);
+        socket.write(ackBuffer);
+        buffer = Buffer.alloc(0); // 處理完成清空buffer
+      }).catch((err) => {
+        console.error('處理HL7訊息錯誤', err);
+        socket.end();
+      });
+    }
   });
 
   socket.on('end', () => {
@@ -103,8 +129,7 @@ const mllpServer = net.createServer((socket) => {
   socket.on('error', (err) => {
     console.error('MLLP server error:', err);
   });
+}).listen(MLLP_PORT, MLLP_HOST, () => {
+  console.log(`MLLP server running on ${MLLP_HOST}:${MLLP_PORT}`);
 });
 
-mllpServer.listen(MLLP_PORT, MLLP_HOST, () => {
-  console.log(`MLLP server is running on ${MLLP_HOST}:${MLLP_PORT}`);
-});
