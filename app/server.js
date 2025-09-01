@@ -3,13 +3,17 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const viteExpress = require('vite-express');
+const net = require('net');
+const { processHL7Message } = require('./services/hl7/hl7Processor');
 
 // 導入資料庫
 console.log('正在初始化 HL7 消息數據庫...');
 const db = require('./database/db');
 
 // 從環境變數中獲取配置
+const MLLP_HOST = process.env.MLLP_LOCAL_HOST || '127.0.0.1';
 const PORT = process.env.server_PORT || 3000;
+const MLLP_PORT = process.env.MLLP_LOCAL_PORT || 4321;
 const CORS_ORIGIN = process.env.server_CORS_ORIGIN || '*';
 
 const app = express();
@@ -53,6 +57,11 @@ app.get('/api/db-test', async (req, res) => {
   }
 });
 
+app.post('/hl7', async (req, res) => {
+  const hl7Msg = req.body;
+  const ack = await processHL7Message(hl7Msg);
+  res.send(ack);
+});
 // 啟動服務器
 const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
@@ -72,4 +81,30 @@ app.use((err, req, res, next) => {
     success: false,
     message: err.message || '伺服器發生內部錯誤。',
   });
+});
+const mllpServer = net.createServer((socket) => {
+  console.log('MLLP client connected');
+
+  socket.on('data', async (data) => {
+    const msg = data.toString('utf-8');
+    console.log('收到 HL7 訊息:', msg);
+
+    // 處理 HL7 訊息
+    const ack = await processHL7Message(msg); // 你現有的 async 處理
+    // 確保加上 MLLP 封包
+    const wrappedAck = '\x0B' + ack + '\x1C\x0D';
+    socket.write(wrappedAck);
+  });
+
+  socket.on('end', () => {
+    console.log('MLLP client disconnected');
+  });
+
+  socket.on('error', (err) => {
+    console.error('MLLP server error:', err);
+  });
+});
+
+mllpServer.listen(MLLP_PORT, MLLP_HOST, () => {
+  console.log(`MLLP server is running on ${MLLP_HOST}:${MLLP_PORT}`);
 });
