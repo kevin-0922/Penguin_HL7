@@ -84,7 +84,7 @@ app.use((err, req, res, next) => {
 });
 
 
-const MLLP_HEADER = 0x0b;
+//const MLLP_HEADER = 0x0b;
 const MLLP_TRAILER_1 = 0x1c;
 const MLLP_TRAILER_2 = 0x0d;
 
@@ -105,11 +105,11 @@ net.createServer(socket => {
       const hl7Msg = buffer.slice(1, buffer.length - 2).toString('utf-8');
       console.log('完整HL7訊息:', hl7Msg);
 
-      // 呼叫你的HL7處理函式 (如 processHL7Message)，得到ACK
+      // 呼叫HL7處理函式 (如 processHL7Message)，得到ACK
       processHL7Message(hl7Msg).then((ackMsg) => {
         // 組裝ACK MLLP封包
         const ackBuffer = Buffer.concat([
-          Buffer.from([MLLP_HEADER]),
+          //Buffer.from([MLLP_HEADER]),
           Buffer.from(ackMsg, 'utf-8'),
           Buffer.from([MLLP_TRAILER_1, MLLP_TRAILER_2])
         ]);
