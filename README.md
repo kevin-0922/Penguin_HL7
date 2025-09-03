@@ -21,7 +21,7 @@
 1. 取得程式碼
    ```bash
    git clone <repo-url>
-   cd Hl7_O33
+   cd Penguin_HL7
    ```
 2. 複製環境檔並依需求修改
    ```bash
@@ -43,16 +43,16 @@ npm start
 ### 使用 Docker
 1. 建置映像
    ```bash
-   docker build -t hl7-o33 .
+   docker build -t Penguin_HL7 .
    ```
 2. 依環境檔啟動容器
    ```bash
-   docker run --env-file .env -p 3000:3000 hl7-o33
+   docker run --env-file .env -p 3000:3000 Penguin_HL7
    ```
    若需保留 SQLite 資料，可加入資料夾掛載：
    ```bash
    docker run --env-file .env -p 3000:3000 \
-     -v $(pwd)/data:/app/app/database hl7-o33
+     -v $(pwd)/data:/app/app/database Penguin_HL7
    ```
 
 ### Windows 執行 Docker
