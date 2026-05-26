@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import { Provider } from 'react-redux';
 import { store } from './store/store';
+import { LanguageProvider } from './contexts/LanguageContext';
 import Root from './routes/root';
 import Home from './pages/home';
 import O33Form from './pages/O33Form';
@@ -47,7 +48,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
     <React.StrictMode>
         <Provider store={store}>
-            <RouterProvider router={router} />
+            <LanguageProvider>
+                <RouterProvider router={router} />
+            </LanguageProvider>
         </Provider>
     </React.StrictMode>,
 )
