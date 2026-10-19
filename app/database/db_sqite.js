@@ -2,32 +2,32 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const fs = require('fs');
 
-// 確認數據庫目錄存在
+// 確認資料庫目錄存在
 const dbDir = path.join(__dirname, '..', 'database');
 if (!fs.existsSync(dbDir)) {
-  console.log(`數據庫目錄不存在，正在創建: ${dbDir}`);
+  console.log(`資料庫目錄不存在，正在創建: ${dbDir}`);
   fs.mkdirSync(dbDir, { recursive: true });
 } else {
-  console.log(`數據庫目錄已存在: ${dbDir}`);
+  console.log(`資料庫目錄已存在: ${dbDir}`);
 }
 
-// 設置數據庫文件路徑
+// 設置資料庫文件路徑
 const dbPath = path.join(dbDir, 'hl7_messages.db');
-console.log(`數據庫文件路徑: ${dbPath}`);
+console.log(`資料庫文件路徑: ${dbPath}`);
 
 // 創建連接
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
-    console.error('連接數據庫失敗:', err.message);
+    console.error('連接 SQLite 資料庫失敗:', err.message);
   } else {
-    console.log(`成功連接到 SQLite 數據庫: ${dbPath}`);
+    console.log(`成功連接到 SQLite 資料庫: ${dbPath}`);
     initializeDatabase();
   }
 });
 
-// 初始化數據庫表
+// 初始化資料庫表
 function initializeDatabase() {
-  console.log('開始初始化數據庫表...');
+  console.log('開始初始化資料庫表...');
   
   // 使用序列化操作確保表按順序創建
   db.serialize(() => {
@@ -121,7 +121,7 @@ function initializeDatabase() {
       }
     });
     
-    // 檢查數據庫表是否存在和工作正常
+    // 檢查資料庫表是否存在和工作正常
     db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='sent_messages'", (err, row) => {
       if (err) {
         console.error('檢查表結構失敗:', err.message);
@@ -176,8 +176,8 @@ function initializeDatabase() {
       }
     });
     
-    // 執行數據庫測試查詢
-    console.log('執行數據庫測試查詢...');
+    // 執行資料庫測試查詢
+    console.log('執行資料庫測試查詢...');
     db.get("SELECT COUNT(*) as count FROM sent_messages", (err, row) => {
       if (err) {
         console.error('測試查詢 sent_messages 失敗:', err.message);
@@ -221,7 +221,7 @@ function initializeDatabase() {
       }
     });
     
-    console.log('===== HL7 消息數據庫初始化完成 =====');
+    console.log('===== HL7 消息資料庫初始化完成 =====');
   });
 }
 
@@ -313,20 +313,20 @@ async function updateMllpConfig(remoteHost, remotePort, timeout) {
   }
 }
 
-// 監聽進程結束，關閉數據庫連接
+// 監聽進程結束，關閉資料庫連接
 process.on('SIGINT', () => {
-  console.log('接收到終止信號，關閉數據庫連接...');
+  console.log('接收到終止信號，關閉資料庫連接...');
   if (db) {
     db.close((err) => {
       if (err) {
-        console.error('關閉數據庫失敗:', err.message);
+        console.error('關閉資料庫失敗:', err.message);
       } else {
-        console.log('數據庫連接已關閉');
+        console.log('資料庫連接已關閉');
       }
       process.exit(0);
     });
   } else {
-    console.log('數據庫連接已關閉');
+    console.log('資料庫連接已關閉');
     process.exit(0);
   }
 });

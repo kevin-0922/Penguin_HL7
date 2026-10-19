@@ -25,7 +25,7 @@ const hl7FormSlice = createSlice({
     }
   },
   reducers: {
-    // 更新特定消息類型的表單數據
+    // 更新特定消息類型的表單資料
     updateFormData: (state, action) => {
       const { messageType, segment, field, value } = action.payload;
       if (state.forms[messageType] && state.forms[messageType][segment]) {

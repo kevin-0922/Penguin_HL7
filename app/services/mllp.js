@@ -54,7 +54,7 @@ async function MLLPRequest(message) {
         ? message.message
         : JSON.stringify(message);
 
-    // 使用Socket直接發送MLLP消息，提供完整的MLLP封裝數據
+    // 使用Socket直接發送MLLP消息，提供完整的MLLP封裝資料
     const responseData = await sendViaSocket(config.remoteHost, config.remotePort, hl7Message);
 
     // 返回響應
@@ -99,7 +99,7 @@ async function sendViaSocket(host, port, message) {
     });
     
     client.on("data", (data) => {
-      // 累積接收到的數據
+      // 累積接收到的資料
       responseData = Buffer.concat([responseData, data]);
       
       // 檢查是否收到完整的MLLP消息（包含結束標記）
@@ -108,13 +108,13 @@ async function sendViaSocket(host, port, message) {
         responseReceived = true;
 
         // // 顯示十六進制形式
-        // console.log("\n原始接收數據 (十六進制):");
+        // console.log("\n原始接收資料 (十六進制):");
         // console.log("-".repeat(50));
         // console.log(responseData.toString("hex"));
         // console.log("-".repeat(50));
 
         // // 顯示字節表示
-        // console.log("\n原始接收數據 (字節表示):");
+        // console.log("\n原始接收資料 (字節表示):");
         // console.log("-".repeat(50));
         // console.log(responseData);
         // console.log("-".repeat(50));
@@ -153,7 +153,7 @@ async function sendViaSocket(host, port, message) {
     
     client.on("close", () => {
       if (responseReceived) {
-        // 處理接收到的數據
+        // 處理接收到的資料
         const trailerIndex = responseData.indexOf(MLLP_TRAILER);
         if (responseData[0] === MLLP_HEADER[0] && trailerIndex > 0) {
           // 提取HL7消息內容 (去除MLLP包裝)

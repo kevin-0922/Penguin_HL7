@@ -12,7 +12,7 @@ const MESSAGE_GENERATORS = {
 
 /**
  * 生成 HL7 消息
- * @param {Object} formData - 表單數據
+ * @param {Object} formData - 表單資料
  * @param {string} messageType - 消息類型
  * @returns {string} - 生成的 HL7 消息
  */
@@ -27,21 +27,21 @@ export const generateHL7Message = (formData, messageType = 'UNSELECTED') => {
     throw new Error(`未找到消息生成器: ${messageType}`);
   }
   
-  // 處理數據結構：檢查是否是嵌套的表單數據格式
+  // 處理資料結構：檢查是否是嵌套的表單資料格式
   let processedData = formData;
   
-  // 如果數據中有 forms 屬性並且包含對應的消息類型數據，則提取該部分
+  // 如果資料中有 forms 屬性並且包含對應的消息類型資料，則提取該部分
   if (formData.forms && formData.forms[messageType]) {
     processedData = formData.forms[messageType];
   }
   
-  // 直接調用生成函數，傳入處理後的數據
+  // 直接調用生成函數，傳入處理後的資料
   return generateMessage(processedData);
 };
 
 /**
  * 生成完整 HL7 消息
- * @param {Object} formData - 表單數據
+ * @param {Object} formData - 表單資料
  * @param {string} messageType - 消息類型，例如 'O33' 或 'Q11'
  * @returns {string} - 生成的 HL7 消息
  */

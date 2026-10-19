@@ -7,7 +7,7 @@ const net = require('net');
 const { processHL7Message } = require('./services/hl7/hl7Processor');
 
 // 導入資料庫
-console.log('正在初始化 HL7 消息數據庫...');
+console.log('正在初始化 HL7 消息資料庫...');
 const db = require('./database/db');
 
 // 從環境變數中獲取配置
@@ -32,26 +32,26 @@ app.use(bodyParser.text({ type: 'application/hl7-v2' }));
   // 載入路由
   require('./routes')(app);
 
-// 測試數據庫連接
+// 測試資料庫連接
 app.get('/api/db-test', async (req, res) => {
   try {
-    // 執行簡單的數據庫查詢測試
+    // 執行簡單的資料庫查詢測試
     const sentCount = await db.get('SELECT COUNT(*) as count FROM sent_messages');
     const receivedCount = await db.get('SELECT COUNT(*) as count FROM received_messages');
 
     res.json({
       success: true,
-      message: 'HL7 數據庫連接正常',
+      message: 'HL7 資料庫連接正常',
       data: {
         sentMessages: sentCount.count,
         receivedMessages: receivedCount.count
       }
     });
   } catch (error) {
-    console.error('數據庫測試失敗:', error);
+    console.error('資料庫測試失敗:', error);
     res.status(500).json({
       success: false,
-      message: '數據庫測試失敗',
+      message: '資料庫測試失敗',
       error: error.message
     });
   }
@@ -65,7 +65,7 @@ app.post('/hl7', async (req, res) => {
 // 啟動服務器
 const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  console.log('HL7 消息數據庫已初始化完成');
+  console.log('HL7 消息資料庫已初始化完成');
 });
 
 // 綁定 Vite
@@ -83,7 +83,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-
+const MLLP_HEADER = Buffer.from([0x0b]);
 //const MLLP_HEADER = 0x0b;
 const MLLP_TRAILER_1 = 0x1c;
 const MLLP_TRAILER_2 = 0x0d;
@@ -110,6 +110,7 @@ net.createServer(socket => {
         // 組裝ACK MLLP封包
         const ackBuffer = Buffer.concat([
           //Buffer.from([MLLP_HEADER]),
+          MLLP_HEADER,
           Buffer.from(ackMsg, 'utf-8'),
           Buffer.from([MLLP_TRAILER_1, MLLP_TRAILER_2])
         ]);

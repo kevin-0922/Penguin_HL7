@@ -90,7 +90,7 @@ async function handleOmlO33(message) {
       await run(
         `INSERT INTO slicing_schedule
         (order_id, message_content, status, created_at)
-        VALUES (?, ?, ?, datetime('now'))`,
+        VALUES (?, ?, ?, NOW())`,
         [orderId, JSON.stringify(jsonMessage), 'pending']
       );
       console.log('O33訊息已儲存到切片排程表，訂單ID:', orderId);

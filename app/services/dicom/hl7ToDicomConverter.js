@@ -215,7 +215,7 @@ const upsDataFunction = (hl7Json) => {
 };
 //將 HL7 O19 訊息轉換為 DICOM JSON 格式並發送到 API
 const convertO19ToDicom = async (hl7Json) => {
-  //console.log('🔍 DICOM 轉換 - 輸入數據:');
+  //console.log('🔍 DICOM 轉換 - 輸入資料:');
   //console.log('HL7 JSON:', hl7Json);
   // 生成 UPS Instance UID
   const upsInstanceUID = generateUpsInstanceUID();
@@ -223,8 +223,8 @@ const convertO19ToDicom = async (hl7Json) => {
   const upsData = upsDataFunction(hl7Json);
 
   // 發送到 API
-  console.log("🔄 發送 DICOM 數據到 API...");
-  console.log("UPS 數據:", upsData);
+  console.log("🔄 發送 DICOM 資料到 API...");
+  console.log("UPS 資料:", upsData);
 
   try {
     console.log("路徑:", `${RacconBaseUrl}/dicom-web/workitems`);
@@ -238,7 +238,7 @@ const convertO19ToDicom = async (hl7Json) => {
 
     console.log("✅ DICOM API 呼叫成功");
     console.log("API 回應狀態:", response.status);
-    console.log("API 回應數據:", response.data);
+    console.log("API 回應資料:", response.data);
 
     return true;
   } catch (error) {
@@ -262,9 +262,9 @@ const convertO23ToDicom = async (hl7Json) => {
   const upsData = upsDataFunction(hl7Json);
 
   // 發送到 API
-  console.log("🔄 發送 DICOM 數據到 API...");
-  //console.log('UPS 數據:', JSON.stringify(upsData, null, 2));
-  console.log("UPS 數據:", JSON.stringify(upsData[0], null, 2));
+  console.log("🔄 發送 DICOM 資料到 API...");
+  //console.log('UPS 資料:', JSON.stringify(upsData, null, 2));
+  console.log("UPS 資料:", JSON.stringify(upsData[0], null, 2));
   try {
     const response = await axios.post(`${RacconBaseUrl}/dicom-web/patients`, upsData[0], {
       headers: {
@@ -275,7 +275,7 @@ const convertO23ToDicom = async (hl7Json) => {
     });
     console.log("✅ DICOM API 呼叫成功");
     console.log("API 回應狀態:", response.status);
-    console.log("API 回應數據:", response.data);
+    console.log("API 回應資料:", response.data);
   } catch (error) {
     console.error("❌ DICOM API 呼叫失敗");
     console.error("錯誤詳情:", {
@@ -302,7 +302,7 @@ const convertO23ToDicom = async (hl7Json) => {
 
     console.log("✅ DICOM API 呼叫成功");
     console.log("API 回應狀態:", response.status);
-    console.log("API 回應數據:", response.data);
+    console.log("API 回應資料:", response.data);
 
     return true;
   } catch (error) {

@@ -5,8 +5,8 @@ require('dotenv').config();
 const sequelize = new Sequelize({
   host: process.env.SQL_HOST || 'localhost',
   port: process.env.SQL_PORT || 5432,
-  username: process.env.SQL_USER || 'postgres',
-  password: process.env.SQL_PASS,
+  username: process.env.SQL_USERNAME || 'postgres',
+  password: process.env.SQL_PASSWORD,
   database: process.env.SQL_DB || 'penguin',
   dialect: 'postgres',
   logging: false, // 關閉 SQL 日誌以保持和原本的簡潔性
@@ -226,9 +226,9 @@ ReceivedMessage.belongsTo(SentMessage, { foreignKey: 'response_message_id' });
 // 模擬原有 SQLite 實例的變數
 let db = sequelize;
 
-// 初始化數據庫表 - 完全對應原本的 initializeDatabase 函數
+// 初始化資料庫表 - 完全對應原本的 initializeDatabase 函數
 function initializeDatabase() {
-  console.log('開始初始化數據庫表...');
+  console.log('開始初始化資料庫表...');
   
   return sequelize.sync({ alter: true }).then(() => {
     console.log('sent_messages 表已創建或已存在');
@@ -238,7 +238,7 @@ function initializeDatabase() {
     console.log('omg_o23_orders 表已創建或已存在');
     console.log('mllp_config 表已創建或已存在');
     
-    // 檢查數據庫表是否存在和工作正常 - 對應原本的檢查邏輯
+    // 檢查資料庫表是否存在和工作正常 - 對應原本的檢查邏輯
     console.log('確認: sent_messages 表存在並可訪問');
     console.log('確認: received_messages 表存在並可訪問');
     console.log('確認: slicing_schedule 表存在並可訪問');
@@ -246,8 +246,8 @@ function initializeDatabase() {
     console.log('確認: omg_o23_orders 表存在並可訪問');
     console.log('確認: mllp_config 表存在並可訪問');
     
-    // 執行數據庫測試查詢 - 完全對應原本的測試查詢
-    console.log('執行數據庫測試查詢...');
+    // 執行資料庫測試查詢 - 完全對應原本的測試查詢
+    console.log('執行資料庫測試查詢...');
     
     return Promise.all([
       SentMessage.count(),
@@ -264,10 +264,10 @@ function initializeDatabase() {
       console.log(`測詢成功: omg_o23_orders 表中有 ${o23OrdersCount} 條記錄`);
       console.log(`測試查詢成功: mllp_config 表中有 ${mllpCount} 條記錄`);
       
-      console.log('===== HL7 消息數據庫初始化完成 =====');
+      console.log('===== HL7 消息資料庫初始化完成 =====');
     });
   }).catch(error => {
-    console.error('數據庫初始化失敗:', error);
+    console.error('資料庫初始化失敗:', error);
   });
 }
 
@@ -361,29 +361,29 @@ async function updateMllpConfig(remoteHost, remotePort, timeout) {
   }
 }
 
-// 監聽進程結束，關閉數據庫連接 - 完全對應原本的邏輯
+// 監聽進程結束，關閉資料庫連接 - 完全對應原本的邏輯
 process.on('SIGINT', () => {
-  console.log('接收到終止信號，關閉數據庫連接...');
+  console.log('接收到終止信號，關閉資料庫連接...');
   if (db) {
     sequelize.close().then(() => {
-      console.log('數據庫連接已關閉');
+      console.log('資料庫連接已關閉');
       process.exit(0);
     }).catch(err => {
-      console.error('關閉數據庫失敗:', err.message);
+      console.error('關閉資料庫失敗:', err.message);
       process.exit(0);
     });
   } else {
-    console.log('數據庫連接已關閉');
+    console.log('資料庫連接已關閉');
     process.exit(0);
   }
 });
 
 // 測試連接並初始化
 sequelize.authenticate().then(() => {
-  console.log(`成功連接到 PostgreSQL 數據庫`);
+  console.log(`成功連接到 PostgreSQL 資料庫`);
   initializeDatabase();
 }).catch(err => {
-  console.error('連接數據庫失敗:', err.message);
+  console.error('連接 PostgreSQL 資料庫失敗:', err.message);
 });
 
 // 完全對應原本 db.js 的 module.exports

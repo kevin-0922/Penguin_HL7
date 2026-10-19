@@ -3,12 +3,12 @@
 > base@1.0.0 start
 > node app/server.js
 
-正在初始化 HL7 消息數據庫...
+正在初始化 HL7 消息資料庫...
 3:16:28 AM [vite-express] Running in development mode
 Server is running on port 3000
-HL7 消息數據庫已初始化完成
-成功連接到 PostgreSQL 數據庫
-開始初始化數據庫表...
+HL7 消息資料庫已初始化完成
+成功連接到 PostgreSQL 資料庫
+開始初始化資料庫表...
 sent_messages 表已創建或已存在
 received_messages 表已創建或已存在
 slicing_schedule 表已創建或已存在
@@ -21,14 +21,14 @@ mllp_config 表已創建或已存在
 確認: omg_o19_orders 表存在並可訪問
 確認: omg_o23_orders 表存在並可訪問
 確認: mllp_config 表存在並可訪問
-執行數據庫測試查詢...
+執行資料庫測試查詢...
 測試查詢成功: sent_messages 表中有 0 條記錄
 測試查詢成功: received_messages 表中有 30 條記錄
 測試查詢成功: slicing_schedule 表中有 0 條記錄
 測詢成功: omg_o19_orders 表中有 22 條記錄
 測詢成功: omg_o23_orders 表中有 0 條記錄
 測試查詢成功: mllp_config 表中有 1 條記錄
-===== HL7 消息數據庫初始化完成 =====
+===== HL7 消息資料庫初始化完成 =====
 收到HTTP HL7訊息請求:
 'MSH|^~&|HIS_APP_01|MAIN_HOSPITAL|RIS_APP_02|RADIOLOGY_DEPT|20250826191056|AUTH_TOKEN_XYZ|OMG^O19^OMG_O19|MSG_CTRL_ID_12345|P|2.5.1|1||AL|AL|TW|UTF-8|zh-TW|UTF-8|LAB-81^IHE\rPID|1|987654|123|ALT-ID-54321|Lin^Li-Hua^Grace|Wang|19781102100000|F|Lily Lin|2028-9|456 Park Ave^^Kaohsiung^TW^800^C|TW|(07)555-1234|(02)666-5678|ZHT|M|BUD|ACCT-112233-01|B298765432|D456789012|MOTHER-ID-456|HAN|Tainan, TW|N|1|TW|Not a veteran|Taiwanese||N|N|Reliable|20250818140000|MAIN_HOSPITAL|HSA|Human|Not Applicable|Not Applicable|Not Applicable\rPV1|1|O|RAD-WAITING^ROOM 1^BED A|E|PRE-98765|ER^ROOM 2^BED C|789^Chang^Yi-Chun|654^Lin^Wei|321^Chen^Mei-Ling|RAD|CT-SCAN-ROOM|Y|N|6|A1|N|789^Chang^Yi-Chun|REG|V-2025-12345|IC|STD|STAFF|GOOD|CONTRACT-XYZ|2025-01-01|50000|YEAR|NONE|NA||NA|0|0|N||01|HOME|REGULAR|MAIN_HOSPITAL|O|ACTIVE|WARD-3A|ER-BAY-1|2025-08-17T09:00|2025-08-17T11:00|1500.50|2500.75|0|1000.25|AV-2025-54321|S|999^Community Clinic^L\rDG1|1|I10|R51|Headache|2025-08-17T09:05|W||DRG-123|Y|REVIEW-456|N|0|0|V3.0-Standard|1|789^Chang^Yi-Chun|Primary|N|2025-08-17T09:10|DIAG-XYZ-789|A\rORC|NW|PLC-RAD-001|FIL-RAD-002|GRP-999|IP|R|1|PARENT-ORDER-42|2025-08-17T09:10|USER-101^Smith^John|USER-202^Jones^Mary|789^Chang^Yi-Chun|ER-STATION-2|(02)5555-1234|2025-08-17T09:15|Patient Complaint|Emergency Dept|TERMINAL-ER-05|USER-101^Smith^John|ABN-123|Main General Hospital|123 Health St, Taipei|(02)1234-5678|456 Wellness Ave, Taipei|Immediate|Patient requested|2025-08-17T10:00|U|O|Electronic Signature|SERVICE-ID-PARENT-001\rTQ1|1|1|Q1H|2025-08-17T10:00|30M|30M|20250817020000|20250817023000|R|If patient reports severe headache|Administer with a full glass of water.|S|3D|72\rOBR||||C2345-1^CT Head W/O Contrast^CPT||2025-08-17T09:15|2025-08-17T10:15|2025-08-17T10:30|N/A|TECH-456^Lee^Ming|A|NONE|Patient reports severe headache after fall.|2025-08-17T09:20|N/A||(02)5555-1234|Check for trauma|Allergy to contrast medium noted|Technician: T555|Machine: CT-Scanner-2|2025-08-17T11:00|CHARGE-CODE-123|RAD|P|PARENT-RESULT-ID-1||DR-CHANG^DR-LIN||WHLC|Head trauma evaluation|DR-999^Kuo^Wei|DR-888^Hsu^Fang|TECH-456^Lee^Ming|TRAN-777^Wu^Mei|2025-08-17T10:00|0|N/A|Patient was cooperative.|Radiology Department|A|Y|Patient requires wheelchair assistance.|CTHEAD|NONE|STAT read requested.|Contrast allergy confirmed, non-contrast study performed.|N/A|STAT|\rIPC|ACN-RAD-555|CTHEAD|1.2.840.113619.2.55.3.2831184246.998.1629888819.987|SPS-999|CT|HEAD-NON-CONTRAST|CT-SCANNER-2|CT-ROOM-1|CT_SCANNER_AET'
 訊息類型: OMG^O19^OMG_O19
@@ -47,7 +47,7 @@ mllp_config 表已創建或已存在
 找到 IPC 段落: IPC|ACN-RAD-555|CTHEAD|1.2.840.113619.2.55.3.2831184246.998.1629888819.987|SPS-999|CT|HEAD-NON-CONTRAST|CT-SCANNER-2|CT-ROOM-1|CT_SCANNER_AET
 OMG^O19 訊息已儲存到資料庫
 🔄 開始轉換為 DICOM 格式...
-🔍 DICOM 轉換 - 輸入數據:
+🔍 DICOM 轉換 - 輸入資料:
 HL7 JSON: {
   MSH: {
     sendingApplication: 'HIS_APP_01',
@@ -254,8 +254,8 @@ HL7 JSON: {
     scheduledProcedureStepStatus: 'CT_SCANNER_AET'
   }
 }
-🔄 發送 DICOM 數據到 API...
-UPS 數據: [
+🔄 發送 DICOM 資料到 API...
+UPS 資料: [
   {
     '00100020': { vr: 'LO', Value: [Array] },
     '00404010': { vr: 'DA', Value: [Array] },

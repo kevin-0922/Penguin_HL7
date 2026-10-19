@@ -53,7 +53,7 @@ const convertHl7ToJson = (message) => {
 /**
  * 將JSON對象轉換回HL7訊息格式
  * 特殊處理MSH段落，確保欄位順序正確
- * @param {Object} jsonData - HL7 JSON格式數據
+ * @param {Object} jsonData - HL7 JSON格式資料
  * @returns {string} HL7訊息文本
  */
 const convertJsonToHl7 = (jsonData) => {

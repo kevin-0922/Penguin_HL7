@@ -3,9 +3,10 @@ const react = require('@vitejs/plugin-react-swc');
 
 // https://vitejs.dev/config/
 module.exports = defineConfig({
-  plugins: [react()],
-  server: {
-    port: 3000,
-    open: true
-  }
-})
+    plugins: [react()],
+    server: {
+        port: 3000,
+        open: true,
+        allowedHosts: ['penguin.dicom.org.tw']
+    }
+});

@@ -4,7 +4,7 @@ import { generateRCPSegment } from '../segments/RCPSegmentGenerator';
 
 /**
  * 生成 Q11 訊息
- * @param {Object} formData - 表單數據
+ * @param {Object} formData - 表單資料
  * @returns {string} - 生成的 HL7 訊息
  */
 export const generateQ11Message = (formData) => {

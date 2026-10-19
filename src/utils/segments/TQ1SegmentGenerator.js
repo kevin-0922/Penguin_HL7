@@ -1,11 +1,11 @@
 /**
  * 生成 TQ1 段落 (時間/數量)
- * @param {Object} formData - 表單數據
+ * @param {Object} formData - 表單資料
  * @param {string} messageType - 訊息類型 (O19, O33 等)
  * @returns {string} - 生成的 TQ1 段落
  */
 export const generateTQ1Segment = (formData, messageType = 'O19') => {
-  // 修改這行以正確訪問 tq1 數據
+  // 修改這行以正確訪問 tq1 資料
   const tq1Data = formData.tq1 || {};
   
   // 將日期時間格式轉換為 HL7 格式 (YYYYMMDDHHMMSS)

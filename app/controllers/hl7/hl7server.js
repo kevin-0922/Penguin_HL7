@@ -58,7 +58,7 @@ exports.handleMLLPRequest = async (req, res) => {
         await run(
           `INSERT INTO slicing_schedule 
           (order_id, message_content, status, created_at) 
-          VALUES (?, ?, ?, datetime('now'))`,
+          VALUES (?, ?, ?,NOW())`,
           [orderId, JSON.stringify(jsonMessage), 'pending']
         );
         

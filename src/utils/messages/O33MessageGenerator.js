@@ -9,7 +9,7 @@ import { generateOBXSegment } from "../segments/OBXSegmentGenerator";
 
 /**
  * 生成 O33 訊息
- * @param {Object} formData - 表單數據
+ * @param {Object} formData - 表單資料
  * @returns {string} - 生成的 HL7 訊息
  */
 export const generateO33Message = (formData) => {

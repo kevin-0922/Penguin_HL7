@@ -247,7 +247,7 @@ const getDicomHL7Order = async (orders) => {
         "00080058": parsedK11.QAK ? getParsedFieldValue(parsedK11.QAK, 2, 0, 0) : "",
       };
 
-      // 檢查是否沒有任何有意義的數據被解析
+      // 檢查是否沒有任何有意義的資料被解析
       const hasData = Object.values(dicomResult).some((value) => value !== "" && value !== "NO");
 
       if (hasData) {
