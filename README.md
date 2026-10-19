@@ -1,71 +1,47 @@
-# HL7 專案
+# Penguin HL7
 
-本專案結合 **Node.js/Express** 後端與 **React** 前端，提供 HL7 訊息產生、解析與 MLLP 傳輸功能，資料儲存採用 **SQLite**。透過 `vite-express` 讓前後端共用一個伺服器運行。
+React/Vite 前端與 Express 後端共用 HTTP 服務，資料儲存於 PostgreSQL 18。另提供 MLLP TCP 接收服務。
 
-## 主要功能
-- 產生 `OML^O33`、`QBP^Q11`、`OMG^O19`、`OMI^O23` 等 HL7 訊息
-- 解析 HL7 並存入資料庫
-- WEB表單介面方便填寫與產生 HL7 訊息
-- OMG^O19、OMI^O23轉換DICOM TAG存下至Raccon裡
-- 以 **MLLP** 協定傳送與接收至其他HL7 server
-- DICOM 訂單映射與重新傳送
+## 在新機器部署
 
-## 環境需求
-- Node.js 20 以上
-- npm
-- Docker 24 以上
-- SQLite 3.49.2以上
-- 
+安裝 Docker Engine 與 Docker Compose v2，然後執行：
 
-## 安裝與建置
-1. 取得程式碼
-   ```bash
-   git clone <repo-url>
-   cd Penguin_HL7
-   ```
-2. 複製環境檔並依需求修改
-   ```bash
-   cp '.env temple' .env
-   # 編輯 .env 調整 PORT、CORS 及 MLLP 等設定
-   ```
-3. 安裝依賴並建置前端
-   ```bash
-   npm install
-   ```
-
-## 執行方式
-### 直接以 Node 啟動
-```bash
-npm start
+```sh
+git clone https://github.com/kevin-0922/Penguin_HL7.git
+cd Penguin_HL7
+cp .env.example .env
+# 編輯 .env，至少將 SQL_PASSWORD 改成自己的密碼
+docker compose up -d --build --wait
 ```
-伺服器預設監聽在 `.env` 內 `server_PORT` 指定的埠，預設為 `3000`。
 
-### 使用 Docker
-1. 建置映像
-   ```bash
-   docker build -t Penguin_HL7 .
-   ```
-2. 依環境檔啟動容器
-   ```bash
-   docker run --env-file .env -p 3000:3000 Penguin_HL7
-   ```
-   若需保留 SQLite 資料，可加入資料夾掛載：
-   ```bash
-   docker run --env-file .env -p 3000:3000 \
-     -v $(pwd)/data:/app/app/database Penguin_HL7
-   ```
+瀏覽 `http://伺服器IP:3000`；MLLP 接收埠為 `4321`。可透過 `.env` 的 `HTTP_PORT`、`MLLP_PORT` 修改對外埠。前端使用同來源 API，無須重新指定前端 API 網址。遠端連線需允許主機防火牆的這兩個埠。
 
-### Windows 執行 Docker
-在 Windows 上可使用 [Docker Desktop](https://www.docker.com/products/docker-desktop/)。
-安裝後開啟 **PowerShell** 或 **命令提示字元**，於專案根目錄執行與上節相同的 `docker build` 與 `docker run` 指令即可。
+```sh
+docker compose ps
+docker compose logs --tail=100 penguin pgsql
+curl --fail http://localhost:3000/api/db-test
+```
 
-### macOS 執行 Docker
-在 macOS 上可使用 [Docker Desktop for Mac](https://www.docker.com/products/docker-desktop/)。  
-安裝完成後，開啟 **終端機（Terminal）**，於專案根目錄執行與上節相同的 `docker build` 與 `docker run` 指令即可。
+兩個服務應顯示 healthy，資料庫測試應回傳 `success: true`。PostgreSQL 使用 Docker named volume 保存資料，不公開 5432 埠。初次啟動由 POSTGRES_DB 建立資料庫，再由後端 Sequelize 建立六張表，不需手動執行 SQL。
 
+## 外部服務設定
 
+`Raccon_API_URL` 必須設為容器可連到的 Raccoon/DICOM 服務網址，DICOM 轉送才會成功。Linux 若服務在宿主機上，請使用宿主機可達的 IP；範例中的 `host.docker.internal` 主要適用 Docker Desktop。MLLP 發送目標在網站首頁設定後儲存到資料庫。
 
+預設容許跨來源請求；若需要限制來源，設定 `SERVER_CORS_ORIGIN` 為網站完整來源，例如 `https://penguin.example.com`。HTTPS 與網域需另外設定反向代理。系統目前沒有登入保護，部署請使用受控網路。
 
-## 其他說明
-- 範例環境變數都列在 `.env temple`，包含 MLLP 連線設定
-- 開發階段可直接執行 `npm start` 會自動啟動 Vite 伺服器
+## 更新、停止與資料保存
+
+```sh
+git pull
+docker compose up -d --build --wait
+docker compose down
+```
+
+`down` 保留資料，`down -v` 會刪除資料庫。`.env` 不進 Git。資料庫初始化後修改 `.env` 的帳號、密碼或資料庫名稱不會更改既有資料，需先在 PostgreSQL 內完成相應修改。
+
+後端啟動會執行 `sequelize.sync({ alter: true })`；既有資料升級前先備份，正式版 schema 變更應採用審核過的 migration。舊環境的 bind mount 資料不會自動搬進新 named volume，請用 pg_dump/pg_restore 遷移。
+
+## 本機開發
+
+安裝 Node.js 22、`npm ci`，自行準備 PostgreSQL，並在 `.env` 設定 `SQL_HOST`、`SQL_PORT`、`SQL_DB`、`SQL_USERNAME`、`SQL_PASSWORD` 後執行 `npm start`。Docker 部署會自動設定容器內部連線與正式環境模式。

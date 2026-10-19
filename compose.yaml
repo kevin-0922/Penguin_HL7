@@ -1,0 +1,47 @@
+name: penguin-hl7
+services:
+  penguin:
+    build: .
+    environment:
+      NODE_ENV: production
+      TZ: Asia/Taipei
+      server_PORT: 3000
+      server_CORS_ORIGIN: ${SERVER_CORS_ORIGIN:-*}
+      MLLP_LOCAL_HOST: 0.0.0.0
+      MLLP_LOCAL_PORT: 4321
+      SQL_HOST: pgsql
+      SQL_PORT: 5432
+      SQL_DB: ${SQL_DB:-penguin}
+      SQL_USERNAME: ${SQL_USERNAME:-postgres}
+      SQL_PASSWORD: ${SQL_PASSWORD:?Set SQL_PASSWORD in .env}
+      Raccon_API_URL: ${Raccon_API_URL:-http://host.docker.internal:8081}
+    ports:
+      - "${HTTP_PORT:-3000}:3000"
+      - "${MLLP_PORT:-4321}:4321"
+    depends_on:
+      pgsql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/db-test').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 5
+    restart: unless-stopped
+  pgsql:
+    image: postgres:18.3
+    environment:
+      TZ: Asia/Taipei
+      POSTGRES_DB: ${SQL_DB:-penguin}
+      POSTGRES_USER: ${SQL_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${SQL_PASSWORD:?Set SQL_PASSWORD in .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+volumes:
+  postgres_data:

@@ -268,6 +268,7 @@ function initializeDatabase() {
     });
   }).catch(error => {
     console.error('資料庫初始化失敗:', error);
+    throw error;
   });
 }
 
@@ -379,15 +380,14 @@ process.on('SIGINT', () => {
 });
 
 // 測試連接並初始化
-sequelize.authenticate().then(() => {
-  console.log(`成功連接到 PostgreSQL 資料庫`);
-  initializeDatabase();
-}).catch(err => {
-  console.error('連接 PostgreSQL 資料庫失敗:', err.message);
+const ready = sequelize.authenticate().then(() => {
+  console.log('成功連接到 PostgreSQL 資料庫');
+  return initializeDatabase();
 });
 
 // 完全對應原本 db.js 的 module.exports
 module.exports = { 
+  ready,
   db, 
   query, 
   get, 
