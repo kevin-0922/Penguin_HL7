@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const viteExpress = require('vite-express');
 const net = require('net');
+const requestLog = require('./observability/requestLog');
 const { processHL7Message } = require('./services/hl7/hl7Processor');
 
 // 導入資料庫
@@ -16,6 +17,8 @@ const MLLP_PORT = process.env.MLLP_LOCAL_PORT || 4321;
 const CORS_ORIGIN = process.env.server_CORS_ORIGIN || '*';
 
 const app = express();
+app.use(requestLog.middleware);
+app.get('/api/request-logs', requestLog.list);
 
 // 設置中間件
 app.use(cors({
@@ -90,6 +93,8 @@ async function start() {
 
   net.createServer(socket => {
     console.log('MLLP client connected');
+    const source = { protocol: 'MLLP', ip: socket.remoteAddress, method: 'TCP', path: ':' + MLLP_PORT };
+    requestLog.record({ ...source, status: 'CONNECTED' });
 
     let buffer = Buffer.alloc(0);
 
@@ -114,9 +119,11 @@ async function start() {
             Buffer.from(ackMsg, 'utf-8'),
             Buffer.from([MLLP_TRAILER_1, MLLP_TRAILER_2])
           ]);
+          requestLog.record({ ...source, status: 'ACK_SENT' });
           socket.write(ackBuffer);
           buffer = Buffer.alloc(0); // 處理完成清空buffer
         }).catch((err) => {
+          requestLog.record({ ...source, status: 'PROCESSING_ERROR' });
           console.error('處理HL7訊息錯誤', err);
           socket.end();
         });
@@ -128,6 +135,7 @@ async function start() {
     });
 
     socket.on('error', (err) => {
+      requestLog.record({ ...source, status: 'SOCKET_ERROR' });
       console.error('MLLP server error:', err);
     });
   }).listen(MLLP_PORT, MLLP_HOST, () => {

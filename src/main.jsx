@@ -9,6 +9,7 @@ import { store } from './store/store';
 import { LanguageProvider } from './contexts/LanguageContext';
 import Root from './routes/root';
 import Home from './pages/home';
+import RequestLogs from './pages/RequestLogs';
 import O33Form from './pages/O33Form';
 import Q11Form from './pages/Q11Form';
 import O19Form from './pages/O19Form';
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
         path: "/",
         element: <Root />,
         children: [
+            { path: "logs", element: <RequestLogs /> },
             {
                 path: "/",
                 element: <Home />,

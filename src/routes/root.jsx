@@ -8,7 +8,7 @@ export default function Root() {
     return (
         <div className="container mx-auto px-4 py-6">
             <header className="mb-6">
-                <nav className="flex items-center bg-white p-4 rounded-lg shadow-md">
+                <nav className="flex flex-wrap gap-y-3 items-center bg-white p-4 rounded-lg shadow-md">
                     <Link
                         to="/"
                         className="mr-6 text-blue-600 hover:text-blue-800 font-medium"
@@ -40,6 +40,9 @@ export default function Root() {
                         {t('nav.o23')}
                     </Link>
 
+                    <Link to="/logs" className="mr-6 text-blue-600 hover:text-blue-800 font-medium">
+                        {lang === 'zh' ? '請求紀錄' : 'Request logs'}
+                    </Link>
                     <div className="ml-auto flex items-center gap-1 border rounded-lg overflow-hidden text-sm font-medium">
                         <button
                             onClick={() => setLang('zh')}

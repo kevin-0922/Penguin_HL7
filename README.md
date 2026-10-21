@@ -45,3 +45,18 @@ docker compose down
 ## 本機開發
 
 安裝 Node.js 22、`npm ci`，自行準備 PostgreSQL，並在 `.env` 設定 `SQL_HOST`、`SQL_PORT`、`SQL_DB`、`SQL_USERNAME`、`SQL_PASSWORD` 後執行 `npm start`。Docker 部署會自動設定容器內部連線與正式環境模式。
+
+## 網頁請求紀錄
+
+導覽列的「請求紀錄」或 `/logs` 可查看最近 1,000 筆 HTTP 與 MLLP 事件，每三秒更新，可搜尋來源 IP、路徑與狀態並篩選協定。紀錄存在記憶體，容器重啟即清空。HTTP 顯示方法、回應狀態、耗時；MLLP 顯示連線、ACK 已送出或處理錯誤（ACK 已送出不代表上游業務成功）。不記錄 request body、query string、headers 或 HL7 訊息內容。紀錄頁自身的 API 輪詢和容器內的資料庫健康探測不列入紀錄。
+
+來源 IP 為直接連線來源，經反向代理時會顯示代理 IP，未採信可被偽造的 X-Forwarded-For。IP 無法直接辨識操作人員。目前此頁與其他 API 一樣沒有登入驗證，能開啟網站的人也能查看紀錄。
+
+更新並重新建置後可使用：
+
+```sh
+git pull
+docker compose up -d --build --wait
+```
+
+測試紀錄模組：`node --test checks/requestLog.test.js`。
